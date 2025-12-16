@@ -1,0 +1,83 @@
+import React, { useEffect, useRef } from 'react';
+
+export const BinaryBackground: React.FC = () => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Set canvas size to cover entire document
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            // Use document height instead of window height to cover scrollable content
+            canvas.height = Math.max(
+                document.documentElement.scrollHeight,
+                document.body.scrollHeight,
+                window.innerHeight
+            );
+        };
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        // Re-calculate on scroll to handle dynamic content
+        window.addEventListener('scroll', resizeCanvas);
+
+        // Binary rain configuration
+        const fontSize = 14;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops: number[] = Array(columns).fill(0);
+        const chars = '01';
+
+        // Animation function
+        const draw = () => {
+            // Semi-transparent black to create fade effect (less transparent for brighter effect)
+            ctx.fillStyle = 'rgba(10, 10, 15, 0.03)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Set text style
+            ctx.fillStyle = '#00ff41'; // Cyber green
+            ctx.font = `${fontSize}px monospace`;
+
+            // Draw characters
+            for (let i = 0; i < drops.length; i++) {
+                // Random binary character
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+
+                // Vary opacity for depth effect (increased brightness)
+                const opacity = Math.random() * 0.5 + 0.5;
+                ctx.fillStyle = `rgba(0, 255, 65, ${opacity})`;
+                ctx.fillText(char, x, y);
+
+                // Reset drop to top randomly
+                if (y > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                // Move drop down
+                drops[i]++;
+            }
+        };
+
+        // Animation loop
+        const interval = setInterval(draw, 50);
+
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener('scroll', resizeCanvas);
+        };
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            className="fixed inset-0 pointer-events-none opacity-40"
+            style={{ zIndex: 0 }}
+        />
+    );
+};

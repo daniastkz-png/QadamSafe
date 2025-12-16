@@ -1,0 +1,103 @@
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/api';
+import type { User } from '../types';
+import { useTranslation } from 'react-i18next';
+
+interface AuthContextType {
+    user: User | null;
+    loading: boolean;
+    login: (email: string, password: string) => Promise<void>;
+    register: (email: string, password: string, name?: string) => Promise<void>;
+    logout: () => void;
+    updateUser: (user: User) => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const { i18n } = useTranslation();
+
+    useEffect(() => {
+        checkAuth();
+    }, []);
+
+    const checkAuth = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const userData = await authAPI.getMe();
+                setUser(userData);
+                // Sync language with user preference
+                if (userData.language && userData.language !== i18n.language) {
+                    i18n.changeLanguage(userData.language);
+                    localStorage.setItem('language', userData.language);
+                }
+            } catch (error) {
+                localStorage.removeItem('token');
+            }
+        }
+        setLoading(false);
+    };
+
+    const login = async (email: string, password: string) => {
+        const { user: userData, token } = await authAPI.login(email, password);
+        localStorage.setItem('token', token);
+        setUser(userData);
+
+        // Sync language
+        if (userData.language) {
+            i18n.changeLanguage(userData.language);
+            localStorage.setItem('language', userData.language);
+        }
+
+        // Redirect to welcome page if first time, otherwise dashboard
+        if (!userData.hasSeenWelcome) {
+            navigate('/welcome');
+        } else {
+            navigate('/progress');
+        }
+    };
+
+    const register = async (email: string, password: string, name?: string) => {
+        const currentLanguage = i18n.language;
+        const { user: userData, token } = await authAPI.register({
+            email,
+            password,
+            name,
+            language: currentLanguage,
+        });
+        localStorage.setItem('token', token);
+        setUser(userData);
+
+        // Always show welcome page on first registration
+        navigate('/welcome');
+    };
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        setUser(null);
+        navigate('/');
+    };
+
+    const updateUser = (updatedUser: User) => {
+        setUser(updatedUser);
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};

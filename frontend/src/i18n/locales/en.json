@@ -1,0 +1,324 @@
+{
+    "common": {
+        "appName": "QadamSafe",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "back": "Back",
+        "next": "Next",
+        "finish": "Finish",
+        "logout": "Logout",
+        "comingSoon": "Coming Soon",
+        "level": "Level"
+    },
+    "landing": {
+        "hero": {
+            "tagline": "Cybersecurity Training Through Real-World Simulations",
+            "valuePoint1": "Practical scenarios of real threats",
+            "valuePoint2": "Safe learning environment",
+            "valuePoint3": "Personal error analysis",
+            "valuePoint4": "No risk to your data",
+            "trustElement": "All scenarios are educational. We don't use real data.",
+            "ctaButton": "Try Free Simulation",
+            "timeIndicator": "Takes 1 minute",
+            "stat": "78% of users make mistakes in similar situations",
+            "cta": "Test Yourself"
+        },
+        "demo": {
+            "header": "Demo Example",
+            "context": "This is one of many scenarios of varying difficulty",
+            "sender": "Kazpost Delivery Service",
+            "message": "Failed to deliver your package. Choose new delivery time via link below.",
+            "question": "What will you do?",
+            "options": {
+                "a": {
+                    "text": "Check package status in Kazpost app",
+                    "risk": "safe",
+                    "feedback": "✅ Correct! Always verify notifications through official app or website. Scammers often fake SMS from delivery services."
+                },
+                "b": {
+                    "text": "Call the number from SMS",
+                    "risk": "risky",
+                    "feedback": "⚠️ Risky! Number in SMS may be fake. Better to find official number on Kazpost website and call there."
+                },
+                "c": {
+                    "text": "Follow the link to choose time",
+                    "risk": "dangerous",
+                    "feedback": "❌ Dangerous! This is classic phishing. Link leads to fake website that will steal your data. Never follow links from unexpected SMS."
+                }
+            },
+            "tryAgain": "Try another option"
+        },
+        "what": {
+            "title": "This is not a course. This is a simulation.",
+            "point1": "They write to you — you decide",
+            "point2": "Make a mistake — system explains why"
+        },
+        "how": {
+            "step1": "Message",
+            "step2": "Decision",
+            "step3": "Consequence",
+            "tagline": "We test behavior, not knowledge"
+        },
+        "forWhom": {
+            "title": "Who really needs this",
+            "audience1": "Those who think: 'This won't happen to me'",
+            "audience2": "Those who use banks, email, marketplaces",
+            "audience3": "Companies where one click = data breach"
+        },
+        "final": {
+            "title": "Ready to test yourself?",
+            "cta": "Start Simulation"
+        }
+    },
+    "auth": {
+        "login": "Login",
+        "register": "Register",
+        "email": "Email",
+        "password": "Password",
+        "name": "Name",
+        "loginButton": "Sign In",
+        "registerButton": "Sign Up",
+        "switchToRegister": "Don't have an account? Sign up",
+        "switchToLogin": "Already have an account? Sign in",
+        "loginError": "Invalid email or password",
+        "registerError": "Registration error",
+        "emailRequired": "Email is required",
+        "passwordRequired": "Password is required",
+        "tagline": "Interactive platform for learning cybersecurity through practical simulations",
+        "valuePoint1": "Real situations",
+        "valuePoint2": "Safe practice",
+        "valuePoint3": "Solution analysis",
+        "registrationBenefit": "Free registration • Takes 1 minute"
+    },
+    "sidebar": {
+        "home": "Home",
+        "welcome": "About Platform",
+        "training": "Training",
+        "progress": "Progress",
+        "achievements": "Achievements",
+        "subscription": "Subscription",
+        "settings": "Settings"
+    },
+    "ranks": {
+        "title": "Your Rank",
+        "rank1": "Beginner",
+        "rank2": "Advanced",
+        "rank3": "Expert",
+        "rank4": "Reliable",
+        "description1": "You are just starting your training",
+        "description2": "You avoid dangerous decisions",
+        "description3": "You consistently make safe decisions",
+        "description4": "You completed all scenarios without a single error",
+        "requirement1": "Automatically upon registration",
+        "requirement2": "Complete 3 scenarios without dangerous decisions",
+        "requirement3": "Complete 5+ scenarios with 70%+ safe decisions",
+        "requirement4": "Complete all 7 scenarios without a single error",
+        "overview": "Ranks Overview",
+        "allRanks": "All system ranks",
+        "howToEarn": "How to earn",
+        "progress": {
+            "toRank2": "Complete 3 scenarios without dangerous decisions",
+            "toRank3": "Complete 5+ scenarios with 70%+ safe decisions"
+        }
+    },
+    "dashboard": {
+        "welcome": "Welcome to QadamSafe",
+        "securityScore": "Security Score",
+        "completedScenarios": "Completed Scenarios",
+        "totalMistakes": "Dangerous Decisions",
+        "completionRate": "Completion Rate",
+        "quickActions": "Quick Actions",
+        "startTraining": "Start Training",
+        "viewProgress": "View Progress",
+        "recentActivity": "Recent Activity",
+        "noActivity": "No activity yet",
+        "activity": {
+            "score": "Score",
+            "mistakes": "Mistakes",
+            "justNow": "Just now",
+            "minutesAgo": "{{count}} min ago",
+            "hoursAgo": "{{count}} h ago",
+            "daysAgo": "{{count}} d ago"
+        }
+    },
+    "welcome": {
+        "title": "Welcome to QadamSafe!",
+        "subtitle": "Your journey to digital security starts here",
+        "intro": "Interactive platform for learning cybersecurity through practical simulations.",
+        "whyNow": {
+            "title": "Why do you need this training right now?",
+            "mainStat": "Every third resident of Kazakhstan faced fraud in 2025",
+            "mainContext": "This is not a hypothesis — this is the real experience of millions of people",
+            "challenge": "Can you tell a real bank email from a fake one?",
+            "challengeHint": "Most people get it wrong. But here it's safe to make mistakes — and useful",
+            "stat2": "to complete first scenario and learn basic protection",
+            "stat3": "of attacks can be avoided after one day of training",
+            "safetyMessage": "Here you can make as many mistakes as you want — it's part of learning",
+            "trustElement": "Scenarios are based on real fraud cases and regularly updated",
+            "cta": "Test yourself — complete first scenario"
+        },
+        "howItWorks": "How It Works",
+        "step1": "Choose a scenario from the Training section",
+        "step2": "Go through the simulation, making decisions",
+        "step3": "Get feedback and error analysis",
+        "step4": "Earn points and achievements",
+        "whatYouLearn": "What You'll Learn",
+        "skill1": "Recognizing phishing emails",
+        "skill2": "Identifying fake websites",
+        "skill3": "Protection from social engineering",
+        "skill4": "Malware detection",
+        "getStarted": "Get Started",
+        "dontShowAgain": "Don't show again"
+    },
+    "training": {
+        "title": "Training",
+        "allScenarios": "All Scenarios",
+        "difficulty": "Difficulty",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "expert": "Expert",
+        "status": "Status",
+        "available": "Available",
+        "completed": "Completed",
+        "locked": "Locked",
+        "lockedTooltip": "Complete the previous scenario without errors to unlock",
+        "lockedMessage": "First complete Level {{level}} without errors",
+        "completedPerfectly": "Completed without errors",
+        "completedWithErrors": "Completed with errors",
+        "scenarioLocked": "Scenario locked",
+        "next": "Next",
+        "upgradeRequired": "Subscription required",
+        "startScenario": "Start Scenario",
+        "continueScenario": "Continue",
+        "retryScenario": "Retry",
+        "points": "points",
+        "noScenarios": "No scenarios available",
+        "prerequisiteRequired": "Complete previous scenarios first",
+        "lockedMessage": "First complete level {{level}} without errors",
+        "aiComingSoon": "Coming Soon: AI Scenarios",
+        "aiComingSoonDesc": "After completing all training scenarios, personalized AI-generated scenarios will appear here"
+    },
+    "scenario": {
+        "step": "Step",
+        "question": "Question",
+        "information": "Information",
+        "decision": "Decision Making",
+        "submit": "Submit",
+        "explanation": "Explanation",
+        "nextStep": "Next Step",
+        "completeScenario": "Complete Scenario",
+        "scenarioCompleted": "Scenario Completed!",
+        "yourScore": "Your Score",
+        "mistakes": "Mistakes",
+        "backToTraining": "Back to Training",
+        "notFound": "Scenario not found",
+        "legitimate": "Legitimate Situation",
+        "potential_threat": "Potential Threat",
+        "outcome_safe": "Safe",
+        "outcome_risky": "Risky",
+        "outcome_dangerous": "Dangerous"
+    },
+    "progress": {
+        "title": "Your Progress",
+        "statistics": "Statistics",
+        "totalCompleted": "Total Completed",
+        "totalScore": "Total Score",
+        "averageScore": "Average Score",
+        "totalMistakes": "Dangerous Decisions",
+        "completionRate": "Completion Rate",
+        "recentScenarios": "Recent Scenarios",
+        "scenarioName": "Name",
+        "score": "Score",
+        "mistakes": "Mistakes",
+        "completedAt": "Completed",
+        "noProgress": "No progress yet. Start training!"
+    },
+    "achievements": {
+        "title": "Achievements",
+        "unlocked": "Unlocked",
+        "locked": "Locked",
+        "progress": "Progress",
+        "completedAt": "Earned",
+        "noAchievements": "No achievements yet",
+        "yourRank": "Your Rank",
+        "noRank": "Complete all 7 scenarios to earn a rank",
+        "rankProgress": "Progress to next rank"
+    },
+    "subscription": {
+        "title": "Subscription",
+        "currentPlan": "Current Plan",
+        "choosePlan": "Choose Plan",
+        "free": "Free",
+        "pro": "Pro",
+        "business": "Business",
+        "perMonth": "per month",
+        "upgrade": "Upgrade",
+        "current": "Current",
+        "freeFeature1": "Limited scenarios",
+        "freeFeature2": "Basic statistics",
+        "freeFeature3": "Email simulations",
+        "proFeature1": "All scenarios",
+        "proFeature2": "AI-powered error analysis and recommendations",
+        "proFeature3": "Email and SMS simulations",
+        "proFeature4": "Achievements",
+        "businessFeature1": "Everything in Pro",
+        "businessFeature2": "Team management",
+        "businessFeature3": "Corporate statistics",
+        "businessFeature4": "Certificates",
+        "businessFeature5": "Priority support",
+        "upgradeNote": "This is a demo version. Real payments are not supported."
+    },
+    "language": {
+        "select": "Select language",
+        "ru": "Русский",
+        "en": "English",
+        "kk": "Қазақша"
+    },
+    "settings": {
+        "title": "Settings",
+        "subtitle": "Account management and personalization",
+        "profile": {
+            "title": "User Profile",
+            "username": "Username",
+            "email": "Email",
+            "tier": "Subscription Tier",
+            "save": "Save Changes",
+            "saveSuccess": "Changes saved successfully"
+        },
+        "personalization": {
+            "title": "Personalization",
+            "language": "Interface Language",
+            "theme": "Theme",
+            "autoSave": "Settings are saved automatically"
+        },
+        "security": {
+            "title": "Account Security",
+            "changePassword": "Change Password",
+            "logout": "Log Out",
+            "passwordChangePlaceholder": "Password change available in full version",
+            "infoTitle": "QadamSafe — Digital Threat Simulator",
+            "infoText": "We don't store real data. All scenarios are created for training."
+        },
+        "dangerZone": {
+            "title": "Danger Zone",
+            "logoutWarning": "This action will log you out of your account"
+        },
+        "progress": {
+            "title": "Training Summary",
+            "completed": "Scenarios Completed",
+            "level": "Current Level",
+            "viewDetails": "View detailed statistics"
+        },
+        "service": {
+            "title": "Service Information",
+            "version": "Platform Version",
+            "privacy": "Privacy Policy"
+        }
+    }
+}
