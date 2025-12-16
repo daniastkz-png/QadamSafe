@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+  BUSINESS
+}
+
+enum ScenarioDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum ScenarioType {
+  EMAIL_PHISHING
+  SMS_PHISHING
+  FAKE_WEBSITE
+  SOCIAL_ENGINEERING
+  MALWARE_DETECTION
+}
+
+model User {
+  id                String              @id @default(uuid())
+  email             String              @unique
+  password          String
+  name              String?
+  role              Role                @default(USER)
+  language          String              @default("ru")
+  subscriptionTier  SubscriptionTier    @default(FREE)
+  securityScore     Int                 @default(0)
+  rank              Int                 @default(1)  // Current rank: 1, 2, or 3
+  hasSeenWelcome    Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  progress          UserProgress[]
+  achievements      UserAchievement[]
+
+  @@index([email])
+}
+
+model Scenario {
+  id                String              @id @default(uuid())
+  title             String
+  titleEn           String?
+  titleKk           String?
+  description       String
+  descriptionEn     String?
+  descriptionKk     String?
+  type              ScenarioType
+  difficulty        ScenarioDifficulty
+  requiredTier      SubscriptionTier    @default(FREE)
+  pointsReward      Int                 @default(10)
+  order             Int                 @default(0)  // Sequential order for progressive unlocking
+  prerequisiteScenarioId String?                     // Optional prerequisite scenario
+  isLegitimate      Boolean             @default(false)  // True if scenario is a safe/real situation
+  content           Json                // Stores scenario steps with branching logic
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  progress          UserProgress[]
+  prerequisiteFor   Scenario[]          @relation("ScenarioPrerequisite")
+  prerequisite      Scenario?           @relation("ScenarioPrerequisite", fields: [prerequisiteScenarioId], references: [id])
+
+  @@index([difficulty])
+  @@index([requiredTier])
+  @@index([order])
+}
+
+model UserProgress {
+  id                String              @id @default(uuid())
+  userId            String
+  scenarioId        String
+  completed         Boolean             @default(false)
+  score             Int                 @default(0)
+  mistakes          Int                 @default(0)
+  decisions         Json?               // Stores user decisions and timestamps
+  completedAt       DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scenario          Scenario            @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scenarioId])
+  @@index([userId])
+  @@index([scenarioId])
+}
+
+model Achievement {
+  id                String              @id @default(uuid())
+  key               String              @unique
+  title             String
+  titleEn           String?
+  titleKk           String?
+  description       String
+  descriptionEn     String?
+  descriptionKk     String?
+  icon              String              // Icon name or path
+  requiredValue     Int                 @default(1)
+  createdAt         DateTime            @default(now())
+
+  userAchievements  UserAchievement[]
+
+  @@index([key])
+}
+
+model UserAchievement {
+  id                String              @id @default(uuid())
+  userId            String
+  achievementId     String
+  progress          Int                 @default(0)
+  completed         Boolean             @default(false)
+  completedAt       DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement       Achievement         @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([achievementId])
+}
