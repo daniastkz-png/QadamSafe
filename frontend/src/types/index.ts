@@ -6,6 +6,7 @@ export interface User {
     language: string;
     subscriptionTier: 'FREE' | 'PRO' | 'BUSINESS';
     securityScore: number;
+    rank: number;
     hasSeenWelcome: boolean;
     createdAt: string;
     updatedAt: string;
