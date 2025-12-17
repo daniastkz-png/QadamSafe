@@ -8,7 +8,7 @@ const router = Router();
 router.use(authMiddleware);
 
 // Get all achievements
-router.get('/', async (req: AuthRequest, res: Response): Promise<void> => {
+router.get('/', async (_req: AuthRequest, res: Response): Promise<void> => {
     try {
         const achievements = await achievementService.getAllAchievements();
         res.status(200).json(achievements);
