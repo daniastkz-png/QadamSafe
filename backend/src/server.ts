@@ -1,11 +1,15 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import { config } from './config';
+import { initializeFirebase } from './config/firebase.config';
 import { errorHandler } from './middleware/error.middleware';
 import authRoutes from './routes/auth.routes';
 import scenarioRoutes from './routes/scenario.routes';
 import progressRoutes from './routes/progress.routes';
 import achievementRoutes from './routes/achievement.routes';
+
+// Initialize Firebase Admin SDK (optional - gracefully skips if not configured)
+initializeFirebase();
 
 const app: Application = express();
 
@@ -33,6 +37,10 @@ app.use(errorHandler);
 
 // Start server
 const PORT = config.port;
+app.get("/health", (req, res) => {
+    res.json({ status: "ok" });
+});
+
 app.listen(PORT, () => {
     console.log(`🚀 QadamSafe Backend running on port ${PORT}`);
     console.log(`📊 Environment: ${config.nodeEnv}`);

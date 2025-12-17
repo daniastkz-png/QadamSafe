@@ -101,7 +101,10 @@
         "valuePoint1": "Нақты жағдайлар",
         "valuePoint2": "Қауіпсіз практика",
         "valuePoint3": "Шешімдерді талдау",
-        "registrationBenefit": "Тегін тіркелу • 1 минут алады"
+        "registrationBenefit": "Тегін тіркелу • 1 минут алады",
+        "quickLogin": "Жылдам кіру",
+        "notYou": "Сіз емессіз бе?",
+        "useAnotherAccount": "Басқа аккаунтты пайдалану"
     },
     "sidebar": {
         "home": "Басты бет",

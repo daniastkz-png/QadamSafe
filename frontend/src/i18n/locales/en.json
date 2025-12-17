@@ -93,7 +93,10 @@
         "valuePoint1": "Real situations",
         "valuePoint2": "Safe practice",
         "valuePoint3": "Solution analysis",
-        "registrationBenefit": "Free registration • Takes 1 minute"
+        "registrationBenefit": "Free registration • Takes 1 minute",
+        "quickLogin": "Quick Login",
+        "notYou": "Not you?",
+        "useAnotherAccount": "Use another account"
     },
     "sidebar": {
         "home": "Home",
@@ -200,7 +203,6 @@
         "points": "points",
         "noScenarios": "No scenarios available",
         "prerequisiteRequired": "Complete previous scenarios first",
-        "lockedMessage": "First complete level {{level}} without errors",
         "aiComingSoon": "Coming Soon: AI Scenarios",
         "aiComingSoonDesc": "After completing all training scenarios, personalized AI-generated scenarios will appear here"
     },

@@ -93,7 +93,10 @@
         "valuePoint1": "Реальные ситуации",
         "valuePoint2": "Безопасная практика",
         "valuePoint3": "Разбор решений",
-        "registrationBenefit": "Бесплатная регистрация • Займет 1 минуту"
+        "registrationBenefit": "Бесплатная регистрация • Займет 1 минуту",
+        "quickLogin": "Быстрый вход",
+        "notYou": "Не вы?",
+        "useAnotherAccount": "Использовать другой аккаунт"
     },
     "sidebar": {
         "home": "Главная",

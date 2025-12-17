@@ -48,6 +48,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.setItem('token', token);
         setUser(userData);
 
+        // Save last account for quick login feature
+        localStorage.setItem('lastAccount', JSON.stringify({
+            email: userData.email,
+            name: userData.name || '',
+        }));
+
         // Sync language
         if (userData.language) {
             i18n.changeLanguage(userData.language);
@@ -72,6 +78,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         });
         localStorage.setItem('token', token);
         setUser(userData);
+
+        // Save last account for quick login feature
+        localStorage.setItem('lastAccount', JSON.stringify({
+            email: userData.email,
+            name: userData.name || '',
+        }));
 
         // Always show welcome page on first registration
         navigate('/welcome');
