@@ -37,14 +37,12 @@ app.use(errorHandler);
 
 // Start server
 const PORT = config.port;
-app.get("/health", (req, res) => {
-    res.json({ status: "ok" });
-});
 
 app.listen(PORT, () => {
     console.log(`🚀 QadamSafe Backend running on port ${PORT}`);
     console.log(`📊 Environment: ${config.nodeEnv}`);
-    console.log(`🔒 CORS enabled for: ${config.corsOrigin}`);
+    console.log(`🔒 CORS enabled for: ${Array.isArray(config.corsOrigin) ? config.corsOrigin.join(', ') : config.corsOrigin}`);
 });
 
 export default app;
+
