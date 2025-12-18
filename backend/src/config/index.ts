@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Parse CORS origins (comma-separated for multiple origins)
+// Parse CORS origins (comma-separated list)
 const parseCorsOrigins = (): string | string[] => {
     const origins = process.env.CORS_ORIGIN || 'http://localhost:5173';
     if (origins.includes(',')) {

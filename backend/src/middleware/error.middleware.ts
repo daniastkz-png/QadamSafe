@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 
 export const errorHandler = (
     err: Error,
-    _req: Request,
+    req: Request,
     res: Response,
-    _next: NextFunction
+    next: NextFunction
 ): void => {
     console.error('Error:', err);
 
@@ -15,4 +15,3 @@ export const errorHandler = (
         ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
     });
 };
-
