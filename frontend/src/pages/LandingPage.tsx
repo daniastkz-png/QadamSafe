@@ -97,8 +97,24 @@ export const LandingPage: React.FC = () => {
                             </button>
                         </div>
 
-                        {/* Right side: Language Switcher & Mobile Menu Button */}
-                        <div className="flex items-center gap-4">
+                        {/* Right side: CTA Buttons, Language Switcher & Mobile Menu Button */}
+                        <div className="flex items-center gap-3">
+                            {/* Desktop CTA Buttons */}
+                            <div className="hidden md:flex items-center gap-3">
+                                <button
+                                    onClick={() => navigate('/auth')}
+                                    className="px-4 py-2 text-sm font-medium text-foreground hover:text-cyber-green transition-colors"
+                                >
+                                    {t('landing.nav.login')}
+                                </button>
+                                <button
+                                    onClick={() => navigate('/auth')}
+                                    className="px-5 py-2 text-sm font-medium bg-cyber-green text-background rounded-md hover:bg-cyber-green/90 transition-all"
+                                >
+                                    {t('landing.nav.startFree')}
+                                </button>
+                            </div>
+
                             <LanguageSwitcher />
 
                             {/* Mobile menu button */}
@@ -155,6 +171,29 @@ export const LandingPage: React.FC = () => {
                                     className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                                 >
                                     {t('landing.nav.faq')}
+                                </button>
+
+                                {/* Divider */}
+                                <div className="border-t border-border my-2"></div>
+
+                                {/* Mobile CTA Buttons */}
+                                <button
+                                    onClick={() => {
+                                        navigate('/auth');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-foreground hover:text-cyber-green hover:bg-muted transition-colors"
+                                >
+                                    {t('landing.nav.login')}
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        navigate('/auth');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="block w-full px-4 py-3 rounded-md text-sm font-medium bg-cyber-green text-background hover:bg-cyber-green/90 transition-all text-center"
+                                >
+                                    {t('landing.nav.startFree')}
                                 </button>
                             </div>
                         </div>
