@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Sidebar } from '../components/Sidebar';
+import { TopNavBar } from '../components/TopNavBar';
 import { ScenarioPlayer } from '../components/ScenarioPlayer';
-import { scenariosAPI } from '../services/api';
+import { firebaseScenariosAPI } from '../services/firebase';
 import type { Scenario } from '../types';
 import { ArrowLeft } from 'lucide-react';
 
@@ -23,8 +23,8 @@ export const ScenarioPage: React.FC = () => {
         if (!id) return;
 
         try {
-            const data = await scenariosAPI.getById(id);
-            setScenario(data);
+            const data = await firebaseScenariosAPI.getById(id);
+            setScenario(data as Scenario);
         } catch (err) {
             setError((err as Error).message);
         } finally {
@@ -51,7 +51,7 @@ export const ScenarioPage: React.FC = () => {
                 }
             });
 
-            await scenariosAPI.complete(scenario.id, {
+            await firebaseScenariosAPI.complete(scenario.id, {
                 score,
                 mistakes,
                 decisions,
@@ -66,9 +66,9 @@ export const ScenarioPage: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex min-h-screen bg-background">
-                <Sidebar />
-                <div className="flex-1 p-8 ml-64">
+            <div className="min-h-screen bg-background">
+                <TopNavBar />
+                <div className="max-w-7xl mx-auto p-8">
                     <div className="text-center py-20">
                         <div className="text-cyber-green text-xl animate-pulse-glow">
                             {t('common.loading')}
@@ -81,9 +81,9 @@ export const ScenarioPage: React.FC = () => {
 
     if (error || !scenario) {
         return (
-            <div className="flex min-h-screen bg-background">
-                <Sidebar />
-                <div className="flex-1 p-8 ml-64">
+            <div className="min-h-screen bg-background">
+                <TopNavBar />
+                <div className="max-w-7xl mx-auto p-8">
                     <div className="cyber-card text-center py-12">
                         <p className="text-cyber-red mb-4">{error || t('scenario.notFound')}</p>
                         <button
@@ -100,10 +100,10 @@ export const ScenarioPage: React.FC = () => {
     }
 
     return (
-        <div className="flex min-h-screen bg-background">
-            <Sidebar />
+        <div className="min-h-screen bg-background">
+            <TopNavBar />
 
-            <div className="flex-1 p-8 ml-64">
+            <div className="max-w-7xl mx-auto p-8">
                 {/* Header */}
                 <div className="mb-8">
                     <button

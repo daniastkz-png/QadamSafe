@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sidebar } from '../components/Sidebar';
+import { TopNavBar } from '../components/TopNavBar';
 import { achievementsAPI } from '../services/api';
 import { Award, Lock, CheckCircle, Shield, TrendingUp } from 'lucide-react';
 import type { UserAchievement } from '../types';
@@ -70,10 +70,10 @@ export const AchievementsPage: React.FC = () => {
     const rankInfo = getRankInfo(currentRank);
 
     return (
-        <div className="flex min-h-screen bg-background">
-            <Sidebar />
+        <div className="min-h-screen bg-background">
+            <TopNavBar />
 
-            <div className="flex-1 p-8 ml-64">
+            <div className="max-w-7xl mx-auto p-8">
                 <h1 className="text-4xl font-bold text-cyber-green mb-8">
                     {t('achievements.title')}
                 </h1>

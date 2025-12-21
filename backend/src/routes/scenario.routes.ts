@@ -1,6 +1,9 @@
 import { Router, Response } from 'express';
-import { scenarioService } from '../services/scenario.service';
 import { authMiddleware, AuthRequest } from '../middleware/auth.middleware';
+import { firestoreScenarioRepository, FirestoreScenario } from '../repositories/firestore/scenario.repository';
+import { firestoreProgressRepository } from '../repositories/firestore/progress.repository';
+import { firestoreUserRepository } from '../repositories/firestore/user.repository';
+import { firestoreAchievementRepository } from '../repositories/firestore/achievement.repository';
 
 const router = Router();
 
@@ -15,8 +18,19 @@ router.get('/', async (req: AuthRequest, res: Response): Promise<void> => {
             return;
         }
 
-        const scenarios = await scenarioService.getAllScenarios(req.user.userId);
-        res.status(200).json(scenarios);
+        const scenarios = await firestoreScenarioRepository.findAll();
+        const progress = await firestoreProgressRepository.findByUserId(req.user.userId);
+
+        // Add user progress to each scenario
+        const scenariosWithProgress = scenarios.map((scenario: FirestoreScenario) => {
+            const userProgress = progress.find((p: any) => p.scenarioId === scenario.id);
+            return {
+                ...scenario,
+                userProgress: userProgress || null,
+            };
+        });
+
+        res.status(200).json(scenariosWithProgress);
     } catch (error) {
         res.status(500).json({ error: (error as Error).message });
     }
@@ -31,7 +45,13 @@ router.get('/:id', async (req: AuthRequest, res: Response): Promise<void> => {
         }
 
         const { id } = req.params;
-        const scenario = await scenarioService.getScenarioById(id, req.user.userId);
+        const scenario = await firestoreScenarioRepository.findById(id);
+
+        if (!scenario) {
+            res.status(404).json({ error: 'Scenario not found' });
+            return;
+        }
+
         res.status(200).json(scenario);
     } catch (error) {
         res.status(404).json({ error: (error as Error).message });
@@ -54,11 +74,58 @@ router.post('/:id/complete', async (req: AuthRequest, res: Response): Promise<vo
             return;
         }
 
-        const progress = await scenarioService.completeScenario(id, req.user.userId, {
+        // Save progress
+        const progress = await firestoreProgressRepository.upsert(req.user.userId, id, {
             score,
             mistakes,
             decisions,
         });
+
+        // Update user security score
+        await firestoreUserRepository.updateSecurityScore(req.user.userId, score);
+
+        // Update achievements
+        const stats = await firestoreProgressRepository.getStats(req.user.userId);
+
+        // First scenario achievement
+        if (stats.completed >= 1) {
+            const achievement = await firestoreAchievementRepository.findAchievementByKey('first_scenario');
+            if (achievement) {
+                await firestoreAchievementRepository.upsertUserAchievement(req.user.userId, achievement.id, 1);
+            }
+        }
+
+        // Five scenarios achievement
+        if (stats.completed >= 5) {
+            const achievement = await firestoreAchievementRepository.findAchievementByKey('five_scenarios');
+            if (achievement) {
+                await firestoreAchievementRepository.upsertUserAchievement(req.user.userId, achievement.id, stats.completed);
+            }
+        }
+
+        // All scenarios achievement
+        if (stats.completed >= 7) {
+            const achievement = await firestoreAchievementRepository.findAchievementByKey('all_scenarios');
+            if (achievement) {
+                await firestoreAchievementRepository.upsertUserAchievement(req.user.userId, achievement.id, stats.completed);
+            }
+        }
+
+        // Perfect score achievement
+        if (mistakes === 0) {
+            const achievement = await firestoreAchievementRepository.findAchievementByKey('perfect_score');
+            if (achievement) {
+                await firestoreAchievementRepository.upsertUserAchievement(req.user.userId, achievement.id, 1);
+            }
+        }
+
+        // Security expert achievement
+        if (stats.totalScore >= 500) {
+            const achievement = await firestoreAchievementRepository.findAchievementByKey('security_expert');
+            if (achievement) {
+                await firestoreAchievementRepository.upsertUserAchievement(req.user.userId, achievement.id, stats.totalScore);
+            }
+        }
 
         res.status(200).json(progress);
     } catch (error) {

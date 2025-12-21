@@ -1,214 +1,500 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ChevronRight, Shield, CheckCircle } from 'lucide-react';
+import { Shield, Mail, Phone, MessageSquare, CheckCircle, ChevronDown, ChevronRight, Lock, Eye, AlertTriangle, Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
-import { BinaryBackground } from '../components/BinaryBackground';
 
 export const LandingPage: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
-    const [showFeedback, setShowFeedback] = useState(false);
-    const [showAnimation, setShowAnimation] = useState(false);
-    const demoRef = useRef<HTMLElement>(null);
+    const [activeSection, setActiveSection] = useState('hero');
+    const [openFaq, setOpenFaq] = useState<number | null>(null);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    const handleOptionClick = (optionId: string) => {
-        setSelectedOption(optionId);
-        setShowFeedback(true);
-        setShowAnimation(true);
+    // Smooth scroll to section
+    const scrollToSection = (sectionId: string) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
 
-    const resetDemo = () => {
-        setSelectedOption(null);
-        setShowFeedback(false);
-    };
+    // Track active section on scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            const sections = ['hero', 'what-you-learn', 'how-it-works', 'access', 'faq'];
+            const scrollPosition = window.scrollY + 100;
 
-    const scrollToDemo = () => {
-        demoRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+            for (const sectionId of sections) {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const { offsetTop, offsetHeight } = element;
+                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                        setActiveSection(sectionId);
+                        break;
+                    }
+                }
+            }
+        };
 
-    const getOptionColor = (optionId: string) => {
-        if (!showFeedback || selectedOption !== optionId) return 'border-border hover:border-cyber-green/50';
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-        const risk = t(`landing.demo.options.${optionId}.risk`);
-        if (risk === 'safe') return 'border-cyber-green bg-cyber-green/10';
-        if (risk === 'risky') return 'border-cyber-yellow bg-cyber-yellow/10';
-        return 'border-cyber-red bg-cyber-red/10';
+    const toggleFaq = (index: number) => {
+        setOpenFaq(openFaq === index ? null : index);
     };
 
     return (
-        <div className="min-h-screen bg-background text-foreground relative">
-            {/* Conditional Animated Binary Background */}
-            {showAnimation && <BinaryBackground />}
+        <div className="min-h-screen bg-background text-foreground">
+            {/* Sticky Navigation */}
+            <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16">
+                        {/* Logo */}
+                        <div className="flex items-center gap-2">
+                            <Shield className="w-6 h-6 text-cyber-green" />
+                            <span className="text-lg font-bold text-cyber-green">QadamSafe</span>
+                        </div>
 
-            {/* Language Switcher - Top Right */}
-            <div className="absolute top-6 right-6 w-48 z-50">
-                <LanguageSwitcher />
-            </div>
+                        {/* Desktop Navigation */}
+                        <div className="hidden md:flex items-center gap-8">
+                            <button
+                                onClick={() => scrollToSection('what-you-learn')}
+                                className={`text-base font-medium transition-colors ${activeSection === 'what-you-learn'
+                                    ? 'text-cyber-green'
+                                    : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                            >
+                                {t('landing.nav.whatYouLearn')}
+                            </button>
+                            <button
+                                onClick={() => scrollToSection('how-it-works')}
+                                className={`text-base font-medium transition-colors ${activeSection === 'how-it-works'
+                                    ? 'text-cyber-green'
+                                    : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                            >
+                                {t('landing.nav.howItWorks')}
+                            </button>
+                            <button
+                                onClick={() => scrollToSection('access')}
+                                className={`text-base font-medium transition-colors ${activeSection === 'access'
+                                    ? 'text-cyber-green'
+                                    : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                            >
+                                {t('landing.nav.access')}
+                            </button>
+                            <button
+                                onClick={() => scrollToSection('faq')}
+                                className={`text-base font-medium transition-colors ${activeSection === 'faq'
+                                    ? 'text-cyber-green'
+                                    : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                            >
+                                {t('landing.nav.faq')}
+                            </button>
+                        </div>
 
-            {/* SCREEN 1 - VALUE PROPOSITION HERO */}
-            <section className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-                {/* Static gradient background */}
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        background: 'linear-gradient(135deg, #0a1628 0%, #000000 100%)',
-                        backgroundAttachment: 'fixed'
-                    }}
-                >
-                    {/* Grain texture overlay */}
-                    <div
-                        className="absolute inset-0 opacity-[0.04]"
-                        style={{
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                            backgroundRepeat: 'repeat'
-                        }}
-                    />
+                        {/* Right side: Language Switcher & Mobile Menu Button */}
+                        <div className="flex items-center gap-4">
+                            <LanguageSwitcher />
+
+                            {/* Mobile menu button */}
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
+                                aria-label="Toggle menu"
+                            >
+                                {mobileMenuOpen ? (
+                                    <X className="w-6 h-6" />
+                                ) : (
+                                    <Menu className="w-6 h-6" />
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Mobile Menu */}
+                    {mobileMenuOpen && (
+                        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-sm">
+                            <div className="px-4 py-3 space-y-1">
+                                <button
+                                    onClick={() => {
+                                        scrollToSection('what-you-learn');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                >
+                                    {t('landing.nav.whatYouLearn')}
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        scrollToSection('how-it-works');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                >
+                                    {t('landing.nav.howItWorks')}
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        scrollToSection('access');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                >
+                                    {t('landing.nav.access')}
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        scrollToSection('faq');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                >
+                                    {t('landing.nav.faq')}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </nav>
+
+            {/* HERO Section */}
+            <section id="hero" className="relative min-h-[90vh] flex items-center justify-center px-4 py-20 overflow-hidden">
+                {/* Background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-cyber-green/5" />
+
+                {/* Animated threat icons */}
+                <div className="absolute inset-0 overflow-hidden opacity-10">
+                    <Mail className="absolute top-20 left-10 w-8 h-8 text-cyber-red animate-float" style={{ animationDelay: '0s' }} />
+                    <Phone className="absolute top-40 right-20 w-6 h-6 text-cyber-yellow animate-float" style={{ animationDelay: '1s' }} />
+                    <MessageSquare className="absolute bottom-40 left-20 w-7 h-7 text-cyber-red animate-float" style={{ animationDelay: '2s' }} />
+                    <AlertTriangle className="absolute bottom-20 right-10 w-8 h-8 text-cyber-yellow animate-float" style={{ animationDelay: '1.5s' }} />
                 </div>
 
-                <div className="max-w-4xl mx-auto text-center relative z-10 space-y-10">
-                    {/* QadamSafe Branding */}
-                    <div className="flex items-center justify-center gap-3 mb-2">
-                        <Shield className="w-12 h-12 text-cyber-green" />
-                        <h1 className="text-5xl font-bold text-cyber-green">QadamSafe</h1>
-                    </div>
+                <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
+                    {/* Main heading */}
+                    <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
+                        {t('landing.hero.title')}
+                    </h1>
 
-                    {/* Tagline */}
-                    <h2 className="text-2xl md:text-3xl text-white font-medium leading-relaxed">
-                        {t('landing.hero.tagline')}
-                    </h2>
-
-                    {/* Value Points */}
-                    <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto text-left">
-                        {[1, 2, 3, 4].map((num) => (
-                            <div key={num} className="flex items-start gap-3 p-4 bg-background/40 rounded-lg border border-border/50">
-                                <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
-                                <p className="text-gray-200 text-base">
-                                    {t(`landing.hero.valuePoint${num}`)}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Trust Element */}
-                    <p className="text-sm text-gray-400 max-w-xl mx-auto">
-                        {t('landing.hero.trustElement')}
+                    {/* Subtitle */}
+                    <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+                        {t('landing.hero.subtitle')}
                     </p>
 
-                    {/* CTA Button */}
-                    <div className="space-y-3">
+                    {/* CTA Buttons */}
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                         <button
-                            onClick={scrollToDemo}
-                            className="cyber-button text-xl px-12 py-5 inline-flex items-center gap-2 group"
+                            onClick={() => navigate('/auth')}
+                            className="cyber-button text-lg px-8 py-4 inline-flex items-center gap-2 group"
                         >
-                            {t('landing.hero.ctaButton')}
-                            <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                            {t('landing.hero.cta')}
+                            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
-                        <p className="text-sm text-gray-400">
-                            {t('landing.hero.timeIndicator')}
-                        </p>
+                        <button
+                            onClick={() => scrollToSection('what-you-learn')}
+                            className="px-8 py-4 text-lg font-medium text-foreground border-2 border-border hover:border-cyber-green rounded-md transition-all"
+                        >
+                            {t('landing.hero.ctaSecondary')}
+                        </button>
+                    </div>
+
+                    {/* Shield visual */}
+                    <div className="pt-8 flex justify-center">
+                        <div className="relative">
+                            <Shield className="w-24 h-24 text-cyber-green opacity-20" />
+                            <Lock className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 text-cyber-green" />
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* SCREEN 2 - DEMO SCENARIO */}
-            <section ref={demoRef} className="min-h-screen flex items-center justify-center px-4 py-16 relative">
-                <div className="max-w-3xl mx-auto text-center relative z-10 space-y-6">
-                    {/* Demo Header */}
-                    <div className="mb-8">
-                        <h3 className="text-3xl font-bold text-cyber-green mb-2">
-                            {t('landing.demo.header')}
-                        </h3>
-                        <p className="text-gray-400">
-                            {t('landing.demo.context')}
-                        </p>
-                    </div>
+            {/* WHAT YOU LEARN Section */}
+            <section id="what-you-learn" className="py-20 px-4 bg-background">
+                <div className="max-w-6xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">
+                        {t('landing.whatYouLearn.title')}
+                    </h2>
 
-                    {/* Interactive Demo Scenario */}
-                    <div className="relative">
-                        {/* Delivery message */}
-                        <div className="cyber-border bg-background/80 rounded-lg p-5 text-left">
-                            <div className="flex items-start gap-3 mb-4">
-                                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <span className="text-white font-bold">📦</span>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {/* Card 1 */}
+                        <div className="cyber-card group hover:border-cyber-green/50 transition-all duration-300">
+                            <div className="flex items-start gap-4">
+                                <div className="p-3 bg-cyber-green/10 rounded-lg">
+                                    <Eye className="w-6 h-6 text-cyber-green" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-white font-semibold text-sm mb-1">
-                                        {t('landing.demo.sender')}
+                                    <h3 className="text-xl font-semibold mb-2 text-foreground">
+                                        {t('landing.whatYouLearn.card1Title')}
+                                    </h3>
+                                    <p className="text-muted-foreground">
+                                        {t('landing.whatYouLearn.card1Desc')}
                                     </p>
-                                    <p className="text-gray-300 text-sm mb-2">
-                                        {t('landing.demo.message')}
-                                    </p>
-                                    <a
-                                        href="#"
-                                        onClick={(e) => e.preventDefault()}
-                                        className="text-sm text-blue-400 hover:text-blue-300 underline"
-                                    >
-                                        https://delivery-reschedule.kz/track/KZ-2847391
-                                    </a>
                                 </div>
                             </div>
+                        </div>
 
-                            {/* Question */}
-                            <p className="text-white font-medium mb-3 text-base">
-                                {t('landing.demo.question')}
-                            </p>
-
-                            {/* Options */}
-                            <div className="space-y-2">
-                                {['a', 'b', 'c'].map((optionId) => (
-                                    <button
-                                        key={optionId}
-                                        onClick={() => handleOptionClick(optionId)}
-                                        disabled={showFeedback}
-                                        className={`w-full text-left p-3 rounded-lg border-2 transition-all ${getOptionColor(optionId)} ${showFeedback ? 'cursor-default' : 'cursor-pointer hover:scale-[1.02]'
-                                            }`}
-                                    >
-                                        <p className="text-sm text-gray-200">
-                                            {t(`landing.demo.options.${optionId}.text`)}
-                                        </p>
-                                    </button>
-                                ))}
-                            </div>
-
-                            {/* Feedback */}
-                            {showFeedback && selectedOption && (
-                                <div className="mt-4 p-4 bg-background/50 rounded-lg border border-border">
-                                    <p className="text-sm text-gray-300 mb-3">
-                                        {t(`landing.demo.options.${selectedOption}.feedback`)}
-                                    </p>
-                                    <button
-                                        onClick={resetDemo}
-                                        className="text-sm text-cyber-green hover:text-cyber-green/80 underline"
-                                    >
-                                        {t('landing.demo.tryAgain')}
-                                    </button>
+                        {/* Card 2 */}
+                        <div className="cyber-card group hover:border-cyber-green/50 transition-all duration-300">
+                            <div className="flex items-start gap-4">
+                                <div className="p-3 bg-cyber-green/10 rounded-lg">
+                                    <MessageSquare className="w-6 h-6 text-cyber-green" />
                                 </div>
-                            )}
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-semibold mb-2 text-foreground">
+                                        {t('landing.whatYouLearn.card2Title')}
+                                    </h3>
+                                    <p className="text-muted-foreground">
+                                        {t('landing.whatYouLearn.card2Desc')}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card 3 */}
+                        <div className="cyber-card group hover:border-cyber-green/50 transition-all duration-300">
+                            <div className="flex items-start gap-4">
+                                <div className="p-3 bg-cyber-green/10 rounded-lg">
+                                    <Shield className="w-6 h-6 text-cyber-green" />
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-semibold mb-2 text-foreground">
+                                        {t('landing.whatYouLearn.card3Title')}
+                                    </h3>
+                                    <p className="text-muted-foreground">
+                                        {t('landing.whatYouLearn.card3Desc')}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card 4 */}
+                        <div className="cyber-card group hover:border-cyber-green/50 transition-all duration-300">
+                            <div className="flex items-start gap-4">
+                                <div className="p-3 bg-cyber-green/10 rounded-lg">
+                                    <CheckCircle className="w-6 h-6 text-cyber-green" />
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-semibold mb-2 text-foreground">
+                                        {t('landing.whatYouLearn.card4Title')}
+                                    </h3>
+                                    <p className="text-muted-foreground">
+                                        {t('landing.whatYouLearn.card4Desc')}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    {/* CTA after demo */}
-                    <div className="mt-12 space-y-4">
-                        <p className="text-lg text-gray-300">
-                            {t('landing.hero.stat')}
-                        </p>
-                        <button
-                            onClick={() => navigate('/auth')}
-                            className="cyber-button text-xl px-12 py-5 inline-flex items-center gap-2 group"
-                        >
-                            {t('landing.hero.cta')}
-                            <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                        </button>
+            {/* HOW IT WORKS Section */}
+            <section id="how-it-works" className="py-20 px-4 bg-cyber-green/5">
+                <div className="max-w-5xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-foreground">
+                        {t('landing.howItWorks.title')}
+                    </h2>
+
+                    <div className="relative">
+                        {/* Connection line */}
+                        <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-border -translate-y-1/2" />
+
+                        <div className="grid md:grid-cols-3 gap-8 relative">
+                            {/* Step 1 */}
+                            <div className="text-center space-y-4">
+                                <div className="relative inline-block">
+                                    <div className="w-16 h-16 bg-cyber-green/10 border-2 border-cyber-green rounded-full flex items-center justify-center mx-auto relative z-10">
+                                        <Mail className="w-8 h-8 text-cyber-green" />
+                                    </div>
+                                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-cyber-green text-background rounded-full flex items-center justify-center text-sm font-bold">
+                                        1
+                                    </div>
+                                </div>
+                                <h3 className="text-xl font-semibold text-foreground">
+                                    {t('landing.howItWorks.step1Title')}
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    {t('landing.howItWorks.step1Desc')}
+                                </p>
+                            </div>
+
+                            {/* Step 2 */}
+                            <div className="text-center space-y-4">
+                                <div className="relative inline-block">
+                                    <div className="w-16 h-16 bg-cyber-green/10 border-2 border-cyber-green rounded-full flex items-center justify-center mx-auto relative z-10">
+                                        <CheckCircle className="w-8 h-8 text-cyber-green" />
+                                    </div>
+                                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-cyber-green text-background rounded-full flex items-center justify-center text-sm font-bold">
+                                        2
+                                    </div>
+                                </div>
+                                <h3 className="text-xl font-semibold text-foreground">
+                                    {t('landing.howItWorks.step2Title')}
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    {t('landing.howItWorks.step2Desc')}
+                                </p>
+                            </div>
+
+                            {/* Step 3 */}
+                            <div className="text-center space-y-4">
+                                <div className="relative inline-block">
+                                    <div className="w-16 h-16 bg-cyber-green/10 border-2 border-cyber-green rounded-full flex items-center justify-center mx-auto relative z-10">
+                                        <Shield className="w-8 h-8 text-cyber-green" />
+                                    </div>
+                                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-cyber-green text-background rounded-full flex items-center justify-center text-sm font-bold">
+                                        3
+                                    </div>
+                                </div>
+                                <h3 className="text-xl font-semibold text-foreground">
+                                    {t('landing.howItWorks.step3Title')}
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    {t('landing.howItWorks.step3Desc')}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ACCESS Section */}
+            <section id="access" className="py-20 px-4 bg-background">
+                <div className="max-w-5xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">
+                        {t('landing.access.title')}
+                    </h2>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {/* Free Access */}
+                        <div className="cyber-card border-2">
+                            <div className="space-y-4">
+                                <h3 className="text-2xl font-bold text-foreground">
+                                    {t('landing.access.freeTitle')}
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    {t('landing.access.freeDesc')}
+                                </p>
+                                <ul className="space-y-3">
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.freeFeature1')}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.freeFeature2')}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.freeFeature3')}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* Pro Access */}
+                        <div className="cyber-card border-2 border-cyber-green bg-cyber-green/5 relative">
+                            <div className="absolute -top-3 right-4 px-3 py-1 bg-cyber-green text-background text-xs font-bold rounded-full">
+                                PRO
+                            </div>
+                            <div className="space-y-4">
+                                <h3 className="text-2xl font-bold text-cyber-green">
+                                    {t('landing.access.proTitle')}
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    {t('landing.access.proDesc')}
+                                </p>
+                                <ul className="space-y-3">
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.proFeature1')}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.proFeature2')}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.proFeature3')}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.proFeature4')}</span>
+                                    </li>
+                                </ul>
+                                <button
+                                    onClick={() => navigate('/subscription')}
+                                    className="w-full cyber-button mt-4"
+                                >
+                                    {t('landing.access.proCta')}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section id="faq" className="py-20 px-4 bg-cyber-green/5">
+                <div className="max-w-3xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">
+                        {t('landing.faq.title')}
+                    </h2>
+
+                    <div className="space-y-4">
+                        {[1, 2, 3, 4, 5].map((index) => (
+                            <div
+                                key={index}
+                                className="cyber-card cursor-pointer transition-all duration-300 hover:border-cyber-green/50"
+                                onClick={() => toggleFaq(index)}
+                            >
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-lg font-semibold text-foreground pr-4">
+                                        {t(`landing.faq.q${index}`)}
+                                    </h3>
+                                    <ChevronDown
+                                        className={`w-5 h-5 text-cyber-green flex-shrink-0 transition-transform ${openFaq === index ? 'rotate-180' : ''
+                                            }`}
+                                    />
+                                </div>
+                                {openFaq === index && (
+                                    <p className="mt-4 text-muted-foreground leading-relaxed">
+                                        {t(`landing.faq.a${index}`)}
+                                    </p>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
 
             {/* Footer */}
-            <div className="py-8 text-center text-sm text-gray-400 border-t border-border/30">
-                © 2026 QadamSafe
-            </div>
+            <footer className="py-8 px-4 border-t border-border bg-background">
+                <div className="max-w-7xl mx-auto text-center">
+                    <p className="text-sm text-muted-foreground">
+                        {t('landing.footer.copyright')}
+                    </p>
+                </div>
+            </footer>
+
+            {/* Add custom animation styles */}
+            <style>{`
+                @keyframes float {
+                    0%, 100% {
+                        transform: translateY(0px);
+                    }
+                    50% {
+                        transform: translateY(-20px);
+                    }
+                }
+                .animate-float {
+                    animation: float 3s ease-in-out infinite;
+                }
+            `}</style>
         </div>
     );
 };

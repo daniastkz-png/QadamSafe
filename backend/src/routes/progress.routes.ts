@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
-import { progressService } from '../services/progress.service';
 import { authMiddleware, AuthRequest } from '../middleware/auth.middleware';
+import { firestoreProgressRepository } from '../repositories/firestore/progress.repository';
+import { firestoreScenarioRepository } from '../repositories/firestore/scenario.repository';
 
 const router = Router();
 
@@ -15,8 +16,18 @@ router.get('/', async (req: AuthRequest, res: Response): Promise<void> => {
             return;
         }
 
-        const progress = await progressService.getUserProgress(req.user.userId);
-        res.status(200).json(progress);
+        const progress = await firestoreProgressRepository.findByUserId(req.user.userId);
+
+        // Add scenario details to each progress
+        const scenarios = await firestoreScenarioRepository.findAll();
+        const scenarioMap = new Map(scenarios.map((s: any) => [s.id, s]));
+
+        const progressWithScenarios = progress.map((p: any) => ({
+            ...p,
+            scenario: scenarioMap.get(p.scenarioId) || null,
+        }));
+
+        res.status(200).json(progressWithScenarios);
     } catch (error) {
         res.status(500).json({ error: (error as Error).message });
     }
@@ -30,7 +41,7 @@ router.get('/stats', async (req: AuthRequest, res: Response): Promise<void> => {
             return;
         }
 
-        const stats = await progressService.getUserStats(req.user.userId);
+        const stats = await firestoreProgressRepository.getStats(req.user.userId);
         res.status(200).json(stats);
     } catch (error) {
         res.status(500).json({ error: (error as Error).message });
@@ -46,7 +57,7 @@ router.get('/scenario/:scenarioId', async (req: AuthRequest, res: Response): Pro
         }
 
         const { scenarioId } = req.params;
-        const progress = await progressService.getScenarioProgress(
+        const progress = await firestoreProgressRepository.findByUserAndScenario(
             req.user.userId,
             scenarioId
         );

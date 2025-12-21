@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sidebar } from '../components/Sidebar';
-import { progressAPI } from '../services/api';
+import { TopNavBar } from '../components/TopNavBar';
+import { firebaseProgressAPI } from '../services/firebase';
 import { TrendingUp, Target, AlertTriangle, CheckCircle, XCircle, Shield } from 'lucide-react';
 import type { ProgressStats, UserProgress } from '../types';
 import { useAuth } from '../contexts/AuthContext';
@@ -20,11 +20,11 @@ export const ProgressPage: React.FC = () => {
     const loadData = async () => {
         try {
             const [statsData, progressData] = await Promise.all([
-                progressAPI.getStats(),
-                progressAPI.getProgress(),
+                firebaseProgressAPI.getStats(),
+                firebaseProgressAPI.getProgress(),
             ]);
-            setStats(statsData);
-            setProgress(progressData.filter((p) => p.completed));
+            setStats(statsData as ProgressStats);
+            setProgress((progressData as any[]).filter((p: any) => p.completed));
         } catch (error) {
             console.error('Failed to load progress:', error);
         } finally {
@@ -49,10 +49,10 @@ export const ProgressPage: React.FC = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-background">
-            <Sidebar />
+        <div className="min-h-screen bg-background">
+            <TopNavBar />
 
-            <div className="flex-1 p-8 ml-64">
+            <div className="max-w-7xl mx-auto p-8">
                 <h1 className="text-4xl font-bold text-cyber-green mb-8">
                     {t('progress.title')}
                 </h1>

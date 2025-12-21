@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-export const BinaryBackground: React.FC = () => {
+interface BinaryBackgroundProps {
+    color?: 'green' | 'red' | 'default';
+}
+
+export const BinaryBackground: React.FC<BinaryBackgroundProps> = ({ color = 'default' }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -31,14 +35,38 @@ export const BinaryBackground: React.FC = () => {
         const drops: number[] = Array(columns).fill(0);
         const chars = '01';
 
+        // Color configuration based on prop
+        const getColors = () => {
+            if (color === 'green') {
+                return {
+                    background: 'rgba(0, 50, 20, 0.05)', // Dark green tint
+                    text: '#00ff41', // Cyber green
+                    rgb: '0, 255, 65' // RGB for cyber green
+                };
+            } else if (color === 'red') {
+                return {
+                    background: 'rgba(50, 0, 0, 0.05)', // Dark red tint
+                    text: '#ff0041', // Cyber red
+                    rgb: '255, 0, 65' // RGB for cyber red
+                };
+            }
+            return {
+                background: 'rgba(10, 10, 15, 0.03)', // Default dark
+                text: '#00ff41', // Cyber green
+                rgb: '0, 255, 65' // RGB for cyber green
+            };
+        };
+
         // Animation function
         const draw = () => {
-            // Semi-transparent black to create fade effect (less transparent for brighter effect)
-            ctx.fillStyle = 'rgba(10, 10, 15, 0.03)';
+            const colors = getColors();
+
+            // Semi-transparent background to create fade effect
+            ctx.fillStyle = colors.background;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Set text style
-            ctx.fillStyle = '#00ff41'; // Cyber green
+            ctx.fillStyle = colors.text;
             ctx.font = `${fontSize}px monospace`;
 
             // Draw characters
@@ -50,7 +78,7 @@ export const BinaryBackground: React.FC = () => {
 
                 // Vary opacity for depth effect (increased brightness)
                 const opacity = Math.random() * 0.5 + 0.5;
-                ctx.fillStyle = `rgba(0, 255, 65, ${opacity})`;
+                ctx.fillStyle = `rgba(${colors.rgb}, ${opacity})`;
                 ctx.fillText(char, x, y);
 
                 // Reset drop to top randomly
@@ -71,7 +99,7 @@ export const BinaryBackground: React.FC = () => {
             window.removeEventListener('resize', resizeCanvas);
             window.removeEventListener('scroll', resizeCanvas);
         };
-    }, []);
+    }, [color]); // Re-run effect when color changes
 
     return (
         <canvas

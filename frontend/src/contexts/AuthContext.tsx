@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authAPI } from '../services/api';
+import { firebaseAuthAPI, auth } from '../services/firebase';
 import type { User } from '../types';
 import { useTranslation } from 'react-i18next';
+import { onAuthStateChanged } from 'firebase/auth';
 
 interface AuthContextType {
     user: User | null;
@@ -22,31 +23,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const { i18n } = useTranslation();
 
     useEffect(() => {
-        checkAuth();
-    }, []);
-
-    const checkAuth = async () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const userData = await authAPI.getMe();
-                setUser(userData);
-                // Sync language with user preference
-                if (userData.language && userData.language !== i18n.language) {
-                    i18n.changeLanguage(userData.language);
-                    localStorage.setItem('language', userData.language);
+        // Listen to Firebase auth state changes
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            if (firebaseUser) {
+                try {
+                    const userData = await firebaseAuthAPI.getMe();
+                    setUser(userData as User);
+                    // Sync language with user preference
+                    if (userData.language && userData.language !== i18n.language) {
+                        i18n.changeLanguage(userData.language);
+                        localStorage.setItem('language', userData.language);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    setUser(null);
                 }
-            } catch (error) {
-                localStorage.removeItem('token');
+            } else {
+                setUser(null);
             }
-        }
-        setLoading(false);
-    };
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, [i18n]);
 
     const login = async (email: string, password: string) => {
-        const { user: userData, token } = await authAPI.login(email, password);
-        localStorage.setItem('token', token);
-        setUser(userData);
+        const { user: userData } = await firebaseAuthAPI.login(email, password);
+        setUser(userData as User);
 
         // Save last account for quick login feature
         localStorage.setItem('lastAccount', JSON.stringify({
@@ -70,14 +73,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const register = async (email: string, password: string, name?: string) => {
         const currentLanguage = i18n.language;
-        const { user: userData, token } = await authAPI.register({
+        const { user: userData } = await firebaseAuthAPI.register({
             email,
             password,
             name,
             language: currentLanguage,
         });
-        localStorage.setItem('token', token);
-        setUser(userData);
+        setUser(userData as User);
 
         // Save last account for quick login feature
         localStorage.setItem('lastAccount', JSON.stringify({
@@ -89,8 +91,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         navigate('/welcome');
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
+    const logout = async () => {
+        await firebaseAuthAPI.logout();
         setUser(null);
         navigate('/');
     };

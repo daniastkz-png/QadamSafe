@@ -85,7 +85,7 @@ export const AuthPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
             {/* Language Switcher - Top Right */}
-            <div className="absolute top-6 right-6 w-48">
+            <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50">
                 <LanguageSwitcher />
             </div>
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Sidebar } from '../components/Sidebar';
-import { scenariosAPI, progressAPI } from '../services/api';
+import { TopNavBar } from '../components/TopNavBar';
+import { firebaseScenariosAPI, firebaseProgressAPI } from '../services/firebase';
 import { Lock, Play, CheckCircle } from 'lucide-react';
 import type { Scenario, UserProgress } from '../types';
 
@@ -21,11 +21,11 @@ export const TrainingPage: React.FC = () => {
     const loadData = async () => {
         try {
             const [scenariosData, progressData] = await Promise.all([
-                scenariosAPI.getAll(),
-                progressAPI.getProgress(),
+                firebaseScenariosAPI.getAll(),
+                firebaseProgressAPI.getProgress(),
             ]);
-            setScenarios(scenariosData);
-            setProgress(progressData);
+            setScenarios(scenariosData as any);
+            setProgress(progressData as any);
         } catch (error) {
             console.error('Failed to load training data:', error);
         } finally {
@@ -83,10 +83,10 @@ export const TrainingPage: React.FC = () => {
     )?.id;
 
     return (
-        <div className="flex min-h-screen bg-background">
-            <Sidebar />
+        <div className="min-h-screen bg-background">
+            <TopNavBar />
 
-            <div className="flex-1 p-8 ml-64">
+            <div className="max-w-7xl mx-auto p-8">
                 <h1 className="text-4xl font-bold text-cyber-green mb-8">
                     {t('training.title')}
                 </h1>

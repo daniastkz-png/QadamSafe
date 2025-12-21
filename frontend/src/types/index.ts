@@ -2,14 +2,14 @@ export interface User {
     id: string;
     email: string;
     name?: string;
-    role: 'USER' | 'ADMIN';
+    role: 'USER' | 'ADMIN' | string;
     language: string;
-    subscriptionTier: 'FREE' | 'PRO' | 'BUSINESS';
+    subscriptionTier: 'FREE' | 'PRO' | 'BUSINESS' | string;
     securityScore: number;
     rank: number;
     hasSeenWelcome: boolean;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: any;
+    updatedAt: any;
 }
 
 export interface Scenario {

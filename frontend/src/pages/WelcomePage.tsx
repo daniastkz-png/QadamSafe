@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Sidebar } from '../components/Sidebar';
+import { TopNavBar } from '../components/TopNavBar';
+import { ThreatProtectionVisual } from '../components/ThreatProtectionVisual';
 import { useAuth } from '../contexts/AuthContext';
-import { authAPI } from '../services/api';
+import { firebaseAuthAPI } from '../services/firebase';
 import { Shield, CheckCircle, Target, TrendingUp, Award, Clock } from 'lucide-react';
 
 export const WelcomePage: React.FC = () => {
@@ -14,8 +15,8 @@ export const WelcomePage: React.FC = () => {
     const handleGetStarted = async () => {
         if (user && !user.hasSeenWelcome) {
             try {
-                const updatedUser = await authAPI.markWelcomeSeen();
-                updateUser(updatedUser);
+                const updatedUser = await firebaseAuthAPI.markWelcomeSeen();
+                updateUser(updatedUser as any);
             } catch (error) {
                 console.error('Failed to mark welcome as seen:', error);
             }
@@ -24,10 +25,10 @@ export const WelcomePage: React.FC = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-background">
-            <Sidebar />
+        <div className="min-h-screen bg-background">
+            <TopNavBar />
 
-            <div className="flex-1 p-8 ml-64">
+            <div className="max-w-7xl mx-auto p-8">
                 {/* Header */}
                 <div className="text-center mb-12">
                     <div className="inline-block cyber-border rounded-lg p-6 mb-6">
@@ -61,6 +62,11 @@ export const WelcomePage: React.FC = () => {
                         <p className="text-gray-300">
                             {t('welcome.whyNow.mainContext')}
                         </p>
+                    </div>
+
+                    {/* Threat Protection Visual */}
+                    <div className="mb-6">
+                        <ThreatProtectionVisual />
                     </div>
 
                     {/* Micro Challenge */}

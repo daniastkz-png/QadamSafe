@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { authService } from '../services/auth.service';
+import { firestoreAuthService } from '../services/firestore/auth.service';
 import { authMiddleware, AuthRequest } from '../middleware/auth.middleware';
-import { userService } from '../services/user.service';
+import { firestoreUserRepository } from '../repositories/firestore/user.repository';
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const result = await authService.register({ email, password, name, language });
+        const result = await firestoreAuthService.register({ email, password, name, language });
         res.status(201).json(result);
     } catch (error) {
         res.status(400).json({ error: (error as Error).message });
@@ -32,7 +32,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const result = await authService.login(email, password);
+        const result = await firestoreAuthService.login(email, password);
         res.status(200).json(result);
     } catch (error) {
         res.status(401).json({ error: (error as Error).message });
@@ -47,7 +47,7 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res: Response): Promi
             return;
         }
 
-        const user = await authService.getUserById(req.user.userId);
+        const user = await firestoreAuthService.getUserById(req.user.userId);
         if (!user) {
             res.status(404).json({ error: 'User not found' });
             return;
@@ -73,7 +73,11 @@ router.patch('/language', authMiddleware, async (req: AuthRequest, res: Response
             return;
         }
 
-        const user = await userService.updateLanguage(req.user.userId, language);
+        const user = await firestoreUserRepository.update(req.user.userId, { language });
+        if (!user) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
         const { password, ...userWithoutPassword } = user;
         res.status(200).json(userWithoutPassword);
     } catch (error) {
@@ -89,7 +93,11 @@ router.post('/welcome-seen', authMiddleware, async (req: AuthRequest, res: Respo
             return;
         }
 
-        const user = await userService.markWelcomeSeen(req.user.userId);
+        const user = await firestoreUserRepository.update(req.user.userId, { hasSeenWelcome: true });
+        if (!user) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
         const { password, ...userWithoutPassword } = user;
         res.status(200).json(userWithoutPassword);
     } catch (error) {

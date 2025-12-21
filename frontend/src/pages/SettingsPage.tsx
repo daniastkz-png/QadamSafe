@@ -17,12 +17,12 @@ import {
     ChevronUp
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { Sidebar } from '../components/Sidebar';
-import { progressAPI, scenariosAPI } from '../services/api';
-import { UserProgress } from '../types';
+import { TopNavBar } from '../components/TopNavBar';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { firebaseProgressAPI, firebaseScenariosAPI } from '../services/firebase';
 
 export const SettingsPage: React.FC = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { user, logout } = useAuth();
 
@@ -38,17 +38,17 @@ export const SettingsPage: React.FC = () => {
         const fetchProgress = async () => {
             try {
                 const [progress, scenarios] = await Promise.all([
-                    progressAPI.getProgress(),
-                    scenariosAPI.getAll()
-                ]);
+                    firebaseProgressAPI.getProgress(),
+                    firebaseScenariosAPI.getAll()
+                ]) as [any[], any[]];
 
-                const completed = progress.filter((p: UserProgress) => p.completed).length;
+                const completed = progress.filter((p: any) => p.completed).length;
                 setCompletedScenarios(completed);
 
-                const completedIds = new Set(progress.filter((p: UserProgress) => p.completed).map((p: UserProgress) => p.scenarioId));
+                const completedIds = new Set(progress.filter((p: any) => p.completed).map((p: any) => p.scenarioId));
                 const nextScenario = scenarios
-                    .sort((a, b) => a.order - b.order)
-                    .find(s => !completedIds.has(s.id));
+                    .sort((a: any, b: any) => a.order - b.order)
+                    .find((s: any) => !completedIds.has(s.id));
 
                 setCurrentLevel(nextScenario ? nextScenario.order : scenarios.length);
             } catch (error) {
@@ -66,9 +66,7 @@ export const SettingsPage: React.FC = () => {
         setTimeout(() => setShowSaveSuccess(false), 3000);
     };
 
-    const handleLanguageChange = (lang: string) => {
-        i18n.changeLanguage(lang);
-    };
+
 
     const handleLogout = () => {
         logout();
@@ -83,10 +81,10 @@ export const SettingsPage: React.FC = () => {
     const tier = 'Free';
 
     return (
-        <div className="flex min-h-screen bg-background">
-            <Sidebar />
+        <div className="min-h-screen bg-background">
+            <TopNavBar />
 
-            <div className="flex-1 p-8 ml-64">
+            <div className="max-w-7xl mx-auto p-8">
                 {/* Page Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-white mb-2">
@@ -218,35 +216,7 @@ export const SettingsPage: React.FC = () => {
                                 <label className="block text-sm font-medium text-gray-300 mb-2">
                                     {t('settings.personalization.language')}
                                 </label>
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => handleLanguageChange('ru')}
-                                        className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${i18n.language === 'ru'
-                                            ? 'bg-cyber-green/20 border-cyber-green text-cyber-green'
-                                            : 'bg-background border-border text-gray-400 hover:border-cyber-green/50'
-                                            }`}
-                                    >
-                                        Русский
-                                    </button>
-                                    <button
-                                        onClick={() => handleLanguageChange('en')}
-                                        className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${i18n.language === 'en'
-                                            ? 'bg-cyber-green/20 border-cyber-green text-cyber-green'
-                                            : 'bg-background border-border text-gray-400 hover:border-cyber-green/50'
-                                            }`}
-                                    >
-                                        English
-                                    </button>
-                                    <button
-                                        onClick={() => handleLanguageChange('kk')}
-                                        className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${i18n.language === 'kk'
-                                            ? 'bg-cyber-green/20 border-cyber-green text-cyber-green'
-                                            : 'bg-background border-border text-gray-400 hover:border-cyber-green/50'
-                                            }`}
-                                    >
-                                        Қазақша
-                                    </button>
-                                </div>
+                                <LanguageSwitcher />
                                 <p className="text-xs text-gray-500 mt-2">
                                     {t('settings.personalization.autoSave')}
                                 </p>
