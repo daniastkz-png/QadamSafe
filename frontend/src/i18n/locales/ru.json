@@ -52,7 +52,7 @@
         },
         "access": {
             "title": "Доступ",
-            "freeTitle": "Бесплатный доступ",
+            "freeTitle": "Free доступ",
             "freeDesc": "Базовые сценарии для начала обучения",
             "freeFeature1": "5 базовых сценариев",
             "freeFeature2": "Основы кибербезопасности",
@@ -288,7 +288,7 @@
         "title": "Подписка",
         "currentPlan": "Текущий план",
         "choosePlan": "Выберите план",
-        "free": "Бесплатный",
+        "free": "Free",
         "pro": "Pro",
         "business": "Business",
         "perMonth": "в месяц",
