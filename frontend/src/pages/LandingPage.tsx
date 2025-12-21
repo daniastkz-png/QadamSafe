@@ -177,12 +177,12 @@ export const LandingPage: React.FC = () => {
 
                 <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
                     {/* Main heading */}
-                    <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
+                    <h1 className="text-3xl md:text-5xl font-bold text-foreground leading-snug md:leading-tight max-w-3xl mx-auto">
                         {t('landing.hero.title')}
                     </h1>
 
                     {/* Subtitle */}
-                    <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+                    <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                         {t('landing.hero.subtitle')}
                     </p>
 
