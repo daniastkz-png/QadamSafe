@@ -61,7 +61,7 @@ export const LandingPage: React.FC = () => {
                         <div className="hidden md:flex items-center gap-8">
                             <button
                                 onClick={() => scrollToSection('what-you-learn')}
-                                className={`text-base font-medium transition-colors ${activeSection === 'what-you-learn'
+                                className={`text-lg font-medium transition-colors ${activeSection === 'what-you-learn'
                                     ? 'text-cyber-green'
                                     : 'text-muted-foreground hover:text-foreground'
                                     }`}
@@ -70,7 +70,7 @@ export const LandingPage: React.FC = () => {
                             </button>
                             <button
                                 onClick={() => scrollToSection('how-it-works')}
-                                className={`text-base font-medium transition-colors ${activeSection === 'how-it-works'
+                                className={`text-lg font-medium transition-colors ${activeSection === 'how-it-works'
                                     ? 'text-cyber-green'
                                     : 'text-muted-foreground hover:text-foreground'
                                     }`}
@@ -79,7 +79,7 @@ export const LandingPage: React.FC = () => {
                             </button>
                             <button
                                 onClick={() => scrollToSection('access')}
-                                className={`text-base font-medium transition-colors ${activeSection === 'access'
+                                className={`text-lg font-medium transition-colors ${activeSection === 'access'
                                     ? 'text-cyber-green'
                                     : 'text-muted-foreground hover:text-foreground'
                                     }`}
@@ -88,7 +88,7 @@ export const LandingPage: React.FC = () => {
                             </button>
                             <button
                                 onClick={() => scrollToSection('faq')}
-                                className={`text-base font-medium transition-colors ${activeSection === 'faq'
+                                className={`text-lg font-medium transition-colors ${activeSection === 'faq'
                                     ? 'text-cyber-green'
                                     : 'text-muted-foreground hover:text-foreground'
                                     }`}
