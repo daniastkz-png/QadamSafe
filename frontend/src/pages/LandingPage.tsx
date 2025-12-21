@@ -53,8 +53,8 @@ export const LandingPage: React.FC = () => {
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
                         <div className="flex items-center gap-2">
-                            <Shield className="w-6 h-6 text-cyber-green" />
-                            <span className="text-lg font-bold text-cyber-green">QadamSafe</span>
+                            <Shield className="w-8 h-8 text-cyber-green" />
+                            <span className="text-xl font-bold text-cyber-green">QadamSafe</span>
                         </div>
 
                         {/* Desktop Navigation */}
