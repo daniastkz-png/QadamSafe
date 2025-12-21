@@ -24,7 +24,7 @@ export const SubscriptionPage: React.FC = () => {
         {
             tier: 'PRO',
             name: t('subscription.pro'),
-            price: '9.900 ₸',
+            price: '4.900 ₸',
             icon: <Crown className="w-8 h-8" />,
             badge: 'Для личного использования',
             features: [
@@ -38,7 +38,7 @@ export const SubscriptionPage: React.FC = () => {
         {
             tier: 'BUSINESS',
             name: t('subscription.business'),
-            price: '19.900 ₸',
+            price: '9.900 ₸',
             icon: <Building2 className="w-8 h-8" />,
             badge: 'Для команд и образовательных учреждений',
             features: [
