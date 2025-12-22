@@ -24,7 +24,9 @@ export const SubscriptionPage: React.FC = () => {
         {
             tier: 'PRO',
             name: t('subscription.pro'),
-            price: '4.900 ₸',
+            price: '2.490 ₸',
+            period: t('subscription.perMonth', 'в месяц'),
+            billingCycle: t('subscription.billedMonthly', 'Списывается каждый месяц'),
             icon: <Crown className="w-8 h-8" />,
             badge: 'Для личного использования',
             features: [
@@ -38,9 +40,14 @@ export const SubscriptionPage: React.FC = () => {
         {
             tier: 'BUSINESS',
             name: t('subscription.business'),
-            price: '9.900 ₸',
+            price: '5.900 ₸',
+            period: t('subscription.per3Months', 'за 3 месяца'),
+            billingCycle: t('subscription.billed3Months', 'Списывается каждые 3 месяца'),
+            pricePerMonth: '1.967 ₸',
+            savings: '21%',
             icon: <Building2 className="w-8 h-8" />,
             badge: 'Для команд и образовательных учреждений',
+            bestValue: true,
             features: [
                 t('subscription.businessFeature1'),
                 t('subscription.businessFeature2'),
@@ -76,13 +83,22 @@ export const SubscriptionPage: React.FC = () => {
                         return (
                             <div
                                 key={plan.tier}
-                                className={`cyber-card relative ${plan.popular
-                                    ? 'border-cyber-green/50 shadow-[0_0_30px_rgba(0,255,65,0.2)]'
-                                    : ''
+                                className={`cyber-card relative ${plan.bestValue
+                                        ? 'border-cyber-green shadow-[0_0_40px_rgba(0,255,65,0.3)]'
+                                        : plan.popular
+                                            ? 'border-cyber-green/50 shadow-[0_0_30px_rgba(0,255,65,0.2)]'
+                                            : ''
                                     } ${isCurrent ? 'bg-cyber-green/5' : ''}`}
                             >
+                                {/* Best Value Badge */}
+                                {plan.bestValue && (
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyber-green to-cyber-blue text-black px-6 py-1.5 rounded-full text-sm font-bold shadow-lg">
+                                        🔥 Самая выгодная
+                                    </div>
+                                )}
+
                                 {/* Popular Badge */}
-                                {plan.popular && (
+                                {plan.popular && !plan.bestValue && (
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-cyber-green text-black px-4 py-1 rounded-full text-sm font-semibold">
                                         Popular
                                     </div>
@@ -112,14 +128,44 @@ export const SubscriptionPage: React.FC = () => {
                                     </div>
                                 )}
 
-                                <div className="text-center mb-6">
-                                    <span className="text-4xl font-bold text-cyber-green">
-                                        {typeof plan.price === 'number' ? `$${plan.price}` : plan.price}
-                                    </span>
-                                    {typeof plan.price === 'number' && plan.price > 0 && (
-                                        <span className="text-muted-foreground ml-2">
-                                            / {t('subscription.perMonth')}
+                                {/* Price Section */}
+                                <div className="text-center mb-4">
+                                    <div className="flex items-baseline justify-center gap-2">
+                                        <span className="text-4xl font-bold text-cyber-green">
+                                            {typeof plan.price === 'number' ? `$${plan.price}` : plan.price}
                                         </span>
+                                        {plan.period && (
+                                            <span className="text-muted-foreground text-sm">
+                                                {plan.period}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Savings Badge for Business */}
+                                    {plan.savings && (
+                                        <div className="mt-2 flex items-center justify-center gap-2">
+                                            <span className="inline-block px-3 py-1 bg-cyber-green/20 border border-cyber-green rounded-full text-xs font-bold text-cyber-green">
+                                                Экономия {plan.savings}
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {/* Price per month for Business */}
+                                    {plan.pricePerMonth && (
+                                        <div className="mt-2">
+                                            <span className="text-sm text-muted-foreground">
+                                                = {plan.pricePerMonth} в месяц
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {/* Billing Cycle */}
+                                    {plan.billingCycle && (
+                                        <div className="mt-2">
+                                            <span className="text-xs text-muted-foreground">
+                                                {plan.billingCycle}
+                                            </span>
+                                        </div>
                                     )}
                                 </div>
 
