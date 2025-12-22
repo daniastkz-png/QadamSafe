@@ -436,10 +436,7 @@ export const LandingPage: React.FC = () => {
                         </div>
 
                         {/* Pro Access */}
-                        <div className="cyber-card border-2 border-cyber-green bg-cyber-green/5 relative">
-                            <div className="absolute -top-3 right-4 px-3 py-1 bg-cyber-green text-background text-xs font-bold rounded-full">
-                                PRO
-                            </div>
+                        <div className="cyber-card border-2 border-cyber-green/30 shadow-[0_0_20px_rgba(0,255,65,0.15)]">
                             <div className="space-y-4">
                                 <h3 className="text-2xl font-bold text-cyber-green">
                                     {t('landing.access.proTitle')}
@@ -475,7 +472,7 @@ export const LandingPage: React.FC = () => {
                         </div>
 
                         {/* Business Access */}
-                        <div className="cyber-card border-2">
+                        <div className="cyber-card border-2 border-cyber-green shadow-[0_0_35px_rgba(0,255,65,0.25)]">
                             <div className="space-y-4">
                                 <h3 className="text-2xl font-bold text-foreground">
                                     {t('landing.access.businessTitle')}
