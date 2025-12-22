@@ -292,6 +292,36 @@ export const AuthPage: React.FC = () => {
 
                     {/* Auth Form */}
                     <div className="cyber-card">
+                        {/* Top Switch Panel */}
+                        <div className="mb-6 pb-6 border-b border-cyber-green/10">
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    {isLogin ? t('auth.noAccount', 'Нет аккаунта?') : t('auth.haveAccount', 'Уже есть аккаунт?')}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={isLogin ? switchToRegister : switchToLogin}
+                                    className="relative group px-6 py-2 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105"
+                                >
+                                    {/* Animated gradient background */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-cyber-green via-cyber-blue to-cyber-green bg-[length:200%_100%] animate-gradient-shift" />
+
+                                    {/* Glow effect */}
+                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="absolute inset-0 bg-cyber-green/20 blur-xl" />
+                                    </div>
+
+                                    {/* Button text */}
+                                    <span className="relative z-10 font-semibold text-black text-sm">
+                                        {isLogin ? t('auth.createAccount', 'Создать') : t('auth.signIn', 'Войти')}
+                                    </span>
+
+                                    {/* Shine effect */}
+                                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                                </button>
+                            </div>
+                        </div>
+
                         {/* Login Form */}
                         {isLogin ? (
                             <>
@@ -346,16 +376,6 @@ export const AuthPage: React.FC = () => {
                                     >
                                         {loading ? t('common.loading') : t('auth.loginButton', 'Войти')}
                                     </button>
-
-                                    <div className="text-center">
-                                        <button
-                                            type="button"
-                                            onClick={switchToRegister}
-                                            className="text-sm text-cyber-green hover:underline"
-                                        >
-                                            {t('auth.noAccount', 'Нет аккаунта?')} {t('auth.createAccount', 'Создать')}
-                                        </button>
-                                    </div>
                                 </form>
                             </>
                         ) : (
@@ -512,16 +532,6 @@ export const AuthPage: React.FC = () => {
                                     >
                                         {loading ? t('common.loading') : t('auth.createAccountButton', 'Создать аккаунт')}
                                     </button>
-
-                                    <div className="text-center">
-                                        <button
-                                            type="button"
-                                            onClick={switchToLogin}
-                                            className="text-sm text-cyber-green hover:underline"
-                                        >
-                                            {t('auth.haveAccount', 'Уже есть аккаунт?')} {t('auth.signIn', 'Войти')}
-                                        </button>
-                                    </div>
                                 </form>
                             </>
                         )}
@@ -561,12 +571,28 @@ export const AuthPage: React.FC = () => {
                     }
                 }
                 
+                @keyframes gradient-shift {
+                    0% {
+                        background-position: 0% 50%;
+                    }
+                    50% {
+                        background-position: 100% 50%;
+                    }
+                    100% {
+                        background-position: 0% 50%;
+                    }
+                }
+                
                 .animate-float {
                     animation: float 6s ease-in-out infinite;
                 }
                 
                 .animate-fade-in-up {
                     animation: fade-in-up 0.8s ease-out forwards;
+                }
+                
+                .animate-gradient-shift {
+                    animation: gradient-shift 3s ease infinite;
                 }
             `}</style>
         </div>
