@@ -38,7 +38,7 @@ const scenarios: Scenario[] = [
         contact: 'demo.scenario1.contact',
         message: 'demo.scenario1.message',
         question: 'demo.scenario1.question',
-        choices: ['demo.scenario1.choice1', 'demo.scenario1.choice2', 'demo.scenario1.choice3', 'demo.scenario1.choice4'],
+        choices: ['demo.scenario1.choice1', 'demo.scenario1.choice2', 'demo.scenario1.choice3'],
         riskyChoices: [0]
     },
     {
@@ -48,7 +48,7 @@ const scenarios: Scenario[] = [
         contact: 'demo.scenario2.contact',
         message: 'demo.scenario2.message',
         question: 'demo.scenario2.question',
-        choices: ['demo.scenario2.choice1', 'demo.scenario2.choice2', 'demo.scenario2.choice3', 'demo.scenario2.choice4'],
+        choices: ['demo.scenario2.choice1', 'demo.scenario2.choice2', 'demo.scenario2.choice3'],
         riskyChoices: [0]
     },
     {
@@ -58,7 +58,7 @@ const scenarios: Scenario[] = [
         contact: 'demo.scenario3.contact',
         message: 'demo.scenario3.message',
         question: 'demo.scenario3.question',
-        choices: ['demo.scenario3.choice1', 'demo.scenario3.choice2', 'demo.scenario3.choice3', 'demo.scenario3.choice4'],
+        choices: ['demo.scenario3.choice1', 'demo.scenario3.choice2', 'demo.scenario3.choice3'],
         riskyChoices: [0]
     },
     {
@@ -68,7 +68,7 @@ const scenarios: Scenario[] = [
         contact: 'demo.scenario4.contact',
         message: 'demo.scenario4.message',
         question: 'demo.scenario4.question',
-        choices: ['demo.scenario4.choice1', 'demo.scenario4.choice2', 'demo.scenario4.choice3', 'demo.scenario4.choice4'],
+        choices: ['demo.scenario4.choice1', 'demo.scenario4.choice2', 'demo.scenario4.choice3'],
         riskyChoices: [0]
     },
     {
@@ -78,7 +78,7 @@ const scenarios: Scenario[] = [
         contact: 'demo.scenario5.contact',
         message: 'demo.scenario5.message',
         question: 'demo.scenario5.question',
-        choices: ['demo.scenario5.choice1', 'demo.scenario5.choice2', 'demo.scenario5.choice3', 'demo.scenario5.choice4'],
+        choices: ['demo.scenario5.choice1', 'demo.scenario5.choice2', 'demo.scenario5.choice3'],
         riskyChoices: [0]
     }
 ];
@@ -104,7 +104,7 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                 }
                 return prev - 1;
             });
-        }, 100); // Update every 100ms for smooth animation (10s total)
+        }, 150); // Update every 150ms -> 15s total duration
 
         return () => clearInterval(interval);
     }, [isPaused, selectedChoice]);

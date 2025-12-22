@@ -480,12 +480,11 @@
         "hint": "Scenarios based on real fraud cases in Kazakhstan.\nTexts adapted for education.",
         "scenario1": {
             "contact": "Unknown Number",
-            "message": "Mom, hi. I lost my phone, using a friend's number.\nPlease send 15,000 to Kaspi ASAP, it's urgent, I'll explain later.\nNumber: +7 705 XXX XX XX",
+            "message": "Mom, hi. I lost my phone, using a friend's number.\nPlease send 15,000 ₸ to Kaspi ASAP, it's urgent, I'll explain later.\nNumber: +7 705 XXX XX XX",
             "question": "What do you do?",
             "choice1": "Transfer immediately — it might be an emergency",
             "choice2": "Ask for a voice message",
-            "choice3": "Ask a personal question only he knows",
-            "choice4": "Call his old number"
+            "choice3": "Call his old number"
         },
         "scenario2": {
             "contact": "Security Service",
@@ -493,8 +492,7 @@
             "question": "Your action?",
             "choice1": "Give the code — need to save the money",
             "choice2": "Hang up and check the banking app",
-            "choice3": "Call the official bank number",
-            "choice4": "Ignore and block"
+            "choice3": "Call the official bank number"
         },
         "scenario3": {
             "contact": "1414 (Egov)",
@@ -502,8 +500,7 @@
             "question": "How do you react?",
             "choice1": "Click and enter card details",
             "choice2": "Check on the official egov.kz website",
-            "choice3": "Call the service center (1414)",
-            "choice4": "Delete the message"
+            "choice3": "Call the service center (1414)"
         },
         "scenario4": {
             "contact": "HR Manager",
@@ -511,8 +508,7 @@
             "question": "Your reply?",
             "choice1": "Yes, interested! (Easy money)",
             "choice2": "Ask for company name and contract",
-            "choice3": "Search for reviews about this 'job'",
-            "choice4": "Block the contact"
+            "choice3": "Block the contact"
         },
         "scenario5": {
             "contact": "KazPost Delivery",
@@ -520,8 +516,7 @@
             "question": "What will you do?",
             "choice1": "Pay it, the amount is small",
             "choice2": "Check tracking number on post.kz",
-            "choice3": "Call the post office hotline",
-            "choice4": "Ignore it"
+            "choice3": "Call the post office hotline"
         }
     }
 }

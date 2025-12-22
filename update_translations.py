@@ -13,12 +13,11 @@ translations = {
             "hint": "Сценарий основан на реальных схемах мошенничества в РК.\nТексты адаптированы.",
             "scenario1": {
                 "contact": "Неизвестный номер",
-                "message": "Мам, привет. Я телефон потерял, это номер друга.\nСкинь срочно 15 000 на Каспи, очень надо, потом объясню.\nНомер: +7 705 XXX XX XX",
+                "message": "Мам, привет. Я телефон потерял, это номер друга.\nСкинь срочно 15 000 ₸ на Каспи, очень надо, потом объясню.\nНомер: +7 705 XXX XX XX",
                 "question": "Что сделаете?",
                 "choice1": "Сразу переведу — вдруг беда случилась",
                 "choice2": "Попрошу записать голосовое сообщение",
-                "choice3": "Задам вопрос, ответ на который знает только сын",
-                "choice4": "Позвоню на его старый номер"
+                "choice3": "Позвоню на его старый номер"
             },
             "scenario2": {
                 "contact": "Служба безопасности",
@@ -26,8 +25,7 @@ translations = {
                 "question": "Ваши действия?",
                 "choice1": "Назову код — нужно спасать деньги",
                 "choice2": "Сброшу и проверю в приложении банка",
-                "choice3": "Перезвоню на 9999 (или номер банка)",
-                "choice4": "Ничего не отвечу"
+                "choice3": "Перезвоню на официальный номер банка"
             },
             "scenario3": {
                 "contact": "1414 (Egov)",
@@ -35,8 +33,7 @@ translations = {
                 "question": "Как поступите?",
                 "choice1": "Перейду и введу данные карты",
                 "choice2": "Зайду на официальный сайт egov.kz",
-                "choice3": "Позвоню в ЦОН (1414)",
-                "choice4": "Удалю сообщение"
+                "choice3": "Позвоню в ЦОН (1414)"
             },
             "scenario4": {
                 "contact": "HR Менеджер",
@@ -44,8 +41,7 @@ translations = {
                 "question": "Что ответите?",
                 "choice1": "Да, интересно! (Легкие деньги)",
                 "choice2": "Спрошу название компании и договор",
-                "choice3": "Поищу отзывы об этой 'работе' в интернете",
-                "choice4": "Заблокирую контакт"
+                "choice3": "Заблокирую контакт"
             },
             "scenario5": {
                 "contact": "KazPost Доставка",
@@ -53,8 +49,7 @@ translations = {
                 "question": "Ваше решение?",
                 "choice1": "Перейду и оплачу, сумма маленькая",
                 "choice2": "Проверю трек-номер на post.kz",
-                "choice3": "Позвоню на горячую линию почты",
-                "choice4": "Проигнорирую"
+                "choice3": "Позвоню на горячую линию почты"
             }
         }
     },
@@ -68,12 +63,11 @@ translations = {
             "hint": "Scenarios based on real fraud cases in Kazakhstan.\nTexts adapted for education.",
             "scenario1": {
                 "contact": "Unknown Number",
-                "message": "Mom, hi. I lost my phone, using a friend's number.\nPlease send 15,000 to Kaspi ASAP, it's urgent, I'll explain later.\nNumber: +7 705 XXX XX XX",
+                "message": "Mom, hi. I lost my phone, using a friend's number.\nPlease send 15,000 ₸ to Kaspi ASAP, it's urgent, I'll explain later.\nNumber: +7 705 XXX XX XX",
                 "question": "What do you do?",
                 "choice1": "Transfer immediately — it might be an emergency",
                 "choice2": "Ask for a voice message",
-                "choice3": "Ask a personal question only he knows",
-                "choice4": "Call his old number"
+                "choice3": "Call his old number"
             },
             "scenario2": {
                 "contact": "Security Service",
@@ -81,8 +75,7 @@ translations = {
                 "question": "Your action?",
                 "choice1": "Give the code — need to save the money",
                 "choice2": "Hang up and check the banking app",
-                "choice3": "Call the official bank number",
-                "choice4": "Ignore and block"
+                "choice3": "Call the official bank number"
             },
             "scenario3": {
                 "contact": "1414 (Egov)",
@@ -90,8 +83,7 @@ translations = {
                 "question": "How do you react?",
                 "choice1": "Click and enter card details",
                 "choice2": "Check on the official egov.kz website",
-                "choice3": "Call the service center (1414)",
-                "choice4": "Delete the message"
+                "choice3": "Call the service center (1414)"
             },
             "scenario4": {
                 "contact": "HR Manager",
@@ -99,8 +91,7 @@ translations = {
                 "question": "Your reply?",
                 "choice1": "Yes, interested! (Easy money)",
                 "choice2": "Ask for company name and contract",
-                "choice3": "Search for reviews about this 'job'",
-                "choice4": "Block the contact"
+                "choice3": "Block the contact"
             },
             "scenario5": {
                 "contact": "KazPost Delivery",
@@ -108,8 +99,7 @@ translations = {
                 "question": "What will you do?",
                 "choice1": "Pay it, the amount is small",
                 "choice2": "Check tracking number on post.kz",
-                "choice3": "Call the post office hotline",
-                "choice4": "Ignore it"
+                "choice3": "Call the post office hotline"
             }
         }
     },
@@ -123,12 +113,11 @@ translations = {
             "hint": "Сценарий ҚР-дағы нақты алаяқтық жағдайларына негізделген.\nМәтіндер бейімделген.",
             "scenario1": {
                 "contact": "Белгісіз нөмір",
-                "message": "Мама, сәлем. Телефонымды жоғалтып алдым, досымның нөмірі.\nМаған шұғыл 15 000 Kaspi-ге жіберші, өте керек, кейін түсіндіремін.\nНөмір: +7 705 XXX XX XX",
+                "message": "Мама, сәлем. Телефонымды жоғалтып алдым, досымның нөмірі.\nМаған шұғыл 15 000 ₸ Kaspi-ге жіберші, өте керек, кейін түсіндіремін.\nНөмір: +7 705 XXX XX XX",
                 "question": "Не істейсіз?",
                 "choice1": "Бірден аударамын — жағдай қиын болуы мүмкін",
                 "choice2": "Дауыстық хабарлама жазуын сұраймын",
-                "choice3": "Тек ұлым білетін сұрақ қоямын",
-                "choice4": "Ескі нөміріне қоңырау шаламын"
+                "choice3": "Ескі нөміріне қоңырау шаламын"
             },
             "scenario2": {
                 "contact": "Қауіпсіздік қызметі",
@@ -136,8 +125,7 @@ translations = {
                 "question": "Сіздің әрекетіңіз?",
                 "choice1": "Кодты айтамын — ақшаны сақтау керек",
                 "choice2": "Тұтқаны қойып, банк қосымшасын тексеремін",
-                "choice3": "Ресми банк нөміріне хабарласамын",
-                "choice4": "Жауап бермеймін"
+                "choice3": "Ресми банк нөміріне хабарласамын"
             },
             "scenario3": {
                 "contact": "1414 (Egov)",
@@ -145,8 +133,7 @@ translations = {
                 "question": "Қалай жасайсыз?",
                 "choice1": "Сілтемемен өтіп, карта мәліметтерін енгіземін",
                 "choice2": "Ресми egov.kz сайтынан тексеремін",
-                "choice3": "ХҚКО-ға (1414) хабарласамын",
-                "choice4": "Хабарламаны өшіремін"
+                "choice3": "ХҚКО-ға (1414) хабарласамын"
             },
             "scenario4": {
                 "contact": "HR Менеджер",
@@ -154,8 +141,7 @@ translations = {
                 "question": "Не жауап бересіз?",
                 "choice1": "Иә, қызық! (Оңай ақша)",
                 "choice2": "Компания атауын және келісімшартты сұраймын",
-                "choice3": "Интернеттен пікірлерді іздеймін",
-                "choice4": "Бұғаттаймын"
+                "choice3": "Бұғаттаймын"
             },
             "scenario5": {
                 "contact": "KazPost Жеткізу",
@@ -163,8 +149,7 @@ translations = {
                 "question": "Не істейсіз?",
                 "choice1": "Төлей саламын, сома аз ғой",
                 "choice2": "post.kz сайтынан трек-нөмірді тексеремін",
-                "choice3": "Поштаның байланыс орталығына хабарласамын",
-                "choice4": "Елемеймін"
+                "choice3": "Поштаның байланыс орталығына хабарласамын"
             }
         }
     }
