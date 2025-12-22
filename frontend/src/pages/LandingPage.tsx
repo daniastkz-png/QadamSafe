@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Shield, Mail, Phone, MessageSquare, CheckCircle, ChevronDown, ChevronRight, Lock, Eye, AlertTriangle, Menu, X } from 'lucide-react';
+import { Shield, Mail, Phone, MessageSquare, CheckCircle, ChevronDown, ChevronRight, Eye, AlertTriangle, Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Footer } from '../components/Footer';
+import { InteractiveDemo } from '../components/InteractiveDemo';
 
 export const LandingPage: React.FC = () => {
     const { t } = useTranslation();
@@ -243,13 +244,8 @@ export const LandingPage: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* Shield visual */}
-                    <div className="pt-8 flex justify-center">
-                        <div className="relative">
-                            <Shield className="w-24 h-24 text-cyber-green opacity-20" />
-                            <Lock className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 text-cyber-green" />
-                        </div>
-                    </div>
+                    {/* Interactive Demo */}
+                    <InteractiveDemo navigate={navigate} t={t} />
                 </div>
             </section>
 
