@@ -94,6 +94,7 @@
         "login": "Вход",
         "register": "Регистрация",
         "email": "Email",
+        "emailOrUsername": "Email или имя пользователя",
         "password": "Пароль",
         "name": "Имя",
         "firstName": "Имя",

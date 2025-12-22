@@ -22,7 +22,6 @@ export const AuthPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
     const [username, setUsername] = useState('');
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPrivacy, setAcceptPrivacy] = useState(false);
@@ -104,7 +103,7 @@ export const AuthPage: React.FC = () => {
             if (isLogin) {
                 await login(email, password);
             } else {
-                await register(email, password, firstName || username || undefined);
+                await register(email, password, username || undefined);
             }
         } catch (err: any) {
             setError(err.response?.data?.error || t(`auth.${isLogin ? 'loginError' : 'registerError'}`));
@@ -301,16 +300,16 @@ export const AuthPage: React.FC = () => {
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     <div>
                                         <label className="block text-sm font-medium text-foreground mb-2">
-                                            {t('auth.email')}
+                                            {t('auth.emailOrUsername', 'Email или имя пользователя')}
                                         </label>
                                         <div className="relative">
                                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                             <input
-                                                type="email"
+                                                type="text"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 className="cyber-input pl-10"
-                                                placeholder={t('auth.email')}
+                                                placeholder={t('auth.emailOrUsername', 'Email или имя пользователя')}
                                                 required
                                             />
                                         </div>
@@ -372,33 +371,19 @@ export const AuthPage: React.FC = () => {
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     <div>
                                         <label className="block text-sm font-medium text-foreground mb-2">
-                                            {t('auth.firstName', 'Имя')}
+                                            {t('auth.username', 'Имя пользователя')}
                                         </label>
                                         <div className="relative">
                                             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                             <input
                                                 type="text"
-                                                value={firstName}
-                                                onChange={(e) => setFirstName(e.target.value)}
+                                                value={username}
+                                                onChange={(e) => setUsername(e.target.value)}
                                                 className="cyber-input pl-10"
-                                                placeholder={t('auth.firstName', 'Имя')}
+                                                placeholder={t('auth.username', 'Имя пользователя')}
                                                 required
                                             />
                                         </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-foreground mb-2">
-                                            {t('auth.username', 'Имя пользователя')}
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                            className="cyber-input"
-                                            placeholder={t('auth.username', 'Имя пользователя')}
-                                            required
-                                        />
                                     </div>
 
                                     <div>

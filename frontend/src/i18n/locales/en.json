@@ -149,6 +149,7 @@
         "login": "Login",
         "register": "Register",
         "email": "Email",
+        "emailOrUsername": "Email or username",
         "password": "Password",
         "name": "Name",
         "firstName": "First Name",
