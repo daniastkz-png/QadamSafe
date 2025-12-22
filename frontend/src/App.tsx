@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LandingPage } from './pages/LandingPage';
 import { AuthPage } from './pages/AuthPage';
+import { PartnersPage } from './pages/PartnersPage';
 import { WelcomePage } from './pages/WelcomePage';
 import { TrainingPage } from './pages/TrainingPage';
 import { ScenarioPage } from './pages/ScenarioPage';
@@ -21,6 +22,7 @@ function App() {
                     {/* Public Routes */}
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/auth" element={<AuthPage />} />
+                    <Route path="/partners" element={<PartnersPage />} />
 
                     {/* Redirect dashboard to progress */}
                     <Route path="/dashboard" element={<Navigate to="/progress" replace />} />

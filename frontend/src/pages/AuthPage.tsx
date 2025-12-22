@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { Shield, Mail, Lock, User, X, AlertTriangle } from 'lucide-react';
+import { Shield, Mail, Lock, User, X, AlertTriangle, Check } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { Link } from 'react-router-dom';
 
 interface LastAccount {
     email: string;
     name: string;
+}
+
+interface PasswordRequirement {
+    label: string;
+    test: (password: string) => boolean;
 }
 
 export const AuthPage: React.FC = () => {
@@ -15,12 +21,28 @@ export const AuthPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
+    const [referralCode, setReferralCode] = useState('');
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [acceptPrivacy, setAcceptPrivacy] = useState(false);
+    const [acceptMarketing, setAcceptMarketing] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [lastAccount, setLastAccount] = useState<LastAccount | null>(null);
     const [showQuickLogin, setShowQuickLogin] = useState(true);
     const passwordRef = useRef<HTMLInputElement>(null);
+
+    // Password requirements
+    const passwordRequirements: PasswordRequirement[] = [
+        { label: t('auth.password8Chars', '8+ символов'), test: (pwd) => pwd.length >= 8 },
+        { label: t('auth.passwordUppercase', 'Заглавная буква'), test: (pwd) => /[A-Z]/.test(pwd) },
+        { label: t('auth.passwordLowercase', 'Строчная буква'), test: (pwd) => /[a-z]/.test(pwd) },
+        { label: t('auth.passwordNumber', 'Цифра'), test: (pwd) => /[0-9]/.test(pwd) },
+        { label: t('auth.passwordSpecial', 'Специальный символ'), test: (pwd) => /[!@#$%^&*(),.?":{}|<>]/.test(pwd) },
+    ];
 
     // Load last account from localStorage
     useEffect(() => {
@@ -39,7 +61,6 @@ export const AuthPage: React.FC = () => {
         if (lastAccount) {
             setEmail(lastAccount.email);
             setShowQuickLogin(false);
-            // Focus on password field
             setTimeout(() => {
                 passwordRef.current?.focus();
             }, 100);
@@ -59,13 +80,34 @@ export const AuthPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+
+        if (!isLogin) {
+            // Validation for registration
+            if (!acceptTerms || !acceptPrivacy) {
+                setError(t('auth.mustAcceptTerms', 'Необходимо принять Условия использования и Политику конфиденциальности'));
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                setError(t('auth.passwordMismatch', 'Пароли не совпадают'));
+                return;
+            }
+
+            const allRequirementsMet = passwordRequirements.every(req => req.test(password));
+            if (!allRequirementsMet) {
+                setError(t('auth.passwordRequirementsNotMet', 'Пароль не соответствует требованиям'));
+                return;
+            }
+        }
+
         setLoading(true);
 
         try {
             if (isLogin) {
                 await login(email, password);
             } else {
-                await register(email, password, name || undefined);
+                const fullName = `${firstName} ${lastName}`.trim();
+                await register(email, password, fullName || username || undefined);
             }
         } catch (err: any) {
             setError(err.response?.data?.error || t(`auth.${isLogin ? 'loginError' : 'registerError'}`));
@@ -74,12 +116,21 @@ export const AuthPage: React.FC = () => {
         }
     };
 
-    // Get initials for avatar
     const getInitials = (name: string, email: string) => {
         if (name) {
             return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
         }
         return email[0].toUpperCase();
+    };
+
+    const switchToRegister = () => {
+        setIsLogin(false);
+        setError('');
+    };
+
+    const switchToLogin = () => {
+        setIsLogin(true);
+        setError('');
     };
 
     return (
@@ -121,12 +172,12 @@ export const AuthPage: React.FC = () => {
 
                         {/* Subheading */}
                         <p className="text-xl text-cyber-green font-medium leading-relaxed">
-                            {t('auth.welcomeSubtitle', 'Войдите в личный кабинет и продолжите обучение кибербезопасности')}
+                            {t('auth.welcomeSubtitleNew', 'Платформа для практического обучения кибербезопасности')}
                         </p>
 
                         {/* Description */}
                         <p className="text-base text-muted-foreground leading-relaxed">
-                            {t('auth.welcomeDescription', 'Интерактивная платформа, где пользователи учатся распознавать цифровые угрозы через реальные сценарии. Практика вместо теории. Навыки, которые реально защищают.')}
+                            {t('auth.welcomeDescriptionNew', 'Изучайте цифровые угрозы через реальные сценарии. Принимайте решения, анализируйте ошибки и формируйте навыки, которые действительно защищают.')}
                         </p>
 
                         {/* Feature Points */}
@@ -168,12 +219,12 @@ export const AuthPage: React.FC = () => {
 
                         {/* Subheading */}
                         <p className="text-lg text-cyber-green font-medium mb-4 leading-relaxed">
-                            {t('auth.welcomeSubtitle', 'Войдите в личный кабинет и продолжите обучение кибербезопасности')}
+                            {t('auth.welcomeSubtitleNew', 'Платформа для практического обучения кибербезопасности')}
                         </p>
 
                         {/* Description */}
                         <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                            {t('auth.welcomeDescription', 'Интерактивная платформа, где пользователи учатся распознавать цифровые угрозы через реальные сценарии. Практика вместо теории. Навыки, которые реально защищают.')}
+                            {t('auth.welcomeDescriptionNew', 'Изучайте цифровые угрозы через реальные сценарии. Принимайте решения, анализируйте ошибки и формируйте навыки, которые действительно защищают.')}
                         </p>
 
                         {/* Feature Points */}
@@ -196,7 +247,6 @@ export const AuthPage: React.FC = () => {
                     {/* Quick Login Card - Only show on login tab when there's a saved account */}
                     {isLogin && lastAccount && showQuickLogin && (
                         <div className="mb-4 cyber-card border-2 border-cyber-green/30 bg-cyber-green/5 relative overflow-hidden">
-                            {/* Dismiss button */}
                             <button
                                 onClick={handleDismissQuickLogin}
                                 className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors p-1"
@@ -213,12 +263,10 @@ export const AuthPage: React.FC = () => {
                                 onClick={handleQuickLogin}
                                 className="w-full flex items-center gap-4 p-3 rounded-lg bg-background/50 border border-cyber-green/20 hover:border-cyber-green/50 hover:bg-cyber-green/10 transition-all group"
                             >
-                                {/* Avatar */}
                                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyber-green to-cyber-blue flex items-center justify-center text-black font-bold text-lg flex-shrink-0">
                                     {getInitials(lastAccount.name, lastAccount.email)}
                                 </div>
 
-                                {/* Account Info */}
                                 <div className="flex-1 text-left min-w-0">
                                     {lastAccount.name && (
                                         <p className="text-foreground font-medium truncate">
@@ -230,7 +278,6 @@ export const AuthPage: React.FC = () => {
                                     </p>
                                 </div>
 
-                                {/* Arrow */}
                                 <div className="text-cyber-green opacity-50 group-hover:opacity-100 transition-opacity">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -238,7 +285,6 @@ export const AuthPage: React.FC = () => {
                                 </div>
                             </button>
 
-                            {/* Not you? link */}
                             <button
                                 onClick={handleClearLastAccount}
                                 className="mt-2 text-xs text-muted-foreground hover:text-cyber-red transition-colors"
@@ -250,108 +296,293 @@ export const AuthPage: React.FC = () => {
 
                     {/* Auth Form */}
                     <div className="cyber-card">
-                        {/* Tabs */}
-                        <div className="flex gap-4 mb-6">
-                            <button
-                                onClick={() => setIsLogin(true)}
-                                className={`flex-1 py-2 font-semibold transition-all ${isLogin
-                                    ? 'text-cyber-green border-b-2 border-cyber-green'
-                                    : 'text-muted-foreground hover:text-foreground'
-                                    }`}
-                            >
-                                {t('auth.login')}
-                            </button>
-                            <button
-                                onClick={() => setIsLogin(false)}
-                                className={`flex-1 py-2 font-semibold transition-all ${!isLogin
-                                    ? 'text-cyber-green border-b-2 border-cyber-green'
-                                    : 'text-muted-foreground hover:text-foreground'
-                                    }`}
-                            >
-                                {t('auth.register')}
-                            </button>
-                        </div>
+                        {/* Login Form */}
+                        {isLogin ? (
+                            <>
+                                <h2 className="text-2xl font-bold text-foreground mb-6">{t('auth.login', 'Вход')}</h2>
 
-                        {/* Form */}
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            {!isLogin && (
-                                <div>
-                                    <label className="block text-sm font-medium text-foreground mb-2">
-                                        {t('auth.name')}
-                                    </label>
-                                    <div className="relative">
-                                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                <form onSubmit={handleSubmit} className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">
+                                            {t('auth.email')}
+                                        </label>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                            <input
+                                                type="email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                className="cyber-input pl-10"
+                                                placeholder={t('auth.email')}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">
+                                            {t('auth.password')}
+                                        </label>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                            <input
+                                                ref={passwordRef}
+                                                type="password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className="cyber-input pl-10"
+                                                placeholder={t('auth.password')}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {error && (
+                                        <div className="cyber-border-red bg-cyber-red/10 text-cyber-red p-3 rounded-md text-sm">
+                                            {error}
+                                        </div>
+                                    )}
+
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="w-full cyber-button disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {loading ? t('common.loading') : t('auth.loginButton', 'Войти')}
+                                    </button>
+
+                                    <div className="text-center">
+                                        <button
+                                            type="button"
+                                            onClick={switchToRegister}
+                                            className="text-sm text-cyber-green hover:underline"
+                                        >
+                                            {t('auth.noAccount', 'Нет аккаунта?')} {t('auth.createAccount', 'Создать')}
+                                        </button>
+                                    </div>
+                                </form>
+                            </>
+                        ) : (
+                            <>
+                                {/* Registration Form */}
+                                <h2 className="text-2xl font-bold text-foreground mb-2">
+                                    {t('auth.createAccountTitle', 'Создайте аккаунт')}
+                                </h2>
+                                <p className="text-sm text-muted-foreground mb-6">
+                                    {t('auth.createAccountSubtitle', 'Присоединяйтесь к платформе для развития навыков кибербезопасности')}
+                                </p>
+
+                                <form onSubmit={handleSubmit} className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-foreground mb-2">
+                                                {t('auth.firstName', 'Имя')}
+                                            </label>
+                                            <div className="relative">
+                                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                                <input
+                                                    type="text"
+                                                    value={firstName}
+                                                    onChange={(e) => setFirstName(e.target.value)}
+                                                    className="cyber-input pl-10"
+                                                    placeholder={t('auth.firstName', 'Имя')}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-foreground mb-2">
+                                                {t('auth.lastName', 'Фамилия')}
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={lastName}
+                                                onChange={(e) => setLastName(e.target.value)}
+                                                className="cyber-input"
+                                                placeholder={t('auth.lastName', 'Фамилия')}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">
+                                            {t('auth.username', 'Имя пользователя')}
+                                        </label>
                                         <input
                                             type="text"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            className="cyber-input pl-10"
-                                            placeholder={t('auth.name')}
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            className="cyber-input"
+                                            placeholder={t('auth.username', 'Имя пользователя')}
+                                            required
                                         />
                                     </div>
-                                </div>
-                            )}
 
-                            <div>
-                                <label className="block text-sm font-medium text-foreground mb-2">
-                                    {t('auth.email')}
-                                </label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                                    <input
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className="cyber-input pl-10"
-                                        placeholder={t('auth.email')}
-                                        required
-                                    />
-                                </div>
-                            </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">
+                                            {t('auth.email')}
+                                        </label>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                            <input
+                                                type="email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                className="cyber-input pl-10"
+                                                placeholder={t('auth.email')}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-foreground mb-2">
-                                    {t('auth.password')}
-                                </label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                                    <input
-                                        ref={passwordRef}
-                                        type="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="cyber-input pl-10"
-                                        placeholder={t('auth.password')}
-                                        required
-                                    />
-                                </div>
-                            </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">
+                                            {t('auth.referralCode', 'Реферальный код')} ({t('auth.optional', 'необязательно')})
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={referralCode}
+                                            onChange={(e) => setReferralCode(e.target.value)}
+                                            className="cyber-input"
+                                            placeholder={t('auth.referralCodePlaceholder', 'Введите код')}
+                                        />
+                                        <p className="text-xs text-muted-foreground mt-1">
+                                            {t('auth.referralCodeHint', 'Используйте код амбассадора, если он у вас есть')}
+                                        </p>
+                                    </div>
 
-                            {error && (
-                                <div className="cyber-border-red bg-cyber-red/10 text-cyber-red p-3 rounded-md text-sm">
-                                    {error}
-                                </div>
-                            )}
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">
+                                            {t('auth.password')}
+                                        </label>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                            <input
+                                                type="password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className="cyber-input pl-10"
+                                                placeholder={t('auth.password')}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
 
-                            {/* Registration Benefit - Only shown on register tab */}
-                            {!isLogin && (
-                                <div className="text-center text-xs text-muted-foreground">
-                                    {t('auth.registrationBenefit')}
-                                </div>
-                            )}
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">
+                                            {t('auth.confirmPassword', 'Подтвердите пароль')}
+                                        </label>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                                            <input
+                                                type="password"
+                                                value={confirmPassword}
+                                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                                className="cyber-input pl-10"
+                                                placeholder={t('auth.confirmPassword', 'Подтвердите пароль')}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
 
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full cyber-button disabled:opacity-50 disabled:cursor-not-allowed"
+                                    {/* Password Requirements */}
+                                    {password && (
+                                        <div className="bg-background-secondary p-3 rounded-md space-y-2">
+                                            <p className="text-xs font-medium text-muted-foreground mb-2">
+                                                {t('auth.passwordRequirements', 'Требования к паролю')}:
+                                            </p>
+                                            {passwordRequirements.map((req, index) => (
+                                                <div key={index} className="flex items-center gap-2">
+                                                    {req.test(password) ? (
+                                                        <Check className="w-4 h-4 text-cyber-green" />
+                                                    ) : (
+                                                        <div className="w-4 h-4 rounded-full border border-muted-foreground/30" />
+                                                    )}
+                                                    <span className={`text-xs ${req.test(password) ? 'text-cyber-green' : 'text-muted-foreground'}`}>
+                                                        {req.label}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Checkboxes */}
+                                    <div className="space-y-3">
+                                        <label className="flex items-start gap-2 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={acceptTerms}
+                                                onChange={(e) => setAcceptTerms(e.target.checked)}
+                                                className="mt-1 w-4 h-4 rounded border-cyber-green/30 text-cyber-green focus:ring-cyber-green"
+                                            />
+                                            <span className="text-sm text-foreground">
+                                                {t('auth.acceptTerms', 'Я принимаю')} <a href="#" className="text-cyber-green hover:underline">{t('auth.termsOfUse', 'Условия использования')}</a> *
+                                            </span>
+                                        </label>
+
+                                        <label className="flex items-start gap-2 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={acceptPrivacy}
+                                                onChange={(e) => setAcceptPrivacy(e.target.checked)}
+                                                className="mt-1 w-4 h-4 rounded border-cyber-green/30 text-cyber-green focus:ring-cyber-green"
+                                            />
+                                            <span className="text-sm text-foreground">
+                                                {t('auth.acceptPrivacy', 'Я принимаю')} <a href="#" className="text-cyber-green hover:underline">{t('auth.privacyPolicy', 'Политику конфиденциальности')}</a> *
+                                            </span>
+                                        </label>
+
+                                        <label className="flex items-start gap-2 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={acceptMarketing}
+                                                onChange={(e) => setAcceptMarketing(e.target.checked)}
+                                                className="mt-1 w-4 h-4 rounded border-cyber-green/30 text-cyber-green focus:ring-cyber-green"
+                                            />
+                                            <span className="text-sm text-foreground">
+                                                {t('auth.acceptMarketing', 'Я хочу получать образовательные материалы и уведомления')}
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    {error && (
+                                        <div className="cyber-border-red bg-cyber-red/10 text-cyber-red p-3 rounded-md text-sm">
+                                            {error}
+                                        </div>
+                                    )}
+
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="w-full cyber-button disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {loading ? t('common.loading') : t('auth.createAccountButton', 'Создать аккаунт')}
+                                    </button>
+
+                                    <div className="text-center">
+                                        <button
+                                            type="button"
+                                            onClick={switchToLogin}
+                                            className="text-sm text-cyber-green hover:underline"
+                                        >
+                                            {t('auth.haveAccount', 'Уже есть аккаунт?')} {t('auth.signIn', 'Войти')}
+                                        </button>
+                                    </div>
+                                </form>
+                            </>
+                        )}
+
+                        {/* B2B Link */}
+                        <div className="mt-6 pt-6 border-t border-cyber-green/10">
+                            <Link
+                                to="/partners"
+                                className="text-sm text-muted-foreground hover:text-cyber-green transition-colors flex items-center justify-center gap-2"
                             >
-                                {loading
-                                    ? t('common.loading')
-                                    : isLogin
-                                        ? t('auth.loginButton')
-                                        : t('auth.registerButton')}
-                            </button>
-                        </form>
+                                {t('auth.forOrganizations', 'Для организаций и партнёров')} →
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
