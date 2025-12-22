@@ -16,7 +16,19 @@
         "level": "Level"
     },
     "landing": {
+        "nav": {
+            "whatYouLearn": "What You'll Learn",
+            "howItWorks": "How It Works",
+            "access": "Access",
+            "faq": "FAQ",
+            "login": "Login",
+            "startFree": "Start Free"
+        },
         "hero": {
+            "title": "Learn to recognize scammers before they deceive you",
+            "subtitle": "Practice, not theory. Real threats, safe environment.",
+            "cta": "Start Training",
+            "ctaSecondary": "Learn More",
             "tagline": "Cybersecurity Training Through Real-World Simulations",
             "valuePoint1": "Practical scenarios of real threats",
             "valuePoint2": "Safe learning environment",
@@ -25,8 +37,65 @@
             "trustElement": "All scenarios are educational. We don't use real data.",
             "ctaButton": "Try Free Simulation",
             "timeIndicator": "Takes 1 minute",
-            "stat": "78% of users make mistakes in similar situations",
-            "cta": "Test Yourself"
+            "stat": "78% of users make mistakes in similar situations"
+        },
+        "whatYouLearn": {
+            "title": "What You'll Learn",
+            "card1Title": "Recognizing Phishing and Fraud",
+            "card1Desc": "Learn to distinguish real messages from fake ones",
+            "card2Title": "Analyzing Messages, Calls and Emails",
+            "card2Desc": "Check suspicious contacts before taking action",
+            "card3Title": "Understanding Safe Situations",
+            "card3Desc": "Know when you can act without concerns",
+            "card4Title": "Informed Decisions",
+            "card4Desc": "Make decisions based on knowledge, not guesses"
+        },
+        "howItWorks": {
+            "title": "How It Works",
+            "step1Title": "Get a Scenario",
+            "step1Desc": "Real-life situation: a message, call or email",
+            "step2Title": "Choose Actions",
+            "step2Desc": "Make a decision as you would in real life",
+            "step3Title": "Get Analysis",
+            "step3Desc": "Learn whether you acted correctly and why"
+        },
+        "access": {
+            "title": "Access",
+            "freeTitle": "Free",
+            "freeDesc": "Basic scenarios to start learning",
+            "freeFeature1": "5 basic scenarios",
+            "freeFeature2": "Cybersecurity fundamentals",
+            "freeFeature3": "Solution analysis",
+            "proTitle": "Pro",
+            "proDesc": "Full library of scenarios and in-depth training",
+            "proFeature1": "All platform scenarios",
+            "proFeature2": "Complex situations",
+            "proFeature3": "Personal statistics",
+            "proFeature4": "Priority support",
+            "businessTitle": "Business",
+            "businessDesc": "For teams and educational institutions",
+            "businessFeature1": "Everything in Pro",
+            "businessFeature2": "Team management",
+            "businessFeature3": "Corporate statistics",
+            "businessFeature4": "Priority support",
+            "proCta": "Learn More",
+            "businessCta": "Learn More"
+        },
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "q1": "Who is this platform for?",
+            "a1": "For everyone who uses the internet: students, parents, company employees. No special knowledge required.",
+            "q2": "Do I need special knowledge?",
+            "a2": "No. The platform is built on practice, not theory. You learn from real situations.",
+            "q3": "Are these real situations?",
+            "a3": "Yes. All scenarios are based on real cases of fraud and phishing that people encounter every day.",
+            "q4": "Is this theory or practice?",
+            "a4": "Only practice. No lectures — just real situations and your decisions.",
+            "q5": "Is it safe?",
+            "a5": "Absolutely. All scenarios are educational, we don't use real data and don't create real threats."
+        },
+        "footer": {
+            "copyright": "© 2026 QadamSafe. Cybersecurity Training."
         },
         "demo": {
             "header": "Demo Example",

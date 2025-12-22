@@ -52,18 +52,25 @@
         },
         "access": {
             "title": "Доступ",
-            "freeTitle": "Бесплатный доступ",
+            "freeTitle": "Free",
             "freeDesc": "Базовые сценарии для начала обучения",
             "freeFeature1": "5 базовых сценариев",
             "freeFeature2": "Основы кибербезопасности",
             "freeFeature3": "Разбор решений",
-            "proTitle": "Расширенный доступ",
+            "proTitle": "Pro",
             "proDesc": "Полная библиотека сценариев и углубленное обучение",
             "proFeature1": "Все сценарии платформы",
             "proFeature2": "Сложные ситуации",
             "proFeature3": "Персональная статистика",
             "proFeature4": "Приоритетная поддержка",
-            "proCta": "Узнать больше"
+            "businessTitle": "Business",
+            "businessDesc": "Для команд и образовательных учреждений",
+            "businessFeature1": "Все из Pro",
+            "businessFeature2": "Управление командой",
+            "businessFeature3": "Корпоративная статистика",
+            "businessFeature4": "Приоритетная поддержка",
+            "proCta": "Узнать больше",
+            "businessCta": "Узнать больше"
         },
         "faq": {
             "title": "Часто задаваемые вопросы",

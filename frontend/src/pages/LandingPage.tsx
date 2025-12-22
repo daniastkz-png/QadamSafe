@@ -403,12 +403,12 @@ export const LandingPage: React.FC = () => {
 
             {/* ACCESS Section */}
             <section id="access" className="py-20 px-4 bg-background">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-6xl mx-auto">
                     <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">
                         {t('landing.access.title')}
                     </h2>
 
-                    <div className="grid md:grid-cols-2 gap-8">
+                    <div className="grid md:grid-cols-3 gap-8">
                         {/* Free Access */}
                         <div className="cyber-card border-2">
                             <div className="space-y-4">
@@ -470,6 +470,42 @@ export const LandingPage: React.FC = () => {
                                     className="w-full cyber-button mt-4"
                                 >
                                     {t('landing.access.proCta')}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Business Access */}
+                        <div className="cyber-card border-2">
+                            <div className="space-y-4">
+                                <h3 className="text-2xl font-bold text-foreground">
+                                    {t('landing.access.businessTitle')}
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    {t('landing.access.businessDesc')}
+                                </p>
+                                <ul className="space-y-3">
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.businessFeature1')}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.businessFeature2')}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.businessFeature3')}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                        <span className="text-foreground">{t('landing.access.businessFeature4')}</span>
+                                    </li>
+                                </ul>
+                                <button
+                                    onClick={() => navigate('/subscription')}
+                                    className="w-full cyber-button mt-4"
+                                >
+                                    {t('landing.access.businessCta')}
                                 </button>
                             </div>
                         </div>
