@@ -57,7 +57,9 @@ export const Footer: React.FC = () => {
                     {/* Legal Links */}
                     <div className="flex flex-wrap items-center justify-center gap-1">
                         <a
-                            href="#"
+                            href="https://docs.google.com/document/d/1vogsED7qmFDngi_aOVfaIAPJETFsKN3vEM6YU942q48/edit?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="hover:text-cyber-green transition-colors px-2"
                         >
                             {t('footer.publicOffer', 'Публичная оферта')}
