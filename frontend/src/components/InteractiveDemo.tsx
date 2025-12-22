@@ -53,14 +53,11 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                     {/* Message Card */}
                     <div className="bg-muted/30 rounded-lg p-4 mb-6">
                         <div className="flex items-start gap-3 mb-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyber-yellow to-cyber-red flex items-center justify-center text-black font-bold flex-shrink-0">
-                                ?
-                            </div>
                             <div className="flex-1">
                                 <p className="text-sm font-semibold text-foreground mb-1">
                                     {t('demo.sender', 'Неизвестный отправитель')}
                                 </p>
-                                <p className="text-xs text-muted-foreground">support@bank-security.com</p>
+                                <p className="text-xs text-muted-foreground">support@secure-bank-verify.com</p>
                             </div>
                         </div>
                         <p className="text-sm text-foreground leading-relaxed">
@@ -116,21 +113,33 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                                 </div>
                             </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex gap-3">
-                                <button
-                                    onClick={handleReset}
-                                    className="flex-1 px-4 py-2 rounded-lg border border-border hover:border-cyber-green/50 bg-background transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
-                                >
-                                    {t('demo.tryAgain', 'Попробовать снова')}
-                                </button>
+                            {/* Action Button - Only for unsafe choice */}
+                            {choice === 'unsafe' && (
                                 <button
                                     onClick={handleTryReal}
-                                    className="flex-1 cyber-button text-sm py-2"
+                                    className="w-full cyber-button text-sm py-3"
                                 >
-                                    {t('demo.tryReal', 'Реальные сценарии')}
+                                    {t('demo.tryReal', 'Перейти на реальные сценарии')}
                                 </button>
-                            </div>
+                            )}
+
+                            {/* Action Buttons - Only for safe choice */}
+                            {choice === 'safe' && (
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={handleReset}
+                                        className="flex-1 px-4 py-2 rounded-lg border border-border hover:border-cyber-green/50 bg-background transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
+                                    >
+                                        {t('demo.tryAgain', 'Попробовать снова')}
+                                    </button>
+                                    <button
+                                        onClick={handleTryReal}
+                                        className="flex-1 cyber-button text-sm py-2"
+                                    >
+                                        {t('demo.tryReal', 'Реальные сценарии')}
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
