@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Shield, Mail, Lock, User, X, AlertTriangle, Check } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Footer } from '../components/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface LastAccount {
     email: string;
@@ -18,7 +18,8 @@ interface PasswordRequirement {
 
 export const AuthPage: React.FC = () => {
     const { t } = useTranslation();
-    const { login, register } = useAuth();
+    const { login, register, user } = useAuth();
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -58,11 +59,17 @@ export const AuthPage: React.FC = () => {
 
     const handleQuickLogin = () => {
         if (lastAccount) {
-            setEmail(lastAccount.email);
-            setShowQuickLogin(false);
-            setTimeout(() => {
-                passwordRef.current?.focus();
-            }, 100);
+            // If user is already logged in (has active Firebase session), redirect to dashboard
+            if (user && user.email === lastAccount.email) {
+                navigate('/progress');
+            } else {
+                // Otherwise, fill email and focus password field
+                setEmail(lastAccount.email);
+                setShowQuickLogin(false);
+                setTimeout(() => {
+                    passwordRef.current?.focus();
+                }, 100);
+            }
         }
     };
 
