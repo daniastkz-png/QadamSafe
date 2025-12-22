@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, Package, Landmark } from 'lucide-react';
+import { Phone, Package, Landmark, ArrowRight } from 'lucide-react';
 
 interface InteractiveDemoProps {
     navigate: (path: string) => void;
@@ -202,34 +202,37 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                             </div>
                         </>
                     ) : (
-                        <div className="space-y-4">
-                            {/* Feedback */}
-                            <div className={`p-4 rounded-lg border ${isRisky ? 'bg-cyber-yellow/10 border-cyber-yellow/20' : 'bg-cyber-green/10 border-cyber-green/20'
-                                }`}>
-                                <p className={`text-sm font-medium ${isRisky ? 'text-cyber-yellow' : 'text-cyber-green'
+                        <div className="space-y-3">
+                            <div className="flex gap-2">
+                                {/* Feedback Block */}
+                                <div className={`flex-1 p-3 rounded-lg border flex items-center ${isRisky ? 'bg-cyber-yellow/10 border-cyber-yellow/20' : 'bg-cyber-green/10 border-cyber-green/20'
                                     }`}>
-                                    {isRisky
-                                        ? t('demo.riskyFeedback', 'Так часто начинаются реальные случаи мошенничества')
-                                        : t('demo.cautiousFeedback', 'Вы выбрали осторожную стратегию')
-                                    }
-                                </p>
-                            </div>
+                                    <p className={`text-xs font-medium leading-tight ${isRisky ? 'text-cyber-yellow' : 'text-cyber-green'
+                                        }`}>
+                                        {isRisky
+                                            ? t('demo.riskyFeedback', 'Так часто начинаются реальные случаи мошенничества')
+                                            : t('demo.cautiousFeedback', 'Вы выбрали осторожную стратегию')
+                                        }
+                                    </p>
+                                </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex gap-3">
-                                <button
-                                    onClick={handleNext}
-                                    className="flex-1 px-4 py-2 rounded-lg border border-border hover:border-cyber-green/50 bg-background transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
-                                >
-                                    {t('demo.nextScenario', 'Следующий сценарий')}
-                                </button>
+                                {/* Try Real Button (Small) */}
                                 <button
                                     onClick={handleTryReal}
-                                    className="flex-1 cyber-button text-sm py-2"
+                                    className="px-3 py-2 rounded-lg cyber-button text-xs font-medium whitespace-nowrap flex items-center justify-center shrink-0"
                                 >
                                     {t('demo.tryReal', 'Реальные сценарии')}
                                 </button>
                             </div>
+
+                            {/* Next Scenario Button (Secondary) */}
+                            <button
+                                onClick={handleNext}
+                                className="w-full py-2 text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-1 opacity-70 hover:opacity-100"
+                            >
+                                {t('demo.nextScenario', 'Следующий сценарий')}
+                                <ArrowRight className="w-3 h-3" />
+                            </button>
                         </div>
                     )}
 
