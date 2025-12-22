@@ -66,7 +66,9 @@ export const Footer: React.FC = () => {
                         </a>
                         <span className="text-border">·</span>
                         <a
-                            href="#"
+                            href="https://docs.google.com/document/d/1Wrmbuh5Wqu9h3D9Po8D4nJXat82AGohY5iEI5BksEBc/edit?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="hover:text-cyber-green transition-colors px-2"
                         >
                             {t('footer.privacyPolicy', 'Политика конфиденциальности')}
