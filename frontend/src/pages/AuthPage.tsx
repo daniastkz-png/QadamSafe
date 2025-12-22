@@ -104,10 +104,10 @@ export const AuthPage: React.FC = () => {
                 <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyber-green/5 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s' }} />
 
                 {/* Content */}
-                <div className="relative z-10 flex flex-col justify-center px-12 xl:px-16 w-full">
-                    <div className="space-y-6 animate-fade-in-up">
+                <div className="relative z-10 flex flex-col justify-start pt-20 px-12 xl:px-16 w-full">
+                    <div className="space-y-8 animate-fade-in-up max-w-xl">
                         {/* Logo */}
-                        <div className="inline-flex items-center gap-3 mb-4">
+                        <div className="inline-flex items-center gap-3">
                             <div className="p-3 bg-cyber-green/10 border border-cyber-green/30 rounded-lg">
                                 <Shield className="w-10 h-10 text-cyber-green" />
                             </div>
@@ -120,27 +120,27 @@ export const AuthPage: React.FC = () => {
                         </h1>
 
                         {/* Subheading */}
-                        <p className="text-xl text-cyber-green font-medium">
+                        <p className="text-xl text-cyber-green font-medium leading-relaxed">
                             {t('auth.welcomeSubtitle', 'Войдите в личный кабинет и продолжите обучение кибербезопасности')}
                         </p>
 
                         {/* Description */}
-                        <p className="text-base text-muted-foreground leading-relaxed max-w-lg">
+                        <p className="text-base text-muted-foreground leading-relaxed">
                             {t('auth.welcomeDescription', 'Интерактивная платформа, где пользователи учатся распознавать цифровые угрозы через реальные сценарии. Практика вместо теории. Навыки, которые реально защищают.')}
                         </p>
 
                         {/* Feature Points */}
-                        <div className="flex flex-col gap-3 pt-4">
+                        <div className="flex flex-col gap-4 pt-2">
                             <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
                                 <span className="text-sm text-foreground">{t('auth.valuePoint1')}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
                                 <span className="text-sm text-foreground">{t('auth.valuePoint2')}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
                                 <span className="text-sm text-foreground">{t('auth.valuePoint3')}</span>
                             </div>
                         </div>
