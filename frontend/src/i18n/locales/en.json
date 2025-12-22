@@ -472,19 +472,56 @@
         "termsOfUse": "Terms of Use"
     },
     "demo": {
-        "contact": "Unknown Number",
-        "message": "Son, hi. Writing from someone else's number — my phone died.\nI'm at the clinic, can you urgently transfer 20,000₸?\nI'll explain later.",
-        "question": "What will you do?",
-        "choice1": "Transfer money — situation seems real",
-        "choice2": "Ask for a voice message",
-        "choice3": "Ask a question only mom would know",
-        "choice4": "Call her usual number",
-        "riskyTitle": "This is how real scam cases often begin",
-        "riskyDesc": "Scammers use emotions and urgency to make you act quickly",
-        "cautiousTitle": "You chose a cautious strategy",
-        "cautiousDesc": "Source verification is an important digital security skill",
-        "tryAgain": "Try again",
-        "tryReal": "Real scenarios",
-        "hint": "Scenario based on real fraud cases in Kazakhstan.\nWordings adapted for educational purposes."
+        "call": "Incoming Call",
+        "riskyFeedback": "This is exactly how scammers exploit emotions",
+        "cautiousFeedback": "Great choice! Always verify the source",
+        "nextScenario": "Next scenario",
+        "tryReal": "Try Real Scenarios",
+        "hint": "Scenarios based on real fraud cases in Kazakhstan.\nTexts adapted for education.",
+        "scenario1": {
+            "contact": "Unknown Number",
+            "message": "Mom, hi. I lost my phone, using a friend's number.\nPlease send 15,000 to Kaspi ASAP, it's urgent, I'll explain later.\nNumber: +7 705 XXX XX XX",
+            "question": "What do you do?",
+            "choice1": "Transfer immediately — it might be an emergency",
+            "choice2": "Ask for a voice message",
+            "choice3": "Ask a personal question only he knows",
+            "choice4": "Call his old number"
+        },
+        "scenario2": {
+            "contact": "Security Service",
+            "message": "Dear client!\nAn attempt to transfer 150,000₸ was detected.\nIf this wasn't you, strictly provide the SMS code to cancel the operation.",
+            "question": "Your action?",
+            "choice1": "Give the code — need to save the money",
+            "choice2": "Hang up and check the banking app",
+            "choice3": "Call the official bank number",
+            "choice4": "Ignore and block"
+        },
+        "scenario3": {
+            "contact": "1414 (Egov)",
+            "message": "You have been approved for a social payment of 50,000₸.\nTo receive it, follow the link: egov-portal-kz.com/payment\nLink valid for 24 hours.",
+            "question": "How do you react?",
+            "choice1": "Click and enter card details",
+            "choice2": "Check on the official egov.kz website",
+            "choice3": "Call the service center (1414)",
+            "choice4": "Delete the message"
+        },
+        "scenario4": {
+            "contact": "HR Manager",
+            "message": "Hello! Looking for remote employees.\nTask: like products online.\nPay: from 25,000₸ per day.\nInterested?",
+            "question": "Your reply?",
+            "choice1": "Yes, interested! (Easy money)",
+            "choice2": "Ask for company name and contract",
+            "choice3": "Search for reviews about this 'job'",
+            "choice4": "Block the contact"
+        },
+        "scenario5": {
+            "contact": "KazPost Delivery",
+            "message": "Your package arrived, but the address is incorrect.\nTo deliver, update address and pay 450₸ fee via link:\nkazpost-delivery-track.com",
+            "question": "What will you do?",
+            "choice1": "Pay it, the amount is small",
+            "choice2": "Check tracking number on post.kz",
+            "choice3": "Call the post office hotline",
+            "choice4": "Ignore it"
+        }
     }
 }
