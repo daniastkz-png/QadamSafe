@@ -79,20 +79,47 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                                 <div className="text-xs text-muted-foreground">0:15</div>
                             </div>
 
+                            {/* Question */}
+                            <div className="pt-4">
+                                <p className="text-sm text-muted-foreground text-center mb-3">
+                                    {t('demo.question', 'Что вы сделаете?')}
+                                </p>
+                            </div>
+
+                            {/* Choice Buttons */}
+                            <div className="grid grid-cols-1 gap-2">
+                                <button
+                                    onClick={() => navigate('/auth')}
+                                    className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
+                                >
+                                    {t('demo.choice1', 'Переведу деньги — ситуация жизненная')}
+                                </button>
+                                <button
+                                    onClick={() => navigate('/auth')}
+                                    className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
+                                >
+                                    {t('demo.choice2', 'Попрошу голосовое сообщение')}
+                                </button>
+                                <button
+                                    onClick={() => navigate('/auth')}
+                                    className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
+                                >
+                                    {t('demo.choice3', 'Задам вопрос, который знает только мама')}
+                                </button>
+                                <button
+                                    onClick={() => navigate('/auth')}
+                                    className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
+                                >
+                                    {t('demo.choice4', 'Перезвоню на её обычный номер')}
+                                </button>
+                            </div>
+
                             {/* Disclaimer */}
                             <div className="pt-4 border-t border-border/50">
                                 <p className="text-xs text-muted-foreground text-center leading-relaxed">
                                     {t('demo.hint', 'Сценарий основан на реальных случаях мошенничества в Казахстане.\nФормулировки адаптированы в образовательных целях.')}
                                 </p>
                             </div>
-
-                            {/* CTA Button */}
-                            <button
-                                onClick={() => navigate('/auth')}
-                                className="w-full cyber-button text-sm py-3"
-                            >
-                                {t('demo.learnToRecognize', 'Научиться распознавать угрозы')}
-                            </button>
                         </div>
                     )}
                 </div>
