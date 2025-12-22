@@ -55,18 +55,14 @@ export const AuthPage: React.FC = () => {
         }
     }, []);
 
-    const handleQuickLogin = async () => {
+
+    const handleQuickLogin = () => {
         if (lastAccount) {
-            setLoading(true);
-            setError('');
-            try {
-                // Auto-login without password using saved credentials
-                await login(lastAccount.email, '');
-            } catch (err: any) {
-                setError(err.response?.data?.error || t('auth.loginError'));
-            } finally {
-                setLoading(false);
-            }
+            setEmail(lastAccount.email);
+            setShowQuickLogin(false);
+            setTimeout(() => {
+                passwordRef.current?.focus();
+            }, 100);
         }
     };
 
@@ -298,8 +294,7 @@ export const AuthPage: React.FC = () => {
 
                                 <button
                                     onClick={handleQuickLogin}
-                                    disabled={loading}
-                                    className="w-full flex items-center gap-4 p-3 rounded-lg bg-background/50 border border-cyber-green/20 hover:border-cyber-green/50 hover:bg-cyber-green/10 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full flex items-center gap-4 p-3 rounded-lg bg-background/50 border border-cyber-green/20 hover:border-cyber-green/50 hover:bg-cyber-green/10 transition-all group"
                                 >
                                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyber-green to-cyber-blue flex items-center justify-center text-black font-bold text-lg flex-shrink-0">
                                         {getInitials(lastAccount.name, lastAccount.email)}
