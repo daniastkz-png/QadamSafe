@@ -1,171 +1,229 @@
 import React, { useState, useEffect } from 'react';
-import { Mic } from 'lucide-react';
+import { Mic, Phone, MessageSquare } from 'lucide-react';
 
 interface InteractiveDemoProps {
     navigate: (path: string) => void;
-    t: any; // Translation function from react-i18next
+    t: any;
 }
 
 // WhatsApp Icon Component
 const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
-    <svg
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className={className}
-    >
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
     </svg>
 );
 
+interface Scenario {
+    id: number;
+    type: 'whatsapp' | 'call' | 'sms' | 'telegram';
+    icon: React.ReactNode;
+    contact: string;
+    message: string;
+    question: string;
+    choices: string[];
+    riskyChoices: number[];
+}
+
+const scenarios: Scenario[] = [
+    {
+        id: 1,
+        type: 'whatsapp',
+        icon: <WhatsAppIcon className="w-5 h-5 text-cyber-green" />,
+        contact: 'demo.scenario1.contact',
+        message: 'demo.scenario1.message',
+        question: 'demo.scenario1.question',
+        choices: ['demo.scenario1.choice1', 'demo.scenario1.choice2', 'demo.scenario1.choice3', 'demo.scenario1.choice4'],
+        riskyChoices: [0]
+    },
+    {
+        id: 2,
+        type: 'call',
+        icon: <Phone className="w-5 h-5 text-cyber-green" />,
+        contact: 'demo.scenario2.contact',
+        message: 'demo.scenario2.message',
+        question: 'demo.scenario2.question',
+        choices: ['demo.scenario2.choice1', 'demo.scenario2.choice2', 'demo.scenario2.choice3', 'demo.scenario2.choice4'],
+        riskyChoices: [0]
+    },
+    {
+        id: 3,
+        type: 'sms',
+        icon: <MessageSquare className="w-5 h-5 text-cyber-green" />,
+        contact: 'demo.scenario3.contact',
+        message: 'demo.scenario3.message',
+        question: 'demo.scenario3.question',
+        choices: ['demo.scenario3.choice1', 'demo.scenario3.choice2', 'demo.scenario3.choice3', 'demo.scenario3.choice4'],
+        riskyChoices: [0]
+    },
+    {
+        id: 4,
+        type: 'telegram',
+        icon: <MessageSquare className="w-5 h-5 text-cyber-green" />,
+        contact: 'demo.scenario4.contact',
+        message: 'demo.scenario4.message',
+        question: 'demo.scenario4.question',
+        choices: ['demo.scenario4.choice1', 'demo.scenario4.choice2', 'demo.scenario4.choice3', 'demo.scenario4.choice4'],
+        riskyChoices: [0]
+    },
+    {
+        id: 5,
+        type: 'sms',
+        icon: <MessageSquare className="w-5 h-5 text-cyber-green" />,
+        contact: 'demo.scenario5.contact',
+        message: 'demo.scenario5.message',
+        question: 'demo.scenario5.question',
+        choices: ['demo.scenario5.choice1', 'demo.scenario5.choice2', 'demo.scenario5.choice3', 'demo.scenario5.choice4'],
+        riskyChoices: [0]
+    }
+];
+
 export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t }) => {
-    const [isTyping, setIsTyping] = useState(true);
-    const [showMessage, setShowMessage] = useState(false);
+    const [currentScenario, setCurrentScenario] = useState(0);
+    const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
+    const [progress, setProgress] = useState(100);
+    const [isPaused, setIsPaused] = useState(false);
+
+    const scenario = scenarios[currentScenario];
+    const isRisky = selectedChoice !== null && scenario.riskyChoices.includes(selectedChoice);
 
     useEffect(() => {
-        // Show typing indicator for 2 seconds
-        const typingTimer = setTimeout(() => {
-            setIsTyping(false);
-            setShowMessage(true);
-        }, 2000);
+        if (isPaused || selectedChoice !== null) return;
 
-        return () => clearTimeout(typingTimer);
-    }, []);
+        const interval = setInterval(() => {
+            setProgress((prev) => {
+                if (prev <= 0) {
+                    // Move to next scenario
+                    setCurrentScenario((curr) => (curr + 1) % scenarios.length);
+                    return 100;
+                }
+                return prev - 1;
+            });
+        }, 100); // Update every 100ms for smooth animation (10s total)
+
+        return () => clearInterval(interval);
+    }, [isPaused, selectedChoice]);
+
+    const handleChoice = (index: number) => {
+        setSelectedChoice(index);
+        setIsPaused(true);
+    };
+
+    const handleNext = () => {
+        setSelectedChoice(null);
+        setIsPaused(false);
+        setCurrentScenario((curr) => (curr + 1) % scenarios.length);
+        setProgress(100);
+    };
+
+    const handleTryReal = () => {
+        navigate('/auth');
+    };
 
     return (
         <div className="pt-12 max-w-2xl mx-auto">
-            {/* Message Card */}
+            {/* Scenario Card */}
             <div className="relative cyber-card border-cyber-green/20">
-                <div className="space-y-4">
+                {/* Progress Bar */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-muted/20 rounded-t-lg overflow-hidden">
+                    <div
+                        className="h-full bg-cyber-green transition-all duration-100 ease-linear"
+                        style={{ width: `${progress}%` }}
+                    />
+                </div>
+
+                <div className="space-y-4 pt-2">
                     {/* Header */}
-                    <div className="flex items-start gap-3 pb-3 border-b border-border/50">
-                        <WhatsAppIcon className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
-                        <div className="flex-1">
-                            <p className="text-sm font-semibold text-foreground">
-                                {t('demo.contact', 'Неизвестный номер')}
-                            </p>
-                            <p className="text-xs text-muted-foreground">+7 (XXX) XXX-XX-XX</p>
+                    <div className="flex items-start justify-between gap-3 pb-3 border-b border-border/50">
+                        <div className="flex items-start gap-3 flex-1">
+                            {scenario.icon}
+                            <div className="flex-1">
+                                <p className="text-sm font-semibold text-foreground">
+                                    {t(scenario.contact, 'Неизвестный номер')}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    {scenario.type === 'whatsapp' && 'WhatsApp'}
+                                    {scenario.type === 'call' && t('demo.call', 'Входящий звонок')}
+                                    {scenario.type === 'sms' && 'SMS'}
+                                    {scenario.type === 'telegram' && 'Telegram'}
+                                </p>
+                            </div>
                         </div>
                         <span className="text-xs text-muted-foreground">
-                            {t('demo.justNow', 'Только что')}
+                            {currentScenario + 1}/5
                         </span>
                     </div>
 
-                    {/* Typing Indicator */}
-                    {isTyping && (
-                        <div className="flex items-center gap-2 py-2 animate-fade-in">
-                            <div className="flex gap-1">
-                                <div className="w-2 h-2 bg-cyber-green/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                                <div className="w-2 h-2 bg-cyber-green/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                                <div className="w-2 h-2 bg-cyber-green/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                            </div>
-                            <span className="text-xs text-muted-foreground">
-                                {t('demo.typing', 'Печатает...')}
-                            </span>
-                        </div>
-                    )}
+                    {/* Message */}
+                    <div className="bg-muted/30 rounded-lg p-4">
+                        <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">
+                            {t(scenario.message, '')}
+                        </p>
+                    </div>
 
-                    {/* Message Content */}
-                    {showMessage && (
-                        <div className="space-y-4 animate-slide-fade-in">
-                            {/* Text Message */}
-                            <div className="bg-muted/30 rounded-lg p-4">
-                                <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">
-                                    {t('demo.message', 'Сынок, привет. Пишу с чужого номера — мой телефон сел.\nЯ сейчас в поликлинике, можешь срочно перевести 20 000₸?\nЯ потом объясню.')}
-                                </p>
-                            </div>
-
-                            {/* Voice Message Indicator */}
-                            <div className="flex items-center gap-3 p-3 bg-muted/20 rounded-lg border border-border/50">
-                                <div className="p-2 bg-cyber-green/10 rounded-full">
-                                    <Mic className="w-4 h-4 text-cyber-green" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-xs text-muted-foreground">
-                                        {t('demo.voiceNote', 'Голосовое сообщение')}
-                                    </p>
-                                    <p className="text-sm text-foreground mt-0.5">
-                                        {t('demo.voiceFamiliar', 'Голос звучит знакомо')}
-                                    </p>
-                                </div>
-                                <div className="text-xs text-muted-foreground">0:15</div>
-                            </div>
-
+                    {!selectedChoice ? (
+                        <>
                             {/* Question */}
-                            <div className="pt-4">
+                            <div className="pt-2">
                                 <p className="text-sm text-muted-foreground text-center mb-3">
-                                    {t('demo.question', 'Что вы сделаете?')}
+                                    {t(scenario.question, 'Что вы сделаете?')}
                                 </p>
                             </div>
 
                             {/* Choice Buttons */}
                             <div className="grid grid-cols-1 gap-2">
-                                <button
-                                    onClick={() => navigate('/auth')}
-                                    className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
-                                >
-                                    {t('demo.choice1', 'Переведу деньги — ситуация жизненная')}
-                                </button>
-                                <button
-                                    onClick={() => navigate('/auth')}
-                                    className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
-                                >
-                                    {t('demo.choice2', 'Попрошу голосовое сообщение')}
-                                </button>
-                                <button
-                                    onClick={() => navigate('/auth')}
-                                    className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
-                                >
-                                    {t('demo.choice3', 'Задам вопрос, который знает только мама')}
-                                </button>
-                                <button
-                                    onClick={() => navigate('/auth')}
-                                    className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
-                                >
-                                    {t('demo.choice4', 'Перезвоню на её обычный номер')}
-                                </button>
+                                {scenario.choices.map((choice, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleChoice(index)}
+                                        className="px-4 py-3 rounded-lg border border-border hover:border-cyber-green/50 bg-background hover:bg-muted/30 transition-all text-sm font-medium text-foreground text-left"
+                                    >
+                                        {t(choice, '')}
+                                    </button>
+                                ))}
                             </div>
-
-                            {/* Disclaimer */}
-                            <div className="pt-4 border-t border-border/50">
-                                <p className="text-xs text-muted-foreground text-center leading-relaxed">
-                                    {t('demo.hint', 'Сценарий основан на реальных случаях мошенничества в Казахстане.\nФормулировки адаптированы в образовательных целях.')}
+                        </>
+                    ) : (
+                        <div className="space-y-4">
+                            {/* Feedback */}
+                            <div className={`p-4 rounded-lg border ${isRisky ? 'bg-cyber-yellow/10 border-cyber-yellow/20' : 'bg-cyber-green/10 border-cyber-green/20'
+                                }`}>
+                                <p className={`text-sm font-medium ${isRisky ? 'text-cyber-yellow' : 'text-cyber-green'
+                                    }`}>
+                                    {isRisky
+                                        ? t('demo.riskyFeedback', 'Так часто начинаются реальные случаи мошенничества')
+                                        : t('demo.cautiousFeedback', 'Вы выбрали осторожную стратегию')
+                                    }
                                 </p>
                             </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handleNext}
+                                    className="flex-1 px-4 py-2 rounded-lg border border-border hover:border-cyber-green/50 bg-background transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
+                                >
+                                    {t('demo.nextScenario', 'Следующий сценарий')}
+                                </button>
+                                <button
+                                    onClick={handleTryReal}
+                                    className="flex-1 cyber-button text-sm py-2"
+                                >
+                                    {t('demo.tryReal', 'Реальные сценарии')}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Disclaimer */}
+                    {!selectedChoice && (
+                        <div className="pt-4 border-t border-border/50">
+                            <p className="text-xs text-muted-foreground text-center leading-relaxed">
+                                {t('demo.hint', 'Сценарий основан на реальных случаях мошенничества в Казахстане.\nФормулировки адаптированы в образовательных целях.')}
+                            </p>
                         </div>
                     )}
                 </div>
             </div>
-
-            {/* Animation Styles */}
-            <style>{`
-                @keyframes slide-fade-in {
-                    from {
-                        opacity: 0;
-                        transform: translateY(10px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                @keyframes fade-in {
-                    from {
-                        opacity: 0;
-                    }
-                    to {
-                        opacity: 1;
-                    }
-                }
-
-                .animate-slide-fade-in {
-                    animation: slide-fade-in 0.6s ease-out forwards;
-                }
-
-                .animate-fade-in {
-                    animation: fade-in 0.4s ease-out forwards;
-                }
-            `}</style>
         </div>
     );
 };
