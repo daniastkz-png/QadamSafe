@@ -54,13 +54,18 @@ export const AuthPage: React.FC = () => {
         }
     }, []);
 
-    const handleQuickLogin = () => {
+    const handleQuickLogin = async () => {
         if (lastAccount) {
-            setEmail(lastAccount.email);
-            setShowQuickLogin(false);
-            setTimeout(() => {
-                passwordRef.current?.focus();
-            }, 100);
+            setLoading(true);
+            setError('');
+            try {
+                // Auto-login without password using saved credentials
+                await login(lastAccount.email, '');
+            } catch (err: any) {
+                setError(err.response?.data?.error || t('auth.loginError'));
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -240,6 +245,38 @@ export const AuthPage: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* Top Switch Panel - Show above Quick Login */}
+                    {isLogin && (
+                        <div className="mb-4 cyber-card">
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    {t('auth.noAccount', 'Нет аккаунта?')}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={switchToRegister}
+                                    className="relative group px-6 py-2 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105"
+                                >
+                                    {/* Animated gradient background */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-cyber-green via-cyber-blue to-cyber-green bg-[length:200%_100%] animate-gradient-shift" />
+
+                                    {/* Glow effect */}
+                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="absolute inset-0 bg-cyber-green/20 blur-xl" />
+                                    </div>
+
+                                    {/* Button text */}
+                                    <span className="relative z-10 font-semibold text-black text-sm">
+                                        {t('auth.createAccount', 'Создать')}
+                                    </span>
+
+                                    {/* Shine effect */}
+                                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Quick Login Card - Only show on login tab when there's a saved account */}
                     {isLogin && lastAccount && showQuickLogin && (
                         <div className="mb-4 cyber-card border-2 border-cyber-green/30 bg-cyber-green/5 relative overflow-hidden">
@@ -257,7 +294,8 @@ export const AuthPage: React.FC = () => {
 
                             <button
                                 onClick={handleQuickLogin}
-                                className="w-full flex items-center gap-4 p-3 rounded-lg bg-background/50 border border-cyber-green/20 hover:border-cyber-green/50 hover:bg-cyber-green/10 transition-all group"
+                                disabled={loading}
+                                className="w-full flex items-center gap-4 p-3 rounded-lg bg-background/50 border border-cyber-green/20 hover:border-cyber-green/50 hover:bg-cyber-green/10 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyber-green to-cyber-blue flex items-center justify-center text-black font-bold text-lg flex-shrink-0">
                                     {getInitials(lastAccount.name, lastAccount.email)}
@@ -292,35 +330,37 @@ export const AuthPage: React.FC = () => {
 
                     {/* Auth Form */}
                     <div className="cyber-card">
-                        {/* Top Switch Panel */}
-                        <div className="mb-6 pb-6 border-b border-cyber-green/10">
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-muted-foreground">
-                                    {isLogin ? t('auth.noAccount', 'Нет аккаунта?') : t('auth.haveAccount', 'Уже есть аккаунт?')}
-                                </span>
-                                <button
-                                    type="button"
-                                    onClick={isLogin ? switchToRegister : switchToLogin}
-                                    className="relative group px-6 py-2 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105"
-                                >
-                                    {/* Animated gradient background */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-cyber-green via-cyber-blue to-cyber-green bg-[length:200%_100%] animate-gradient-shift" />
-
-                                    {/* Glow effect */}
-                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <div className="absolute inset-0 bg-cyber-green/20 blur-xl" />
-                                    </div>
-
-                                    {/* Button text */}
-                                    <span className="relative z-10 font-semibold text-black text-sm">
-                                        {isLogin ? t('auth.createAccount', 'Создать') : t('auth.signIn', 'Войти')}
+                        {/* Top Switch Panel - Only for Registration */}
+                        {!isLogin && (
+                            <div className="mb-6 pb-6 border-b border-cyber-green/10">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-muted-foreground">
+                                        {t('auth.haveAccount', 'Уже есть аккаунт?')}
                                     </span>
+                                    <button
+                                        type="button"
+                                        onClick={switchToLogin}
+                                        className="relative group px-6 py-2 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105"
+                                    >
+                                        {/* Animated gradient background */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-cyber-green via-cyber-blue to-cyber-green bg-[length:200%_100%] animate-gradient-shift" />
 
-                                    {/* Shine effect */}
-                                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                                </button>
+                                        {/* Glow effect */}
+                                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <div className="absolute inset-0 bg-cyber-green/20 blur-xl" />
+                                        </div>
+
+                                        {/* Button text */}
+                                        <span className="relative z-10 font-semibold text-black text-sm">
+                                            {t('auth.signIn', 'Войти')}
+                                        </span>
+
+                                        {/* Shine effect */}
+                                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Login Form */}
                         {isLogin ? (
