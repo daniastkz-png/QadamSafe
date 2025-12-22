@@ -23,9 +23,7 @@ export const AuthPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
-    const [referralCode, setReferralCode] = useState('');
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPrivacy, setAcceptPrivacy] = useState(false);
     const [acceptMarketing, setAcceptMarketing] = useState(false);
@@ -106,8 +104,7 @@ export const AuthPage: React.FC = () => {
             if (isLogin) {
                 await login(email, password);
             } else {
-                const fullName = `${firstName} ${lastName}`.trim();
-                await register(email, password, fullName || username || undefined);
+                await register(email, password, firstName || username || undefined);
             }
         } catch (err: any) {
             setError(err.response?.data?.error || t(`auth.${isLogin ? 'loginError' : 'registerError'}`));
@@ -373,34 +370,18 @@ export const AuthPage: React.FC = () => {
                                 </p>
 
                                 <form onSubmit={handleSubmit} className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-foreground mb-2">
-                                                {t('auth.firstName', 'Имя')}
-                                            </label>
-                                            <div className="relative">
-                                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                                                <input
-                                                    type="text"
-                                                    value={firstName}
-                                                    onChange={(e) => setFirstName(e.target.value)}
-                                                    className="cyber-input pl-10"
-                                                    placeholder={t('auth.firstName', 'Имя')}
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-foreground mb-2">
-                                                {t('auth.lastName', 'Фамилия')}
-                                            </label>
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">
+                                            {t('auth.firstName', 'Имя')}
+                                        </label>
+                                        <div className="relative">
+                                            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                             <input
                                                 type="text"
-                                                value={lastName}
-                                                onChange={(e) => setLastName(e.target.value)}
-                                                className="cyber-input"
-                                                placeholder={t('auth.lastName', 'Фамилия')}
+                                                value={firstName}
+                                                onChange={(e) => setFirstName(e.target.value)}
+                                                className="cyber-input pl-10"
+                                                placeholder={t('auth.firstName', 'Имя')}
                                                 required
                                             />
                                         </div>
@@ -437,21 +418,7 @@ export const AuthPage: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium text-foreground mb-2">
-                                            {t('auth.referralCode', 'Реферальный код')} ({t('auth.optional', 'необязательно')})
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={referralCode}
-                                            onChange={(e) => setReferralCode(e.target.value)}
-                                            className="cyber-input"
-                                            placeholder={t('auth.referralCodePlaceholder', 'Введите код')}
-                                        />
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            {t('auth.referralCodeHint', 'Используйте код амбассадора, если он у вас есть')}
-                                        </p>
-                                    </div>
+
 
                                     <div>
                                         <label className="block text-sm font-medium text-foreground mb-2">
