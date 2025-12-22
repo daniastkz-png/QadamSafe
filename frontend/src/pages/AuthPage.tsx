@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { Shield, Mail, Lock, User, X, AlertTriangle, Check } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { Footer } from '../components/Footer';
 import { Link } from 'react-router-dom';
 
 interface LastAccount {
@@ -635,6 +636,8 @@ export const AuthPage: React.FC = () => {
                     animation: gradient-shift 3s ease infinite;
                 }
             `}</style>
+
+            <Footer />
         </div>
     );
 };

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { TopNavBar } from '../components/TopNavBar';
 import { useAuth } from '../contexts/AuthContext';
 import { Check, Crown, Building2, AlertCircle } from 'lucide-react';
+import { Footer } from '../components/Footer';
 
 export const SubscriptionPage: React.FC = () => {
     const { t } = useTranslation();
@@ -180,6 +181,8 @@ export const SubscriptionPage: React.FC = () => {
                     })}
                 </div>
             </div>
+
+            <Footer />
         </div>
     );
 };

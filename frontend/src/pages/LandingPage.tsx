@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Shield, Mail, Phone, MessageSquare, CheckCircle, ChevronDown, ChevronRight, Lock, Eye, AlertTriangle, Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { Footer } from '../components/Footer';
 
 export const LandingPage: React.FC = () => {
     const { t } = useTranslation();
@@ -545,13 +546,7 @@ export const LandingPage: React.FC = () => {
             </section>
 
             {/* Footer */}
-            <footer className="py-8 px-4 border-t border-border bg-background">
-                <div className="max-w-7xl mx-auto text-center">
-                    <p className="text-sm text-muted-foreground">
-                        {t('landing.footer.copyright')}
-                    </p>
-                </div>
-            </footer>
+            <Footer />
 
             {/* Add custom animation styles */}
             <style>{`

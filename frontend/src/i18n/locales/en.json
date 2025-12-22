@@ -460,5 +460,15 @@
             "version": "Platform Version",
             "privacy": "Privacy Policy"
         }
+    },
+    "footer": {
+        "description": "Interactive platform for practical cybersecurity training through real-world scenarios.",
+        "contacts": "Contacts",
+        "city": "City",
+        "location": "Astana, Kazakhstan",
+        "allRightsReserved": "All rights reserved",
+        "publicOffer": "Public Offer",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfUse": "Terms of Use"
     }
 }
