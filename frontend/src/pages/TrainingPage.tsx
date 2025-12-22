@@ -19,6 +19,16 @@ export const TrainingPage: React.FC = () => {
         loadData();
     }, []);
 
+    // Auto-seed if empty
+    useEffect(() => {
+        if (!loading && scenarios.length === 0) {
+            console.log('No scenarios found. Auto-seeding...');
+            seedScenarios().then(() => {
+                loadData();
+            });
+        }
+    }, [loading, scenarios.length]);
+
     const loadData = async () => {
         try {
             const [scenariosData, progressData] = await Promise.all([
@@ -100,16 +110,12 @@ export const TrainingPage: React.FC = () => {
                     </div>
                 ) : scenarios.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12">
-                        <div className="cyber-card text-center py-12 w-full max-w-md mb-8">
-                            <p className="text-muted-foreground">{t('training.noScenarios')}</p>
+                        <div className="text-center py-12 w-full max-w-md">
+                            <div className="text-cyber-green text-lg animate-pulse-glow mb-2">
+                                {t('training.initializing', 'Создаем обучающие материалы...')}
+                            </div>
+                            <p className="text-sm text-muted-foreground">Это займет всего пару секунд</p>
                         </div>
-                        {/* DEV BUTTON - Only visible when empty */}
-                        <button
-                            onClick={() => seedScenarios().then(() => loadData())}
-                            className="text-xs text-muted-foreground hover:text-cyber-green underline opacity-50 transition-all border border-dashed border-border px-4 py-2 rounded"
-                        >
-                            [Admin] Initialize Scenario 1
-                        </button>
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -237,17 +243,6 @@ export const TrainingPage: React.FC = () => {
                 )}
             </div>
 
-            {/* Added extra button at bottom as fallback if list is not empty */}
-            {scenarios.length > 0 && (
-                <div className="max-w-7xl mx-auto px-8 pb-4 flex justify-center">
-                    <button
-                        onClick={() => seedScenarios().then(() => loadData())}
-                        className="text-xs text-muted-foreground hover:text-foreground underline opacity-30 transition-opacity"
-                    >
-                        Force Update Scenario 1
-                    </button>
-                </div>
-            )}
 
             {/* Toast Notification */}
             {toast.visible && (
