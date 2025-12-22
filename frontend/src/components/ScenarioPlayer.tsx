@@ -92,7 +92,8 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
     };
 
     const handleNext = () => {
-        if (!selectedOption) return;
+        // For information steps, no option selection is required
+        if (currentStep.type !== 'information' && !selectedOption) return;
 
         const selected = shuffledOptions.find(opt => opt.id === selectedOption);
 
@@ -155,9 +156,9 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                         <h3 className="text-sm font-medium text-cyber-green mb-1">
                             {t(`scenario.${currentStep.type}`)}
                         </h3>
-                        <p className="text-lg text-foreground leading-relaxed">
+                        <div className="text-lg text-foreground leading-relaxed whitespace-pre-line">
                             {getLocalizedContent(currentStep)}
-                        </p>
+                        </div>
                     </div>
                 </div>
 

@@ -13,6 +13,7 @@ export const TrainingPage: React.FC = () => {
     const [scenarios, setScenarios] = useState<(Scenario & { isUnlocked?: boolean })[]>([]);
     const [progress, setProgress] = useState<UserProgress[]>([]);
     const [loading, setLoading] = useState(true);
+    const [seeding, setSeeding] = useState(false);
     const [toast, setToast] = useState<{ message: string; visible: boolean }>({ message: '', visible: false });
 
     useEffect(() => {
@@ -41,6 +42,21 @@ export const TrainingPage: React.FC = () => {
             console.error('Failed to load training data:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleManualSeed = async () => {
+        setSeeding(true);
+        try {
+            await seedScenarios();
+            await loadData();
+            setToast({ message: 'Сценарии успешно созданы!', visible: true });
+            setTimeout(() => setToast({ message: '', visible: false }), 3000);
+        } catch (e) {
+            console.error(e);
+            setToast({ message: 'Ошибка создания сценариев', visible: true });
+        } finally {
+            setSeeding(false);
         }
     };
 
@@ -111,10 +127,26 @@ export const TrainingPage: React.FC = () => {
                 ) : scenarios.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12">
                         <div className="text-center py-12 w-full max-w-md">
-                            <div className="text-cyber-green text-lg animate-pulse-glow mb-2">
-                                {t('training.initializing', 'Создаем обучающие материалы...')}
+                            <div className="text-cyber-green text-lg animate-pulse-glow mb-4">
+                                {t('training.initializing', 'Инициализация обучения...')}
                             </div>
-                            <p className="text-sm text-muted-foreground">Это займет всего пару секунд</p>
+                            <p className="text-sm text-muted-foreground mb-6">
+                                Если сценарии не появляются автоматически, нажмите кнопку ниже.
+                            </p>
+                            <button
+                                onClick={handleManualSeed}
+                                disabled={seeding}
+                                className="cyber-button px-6 py-2 flex items-center justify-center gap-2 mx-auto"
+                            >
+                                {seeding ? (
+                                    <>
+                                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-background"></span>
+                                        Создаем...
+                                    </>
+                                ) : (
+                                    'Загрузить сценарии'
+                                )}
+                            </button>
                         </div>
                     </div>
                 ) : (
