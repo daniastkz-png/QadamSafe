@@ -151,22 +151,46 @@ export const AuthPage: React.FC = () => {
             {/* Right Column - Auth Form */}
             <div className="w-full lg:w-[55%] flex items-center justify-center px-4 py-8 lg:px-8">
                 <div className="w-full max-w-md">
-                    {/* Mobile Logo (Only visible on mobile) */}
-                    <div className="lg:hidden text-center mb-6">
-                        <div className="inline-block cyber-border rounded-lg p-4 mb-4">
-                            <Shield className="w-16 h-16 text-cyber-green" />
+                    {/* Mobile Welcome Block (Only visible on mobile) */}
+                    <div className="lg:hidden mb-8">
+                        {/* Logo */}
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-3 bg-cyber-green/10 border border-cyber-green/30 rounded-lg">
+                                <Shield className="w-10 h-10 text-cyber-green" />
+                            </div>
+                            <span className="text-2xl font-bold text-cyber-green">QadamSafe</span>
                         </div>
-                        <h1 className="text-3xl font-bold text-cyber-green mb-3">{t('common.appName')}</h1>
-                        <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
-                            {t('auth.tagline')}
-                        </p>
-                    </div>
 
-                    {/* Value Propositions - Compact inline format (Mobile only) */}
-                    <div className="lg:hidden mb-6 text-center">
-                        <p className="text-xs text-muted-foreground">
-                            {t('auth.valuePoint1')} · {t('auth.valuePoint2')} · {t('auth.valuePoint3')}
+                        {/* Main Heading */}
+                        <h1 className="text-3xl font-bold text-foreground mb-4 leading-tight">
+                            {t('auth.welcomeTitle', 'Добро пожаловать в QadamSafe')}
+                        </h1>
+
+                        {/* Subheading */}
+                        <p className="text-lg text-cyber-green font-medium mb-4 leading-relaxed">
+                            {t('auth.welcomeSubtitle', 'Войдите в личный кабинет и продолжите обучение кибербезопасности')}
                         </p>
+
+                        {/* Description */}
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                            {t('auth.welcomeDescription', 'Интерактивная платформа, где пользователи учатся распознавать цифровые угрозы через реальные сценарии. Практика вместо теории. Навыки, которые реально защищают.')}
+                        </p>
+
+                        {/* Feature Points */}
+                        <div className="flex flex-col gap-3">
+                            <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
+                                <span className="text-sm text-foreground">{t('auth.valuePoint1')}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
+                                <span className="text-sm text-foreground">{t('auth.valuePoint2')}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
+                                <span className="text-sm text-foreground">{t('auth.valuePoint3')}</span>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Quick Login Card - Only show on login tab when there's a saved account */}
