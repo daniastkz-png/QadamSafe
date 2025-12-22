@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mic, Phone, MessageSquare } from 'lucide-react';
+import { Phone, MessageSquare } from 'lucide-react';
 
 interface InteractiveDemoProps {
     navigate: (path: string) => void;
