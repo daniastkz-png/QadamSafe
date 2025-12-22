@@ -97,7 +97,7 @@ export const AuthPage: React.FC = () => {
 
             const allRequirementsMet = passwordRequirements.every(req => req.test(password));
             if (!allRequirementsMet) {
-                setError(t('auth.passwordRequirementsNotMet', 'Пароль не соответствует требованиям'));
+                setError(t('auth.passwordRequirementsNotMet', 'Этот пароль легко подобрать. Усильте защиту аккаунта'));
                 return;
             }
         }

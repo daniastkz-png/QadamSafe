@@ -175,7 +175,7 @@
         "passwordRequired": "Password is required",
         "passwordMismatch": "Passwords don't match",
         "mustAcceptTerms": "You must accept Terms of Use and Privacy Policy",
-        "passwordRequirementsNotMet": "Password doesn't meet requirements",
+        "passwordRequirementsNotMet": "This password is easy to guess. Strengthen your account security",
         "tagline": "Interactive platform for learning cybersecurity through practical simulations",
         "valuePoint1": "Real situations",
         "valuePoint2": "Safe practice",
