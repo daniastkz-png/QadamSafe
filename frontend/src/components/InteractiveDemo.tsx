@@ -202,12 +202,12 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                             </div>
                         </>
                     ) : (
-                        <div className="space-y-3">
-                            <div className="flex gap-2">
+                        <div className="space-y-3 pt-2">
+                            <div className="grid grid-cols-2 gap-3 h-full">
                                 {/* Feedback Block */}
-                                <div className={`flex-1 p-3 rounded-lg border flex items-center ${isRisky ? 'bg-cyber-yellow/10 border-cyber-yellow/20' : 'bg-cyber-green/10 border-cyber-green/20'
+                                <div className={`p-3 rounded-lg border flex flex-col justify-center text-center ${isRisky ? 'bg-cyber-yellow/10 border-cyber-yellow/20' : 'bg-cyber-green/10 border-cyber-green/20'
                                     }`}>
-                                    <p className={`text-xs font-medium leading-tight ${isRisky ? 'text-cyber-yellow' : 'text-cyber-green'
+                                    <p className={`text-xs font-semibold leading-snug ${isRisky ? 'text-cyber-yellow' : 'text-cyber-green'
                                         }`}>
                                         {isRisky
                                             ? t('demo.riskyFeedback', 'Так часто начинаются реальные случаи мошенничества')
@@ -216,19 +216,24 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                                     </p>
                                 </div>
 
-                                {/* Try Real Button (Small) */}
+                                {/* Try Real Button Block */}
                                 <button
                                     onClick={handleTryReal}
-                                    className="px-3 py-2 rounded-lg cyber-button text-xs font-medium whitespace-nowrap flex items-center justify-center shrink-0"
+                                    className="p-3 rounded-lg cyber-button flex flex-col items-center justify-center text-center group bg-cyber-green/10 hover:bg-cyber-green/20 border border-cyber-green/50 transition-all"
                                 >
-                                    {t('demo.tryReal', 'Реальные сценарии')}
+                                    <span className="text-xs font-bold text-cyber-green group-hover:text-white transition-colors mb-1">
+                                        QadamSafe
+                                    </span>
+                                    <span className="text-[10px] text-muted-foreground group-hover:text-cyber-green/80 leading-tight">
+                                        {t('demo.tryReal', 'Попробовать реальные сценарии')}
+                                    </span>
                                 </button>
                             </div>
 
-                            {/* Next Scenario Button (Secondary) */}
+                            {/* Next Scenario Button */}
                             <button
                                 onClick={handleNext}
-                                className="w-full py-2 text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-1 opacity-70 hover:opacity-100"
+                                className="w-full py-2 text-xs text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-2 opacity-60 hover:opacity-100"
                             >
                                 {t('demo.nextScenario', 'Следующий сценарий')}
                                 <ArrowRight className="w-3 h-3" />
