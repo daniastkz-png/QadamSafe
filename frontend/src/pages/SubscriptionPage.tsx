@@ -84,26 +84,12 @@ export const SubscriptionPage: React.FC = () => {
                             <div
                                 key={plan.tier}
                                 className={`cyber-card relative ${plan.bestValue
-                                        ? 'border-cyber-green shadow-[0_0_40px_rgba(0,255,65,0.3)]'
-                                        : plan.popular
-                                            ? 'border-cyber-green/50 shadow-[0_0_30px_rgba(0,255,65,0.2)]'
-                                            : ''
+                                    ? 'border-cyber-green shadow-[0_0_40px_rgba(0,255,65,0.3)]'
+                                    : plan.popular
+                                        ? 'border-cyber-green/50 shadow-[0_0_30px_rgba(0,255,65,0.2)]'
+                                        : ''
                                     } ${isCurrent ? 'bg-cyber-green/5' : ''}`}
                             >
-                                {/* Best Value Badge */}
-                                {plan.bestValue && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyber-green to-cyber-blue text-black px-6 py-1.5 rounded-full text-sm font-bold shadow-lg">
-                                        🔥 Самая выгодная
-                                    </div>
-                                )}
-
-                                {/* Popular Badge */}
-                                {plan.popular && !plan.bestValue && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-cyber-green text-black px-4 py-1 rounded-full text-sm font-semibold">
-                                        Popular
-                                    </div>
-                                )}
-
                                 {/* Icon */}
                                 <div className="flex justify-center mb-4">
                                     <div
