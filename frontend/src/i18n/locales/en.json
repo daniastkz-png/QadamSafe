@@ -165,7 +165,10 @@
         "registrationBenefit": "Free registration • Takes 1 minute",
         "quickLogin": "Quick Login",
         "notYou": "Not you?",
-        "useAnotherAccount": "Use another account"
+        "useAnotherAccount": "Use another account",
+        "welcomeTitle": "Welcome to QadamSafe",
+        "welcomeSubtitle": "Sign in to your account and continue your cybersecurity training",
+        "welcomeDescription": "An interactive platform where users learn to recognize digital threats through real-world scenarios. Practice instead of theory. Skills that truly protect."
     },
     "sidebar": {
         "home": "Home",
