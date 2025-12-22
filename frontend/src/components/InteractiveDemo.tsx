@@ -84,12 +84,25 @@ const scenarios: Scenario[] = [
 ];
 
 export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t }) => {
-    const [currentScenario, setCurrentScenario] = useState(0);
+    // Initialize with default order, will be shuffled on mount
+    const [scenarioOrder, setScenarioOrder] = useState<number[]>([0, 1, 2, 3, 4]);
+    const [orderIndex, setOrderIndex] = useState(0);
     const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
     const [progress, setProgress] = useState(100);
     const [isPaused, setIsPaused] = useState(false);
 
-    const scenario = scenarios[currentScenario];
+    useEffect(() => {
+        // Fisher-Yates shuffle to randomize scenario order on mount
+        const indices = scenarios.map((_, i) => i);
+        for (let i = indices.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        setScenarioOrder(indices);
+    }, []);
+
+    const currentScenarioId = scenarioOrder[orderIndex];
+    const scenario = scenarios[currentScenarioId];
     const isRisky = selectedChoice !== null && scenario.riskyChoices.includes(selectedChoice);
 
     useEffect(() => {
@@ -98,8 +111,8 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
         const interval = setInterval(() => {
             setProgress((prev) => {
                 if (prev <= 0) {
-                    // Move to next scenario
-                    setCurrentScenario((curr) => (curr + 1) % scenarios.length);
+                    // Move to next scenario in the shuffled order
+                    setOrderIndex((curr) => (curr + 1) % scenarios.length);
                     return 100;
                 }
                 return prev - 1;
@@ -107,7 +120,7 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
         }, 150); // Update every 150ms -> 15s total duration
 
         return () => clearInterval(interval);
-    }, [isPaused, selectedChoice]);
+    }, [isPaused, selectedChoice, scenarioOrder]); // Added scenarioOrder dep
 
     const handleChoice = (index: number) => {
         setSelectedChoice(index);
@@ -117,7 +130,7 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
     const handleNext = () => {
         setSelectedChoice(null);
         setIsPaused(false);
-        setCurrentScenario((curr) => (curr + 1) % scenarios.length);
+        setOrderIndex((curr) => (curr + 1) % scenarios.length);
         setProgress(100);
     };
 
