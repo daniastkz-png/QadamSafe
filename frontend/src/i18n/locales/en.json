@@ -169,7 +169,7 @@
         "createAccount": "Create",
         "haveAccount": "Already have an account?",
         "signIn": "Sign In",
-        "loginError": "Invalid email or password",
+        "loginError": "Failed to verify login credentials",
         "registerError": "Registration error",
         "emailRequired": "Email is required",
         "passwordRequired": "Password is required",

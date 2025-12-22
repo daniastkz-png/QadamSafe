@@ -177,7 +177,7 @@
         "createAccount": "Жасау",
         "haveAccount": "Аккаунт бар ма?",
         "signIn": "Кіру",
-        "loginError": "Қате email немесе құпия сөз",
+        "loginError": "Кіру деректерін растау мүмкін болмады",
         "registerError": "Тіркелу қатесі",
         "emailRequired": "Email міндетті",
         "passwordRequired": "Құпия сөз міндетті",

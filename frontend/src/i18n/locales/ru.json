@@ -114,7 +114,7 @@
         "createAccount": "Создать",
         "haveAccount": "Уже есть аккаунт?",
         "signIn": "Войти",
-        "loginError": "Неверный email или пароль",
+        "loginError": "Не удалось подтвердить данные для входа",
         "registerError": "Ошибка регистрации",
         "emailRequired": "Email обязателен",
         "passwordRequired": "Пароль обязателен",
