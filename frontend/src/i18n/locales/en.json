@@ -470,5 +470,21 @@
         "publicOffer": "Public Offer",
         "privacyPolicy": "Privacy Policy",
         "termsOfUse": "Terms of Use"
+    },
+    "demo": {
+        "contact": "Unknown Number",
+        "message": "Son, hi. Writing from someone else's number — my phone died.\nI'm at the clinic, can you urgently transfer 20,000₸?\nI'll explain later.",
+        "question": "What will you do?",
+        "choice1": "Transfer money — situation seems real",
+        "choice2": "Ask for a voice message",
+        "choice3": "Ask a question only mom would know",
+        "choice4": "Call her usual number",
+        "riskyTitle": "This is how real scam cases often begin",
+        "riskyDesc": "Scammers use emotions and urgency to make you act quickly",
+        "cautiousTitle": "You chose a cautious strategy",
+        "cautiousDesc": "Source verification is an important digital security skill",
+        "tryAgain": "Try again",
+        "tryReal": "Real scenarios",
+        "hint": "This is a demo. Try different options"
     }
 }
