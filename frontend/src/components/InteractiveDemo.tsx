@@ -57,7 +57,7 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                                 <p className="text-sm font-semibold text-foreground mb-1">
                                     {t('demo.sender', 'Неизвестный отправитель')}
                                 </p>
-                                <p className="text-xs text-muted-foreground">support@secure-bank-verify.com</p>
+                                <p className="text-xs text-muted-foreground">support@bank-security.com</p>
                             </div>
                         </div>
                         <p className="text-sm text-foreground leading-relaxed">
@@ -113,33 +113,21 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                                 </div>
                             </div>
 
-                            {/* Action Button - Only for unsafe choice */}
-                            {choice === 'unsafe' && (
+                            {/* Action Buttons */}
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handleReset}
+                                    className="flex-1 px-4 py-2 rounded-lg border border-border hover:border-cyber-green/50 bg-background transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
+                                >
+                                    {t('demo.tryAgain', 'Попробовать снова')}
+                                </button>
                                 <button
                                     onClick={handleTryReal}
-                                    className="w-full cyber-button text-sm py-3"
+                                    className="flex-1 cyber-button text-sm py-2"
                                 >
-                                    {t('demo.tryReal', 'Перейти на реальные сценарии')}
+                                    {t('demo.tryReal', 'Реальные сценарии')}
                                 </button>
-                            )}
-
-                            {/* Action Buttons - Only for safe choice */}
-                            {choice === 'safe' && (
-                                <div className="flex gap-3">
-                                    <button
-                                        onClick={handleReset}
-                                        className="flex-1 px-4 py-2 rounded-lg border border-border hover:border-cyber-green/50 bg-background transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
-                                    >
-                                        {t('demo.tryAgain', 'Попробовать снова')}
-                                    </button>
-                                    <button
-                                        onClick={handleTryReal}
-                                        className="flex-1 cyber-button text-sm py-2"
-                                    >
-                                        {t('demo.tryReal', 'Реальные сценарии')}
-                                    </button>
-                                </div>
-                            )}
+                            </div>
                         </div>
                     )}
                 </div>
