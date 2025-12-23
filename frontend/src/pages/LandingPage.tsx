@@ -48,7 +48,7 @@ export const LandingPage: React.FC = () => {
     const howItWorksSlides = [
         { image: '/step1-scenario.png', step: 1 },
         { image: '/step2-decision.png', step: 2 },
-        { image: '/step3-feedback.png', step: 3 },
+        { image: '/step3-feedback-v2.png', step: 3 },
     ];
 
     // Auto-rotate slides
