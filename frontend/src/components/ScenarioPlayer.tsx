@@ -174,9 +174,6 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
         return (
             <div className="max-w-3xl mx-auto">
                 <div className="cyber-card mb-6 p-8 bg-gradient-to-br from-cyber-green/10 to-cyber-blue/10 border border-cyber-green/30">
-                    <div className="text-center mb-6">
-                        <span className="text-6xl animate-bounce inline-block">🎉</span>
-                    </div>
                     <h3 className="text-2xl font-bold text-cyber-green text-center mb-6">
                         {getLocalizedCompletionTitle()}
                     </h3>
