@@ -342,10 +342,10 @@
         "backToTraining": "Оқытуға оралу"
     },
     "scenario": {
+        "step": "Қадам",
         "question": "Сұрақ",
         "information": "Ақпарат",
         "decision": "Шешім қабылдау",
-        "chooseAction": "Бұл жағдайда не істейсіз?",
         "submit": "Жіберу",
         "correct": "Дұрыс!",
         "incorrect": "Қате",
@@ -355,7 +355,14 @@
         "scenarioCompleted": "Сценарий аяқталды!",
         "yourScore": "Сіздің нәтижеңіз",
         "mistakes": "Қателер",
-        "backToTraining": "Оқытуға оралу"
+        "backToTraining": "Оқытуға оралу",
+        "notFound": "Сценарий табылмады",
+        "legitimate": "Нақты жағдай",
+        "potential_threat": "Ықтимал қауіп",
+        "outcome_safe": "Қауіпсіз",
+        "outcome_risky": "Тәуекелді",
+        "outcome_dangerous": "Қауіпті",
+        "chooseAction": "Не істейсіз?"
     },
     "progress": {
         "title": "Сіздің прогресс",

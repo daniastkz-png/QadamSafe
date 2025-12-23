@@ -349,7 +349,6 @@
         "question": "Question",
         "information": "Information",
         "decision": "Decision Making",
-        "chooseAction": "What will you do in this situation?",
         "submit": "Submit",
         "explanation": "Explanation",
         "nextStep": "Next Step",
@@ -363,7 +362,8 @@
         "potential_threat": "Potential Threat",
         "outcome_safe": "Safe",
         "outcome_risky": "Risky",
-        "outcome_dangerous": "Dangerous"
+        "outcome_dangerous": "Dangerous",
+        "chooseAction": "What will you do?"
     },
     "progress": {
         "title": "Your Progress",

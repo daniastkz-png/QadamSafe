@@ -309,7 +309,6 @@
         "question": "Вопрос",
         "information": "Информация",
         "decision": "Принятие решения",
-        "chooseAction": "Что вы сделаете в этой ситуации?",
         "submit": "Отправить",
         "explanation": "Объяснение",
         "nextStep": "Следующий шаг",
@@ -323,7 +322,8 @@
         "potential_threat": "Потенциальная угроза",
         "outcome_safe": "Безопасно",
         "outcome_risky": "Рискованно",
-        "outcome_dangerous": "Опасно"
+        "outcome_dangerous": "Опасно",
+        "chooseAction": "Что вы сделаете?"
     },
     "progress": {
         "title": "Ваш прогресс",
