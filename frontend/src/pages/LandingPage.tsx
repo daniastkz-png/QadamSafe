@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Shield, Mail, Phone, MessageSquare, CheckCircle, ChevronDown, ChevronRight, Eye, AlertTriangle, Menu, X, Play, Lightbulb } from 'lucide-react';
+import { Shield, Mail, Phone, MessageSquare, CheckCircle, ChevronDown, ChevronRight, Eye, AlertTriangle, Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Footer } from '../components/Footer';
 import { InteractiveDemo } from '../components/InteractiveDemo';
@@ -294,7 +294,7 @@ export const LandingPage: React.FC = () => {
                         <div className="cyber-card group hover:border-cyber-green/50 transition-all duration-300">
                             <div className="flex items-start gap-4">
                                 <div className="p-3 bg-cyber-green/10 rounded-lg">
-                                    <Play className="w-6 h-6 text-cyber-green" />
+                                    <MessageSquare className="w-6 h-6 text-cyber-green" />
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-xl font-semibold mb-2 text-foreground">
@@ -311,7 +311,7 @@ export const LandingPage: React.FC = () => {
                         <div className="cyber-card group hover:border-cyber-green/50 transition-all duration-300">
                             <div className="flex items-start gap-4">
                                 <div className="p-3 bg-cyber-green/10 rounded-lg">
-                                    <MessageSquare className="w-6 h-6 text-cyber-green" />
+                                    <Shield className="w-6 h-6 text-cyber-green" />
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-xl font-semibold mb-2 text-foreground">
@@ -336,23 +336,6 @@ export const LandingPage: React.FC = () => {
                                     </h3>
                                     <p className="text-muted-foreground">
                                         {t('landing.whatYouLearn.card4Desc')}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Card 5 */}
-                        <div className="cyber-card group hover:border-cyber-green/50 transition-all duration-300">
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 bg-cyber-green/10 rounded-lg">
-                                    <Lightbulb className="w-6 h-6 text-cyber-green" />
-                                </div>
-                                <div className="flex-1">
-                                    <h3 className="text-xl font-semibold mb-2 text-foreground">
-                                        {t('landing.whatYouLearn.card5Title')}
-                                    </h3>
-                                    <p className="text-muted-foreground">
-                                        {t('landing.whatYouLearn.card5Desc')}
                                     </p>
                                 </div>
                             </div>
