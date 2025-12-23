@@ -422,11 +422,11 @@ export const LandingPage: React.FC = () => {
                                     style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                                 >
                                     {howItWorksSlides.map((slide, index) => (
-                                        <div key={index} className="w-full flex-shrink-0">
+                                        <div key={index} className="w-full flex-shrink-0 p-8 md:p-12 flex items-center justify-center bg-cyber-green/5">
                                             <img
                                                 src={slide.image}
                                                 alt={`Step ${slide.step}`}
-                                                className="w-full h-auto object-cover"
+                                                className="w-full max-w-sm md:max-w-md h-auto object-contain rounded-xl shadow-2xl border border-white/10"
                                             />
                                         </div>
                                     ))}
@@ -447,8 +447,8 @@ export const LandingPage: React.FC = () => {
                                         key={index}
                                         onClick={() => setCurrentSlide(index)}
                                         className={`w-3 h-3 rounded-full transition-all duration-300 ${currentSlide === index
-                                                ? 'bg-cyber-green w-8'
-                                                : 'bg-border hover:bg-cyber-green/50'
+                                            ? 'bg-cyber-green w-8'
+                                            : 'bg-border hover:bg-cyber-green/50'
                                             }`}
                                         aria-label={`Go to slide ${index + 1}`}
                                     />
