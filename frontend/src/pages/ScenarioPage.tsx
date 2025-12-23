@@ -103,7 +103,7 @@ export const ScenarioPage: React.FC = () => {
         <div className="min-h-screen bg-background">
             <TopNavBar />
 
-            <div className="max-w-7xl mx-auto p-8">
+            <div className="max-w-7xl mx-auto px-4 py-6 sm:p-8">
                 {/* Header */}
                 <div className="mb-8">
                     <button

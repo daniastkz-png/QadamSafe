@@ -197,7 +197,7 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
     }
 
     return (
-        <div className="max-w-3xl mx-auto">
+        <div className="w-full max-w-3xl mx-auto px-2 sm:px-0">
             {/* Progress Indicator */}
             <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
@@ -291,10 +291,10 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                                         onClick={() => !showExplanation && handleOptionSelect(option)}
                                         disabled={showExplanation}
                                         className={`w-full text-left p-4 rounded-lg border-2 transition-all ${isSelected && showExplanation
-                                                ? getOutcomeColor(option.outcomeType)
-                                                : isSelected
-                                                    ? 'border-cyber-green bg-cyber-green/10'
-                                                    : 'border-border hover:border-cyber-green/50 bg-card'
+                                            ? getOutcomeColor(option.outcomeType)
+                                            : isSelected
+                                                ? 'border-cyber-green bg-cyber-green/10'
+                                                : 'border-border hover:border-cyber-green/50 bg-card'
                                             } ${showExplanation ? 'cursor-default' : 'cursor-pointer'}`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -316,10 +316,10 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                 {/* Explanation Block - appears after selection */}
                 {showExplanation && selectedOptionData && (
                     <div className={`mt-6 p-5 rounded-xl border-2 ${selectedOptionData.outcomeType === 'safe'
-                            ? 'bg-cyber-green/5 border-cyber-green/30'
-                            : selectedOptionData.outcomeType === 'risky'
-                                ? 'bg-cyber-yellow/5 border-cyber-yellow/30'
-                                : 'bg-cyber-red/5 border-cyber-red/30'
+                        ? 'bg-cyber-green/5 border-cyber-green/30'
+                        : selectedOptionData.outcomeType === 'risky'
+                            ? 'bg-cyber-yellow/5 border-cyber-yellow/30'
+                            : 'bg-cyber-red/5 border-cyber-red/30'
                         }`}>
                         <div className="flex items-start gap-3">
                             <div className="flex-shrink-0 mt-0.5">
@@ -333,10 +333,10 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                             </div>
                             <div className="flex-1">
                                 <h4 className={`font-semibold mb-2 ${selectedOptionData.outcomeType === 'safe'
-                                        ? 'text-cyber-green'
-                                        : selectedOptionData.outcomeType === 'risky'
-                                            ? 'text-cyber-yellow'
-                                            : 'text-cyber-red'
+                                    ? 'text-cyber-green'
+                                    : selectedOptionData.outcomeType === 'risky'
+                                        ? 'text-cyber-yellow'
+                                        : 'text-cyber-red'
                                     }`}>
                                     {selectedOptionData.outcomeType === 'safe'
                                         ? t('scenario.feedback.safe')
