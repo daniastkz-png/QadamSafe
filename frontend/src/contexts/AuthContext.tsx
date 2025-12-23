@@ -63,12 +63,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             localStorage.setItem('language', userData.language);
         }
 
-        // Redirect to welcome page if first time, otherwise dashboard
-        if (!userData.hasSeenWelcome) {
-            navigate('/welcome');
-        } else {
-            navigate('/progress');
-        }
+        // Always redirect to welcome page (About Platform section)
+        navigate('/welcome');
     };
 
     const register = async (email: string, password: string, name?: string) => {
