@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, updateDoc, limit } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -17,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 // Types
 interface User {
@@ -129,6 +130,40 @@ export const firebaseAuthAPI = {
     },
 
     getCurrentUser: () => auth.currentUser,
+
+    loginWithGoogle: async (language?: string) => {
+        const result = await signInWithPopup(auth, googleProvider);
+        const firebaseUser = result.user;
+
+        // Check if user profile exists
+        const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+
+        if (userDoc.exists()) {
+            // Existing user - return profile
+            const user = userDoc.data() as User;
+            const token = await firebaseUser.getIdToken();
+            return { user, token, isNewUser: false };
+        } else {
+            // New user - create profile
+            const user: User = {
+                id: firebaseUser.uid,
+                email: firebaseUser.email || '',
+                name: firebaseUser.displayName || '',
+                role: 'USER',
+                language: language || 'ru',
+                subscriptionTier: 'FREE',
+                securityScore: 0,
+                rank: 1,
+                hasSeenWelcome: false,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+
+            await setDoc(doc(db, 'users', firebaseUser.uid), user);
+            const token = await firebaseUser.getIdToken();
+            return { user, token, isNewUser: true };
+        }
+    },
 };
 
 // ============= SCENARIOS API =============

@@ -10,6 +10,7 @@ interface AuthContextType {
     loading: boolean;
     login: (email: string, password: string) => Promise<void>;
     register: (email: string, password: string, name?: string) => Promise<void>;
+    loginWithGoogle: () => Promise<void>;
     logout: () => void;
     updateUser: (user: User) => void;
 }
@@ -87,6 +88,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         navigate('/welcome');
     };
 
+    const loginWithGoogle = async () => {
+        const currentLanguage = i18n.language;
+        const { user: userData } = await firebaseAuthAPI.loginWithGoogle(currentLanguage);
+        setUser(userData as User);
+
+        // Save last account for quick login feature
+        localStorage.setItem('lastAccount', JSON.stringify({
+            email: userData.email,
+            name: userData.name || '',
+        }));
+
+        // Sync language
+        if (userData.language) {
+            i18n.changeLanguage(userData.language);
+            localStorage.setItem('language', userData.language);
+        }
+
+        // Redirect based on whether new or existing user
+        navigate('/welcome');
+    };
+
     const logout = async () => {
         await firebaseAuthAPI.logout();
         setUser(null);
@@ -98,7 +120,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
+        <AuthContext.Provider value={{ user, loading, login, register, loginWithGoogle, logout, updateUser }}>
             {children}
         </AuthContext.Provider>
     );
