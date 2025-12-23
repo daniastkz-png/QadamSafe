@@ -26,9 +26,9 @@ export const SCENARIOS: Scenario[] = [
                 {
                     id: 'step1',
                     type: 'question',
-                    content: 'Вы получаете сообщение в WhatsApp с незнакомого номера. На фото профиля — ваш сын или брат.\n\nСообщение:\n"Мам, привет. Я телефон потерял, это номер друга. Скинь срочно 15 000 ₸ на Каспи, очень надо, потом объясню. Номер: +7 705 XXX XX XX"\n\nЧто вы сделаете в этой ситуации?',
-                    contentEn: 'You receive a WhatsApp message from an unknown number. The profile picture shows your son or brother.\n\nMessage:\n"Mom, hi. I lost my phone, this is my friend\'s number. Send 15,000 ₸ to Kaspi urgently, I really need it, I\'ll explain later. Number: +7 705 XXX XX XX"\n\nWhat will you do in this situation?',
-                    contentKk: 'Сізге белгісіз нөмірден WhatsApp хабарламасы келеді. Профиль суретінде — сіздің ұлыңыз немесе ағаңыз.\n\nХабарлама:\n"Апа, сәлем. Телефонымды жоғалттым, бұл досымның нөмірі. Каспиге 15 000 ₸ жіберші, өте керек, кейін түсіндіремін. Нөмір: +7 705 XXX XX XX"\n\nБұл жағдайда не істейсіз?',
+                    content: 'Вы получаете сообщение в WhatsApp с незнакомого номера. На фото профиля — ваш сын или брат.\n\nСообщение:\n"Мам, привет. Я телефон потерял, это номер друга. Скинь срочно 15 000 ₸ на Каспи, очень надо, потом объясню. Номер: +7 705 XXX XX XX"',
+                    contentEn: 'You receive a WhatsApp message from an unknown number. The profile picture shows your son or brother.\n\nMessage:\n"Mom, hi. I lost my phone, this is my friend\'s number. Send 15,000 ₸ to Kaspi urgently, I really need it, I\'ll explain later. Number: +7 705 XXX XX XX"',
+                    contentKk: 'Сізге белгісіз нөмірден WhatsApp хабарламасы келеді. Профиль суретінде — сіздің ұлыңыз немесе ағаңыз.\n\nХабарлама:\n"Апа, сәлем. Телефонымды жоғалттым, бұл досымның нөмірі. Каспиге 15 000 ₸ жіберші, өте керек, кейін түсіндіремін. Нөмір: +7 705 XXX XX XX"',
                     options: [
                         {
                             id: 'opt1',
@@ -103,9 +103,9 @@ export const SCENARIOS: Scenario[] = [
                 {
                     id: 'step1',
                     type: 'question',
-                    content: 'Вам поступает звонок. Голос уверенный, фоном слышен шум колл-центра.\n\n"Служба безопасности":\n"Уважаемый клиент! Зафиксирована подозрительная попытка перевода на сумму 150 000₸. Если это не Вы, срочно сообщите код из SMS для отмены операции."\n\nЧто вы сделаете в этой ситуации?',
-                    contentEn: 'You receive a call. The voice is confident, you can hear call center noise in the background.\n\n"Security Service":\n"Dear client! A suspicious transfer attempt of 150,000₸ has been detected. If this wasn\'t you, urgently provide the SMS code to cancel the operation."\n\nWhat will you do in this situation?',
-                    contentKk: 'Сізге қоңырау келеді. Дауыс сенімді, фонда колл-орталық шуы естіледі.\n\n"Қауіпсіздік қызметі":\n"Құрметті клиент! 150 000₸ сомасына күдікті аударым әрекеті тіркелді. Егер бұл сіз болмасаңыз, операцияны болдырмау үшін SMS кодын дереу хабарлаңыз."\n\nБұл жағдайда не істейсіз?',
+                    content: 'Вам поступает звонок. Голос уверенный, фоном слышен шум колл-центра.\n\n"Служба безопасности":\n"Уважаемый клиент! Зафиксирована подозрительная попытка перевода на сумму 150 000₸. Если это не Вы, срочно сообщите код из SMS для отмены операции."',
+                    contentEn: 'You receive a call. The voice is confident, you can hear call center noise in the background.\n\n"Security Service":\n"Dear client! A suspicious transfer attempt of 150,000₸ has been detected. If this wasn\'t you, urgently provide the SMS code to cancel the operation."',
+                    contentKk: 'Сізге қоңырау келеді. Дауыс сенімді, фонда колл-орталық шуы естіледі.\n\n"Қауіпсіздік қызметі":\n"Құрметті клиент! 150 000₸ сомасына күдікті аударым әрекеті тіркелді. Егер бұл сіз болмасаңыз, операцияны болдырмау үшін SMS кодын дереу хабарлаңыз."',
                     options: [
                         {
                             id: 'opt1',
@@ -180,9 +180,9 @@ export const SCENARIOS: Scenario[] = [
                 {
                     id: 'step1',
                     type: 'question',
-                    content: 'Вы получаете SMS с приятной новостью о социальной выплате.\n\nОт: 1414 (Fake)\n"Вам назначена социальная выплата 50 000₸. Для получения перейдите по ссылке: egov-portal-kz.com/payment. Срок действия ссылки 24 часа."\n\nЧто вы сделаете в этой ситуации?',
-                    contentEn: 'You receive an SMS with pleasant news about a social payment.\n\nFrom: 1414 (Fake)\n"You have been assigned a social payment of 50,000₸. To receive it, follow the link: egov-portal-kz.com/payment. Link valid for 24 hours."\n\nWhat will you do in this situation?',
-                    contentKk: 'Сізге әлеуметтік төлем туралы қуанышты хабармен SMS келеді.\n\nКімнен: 1414 (Жалған)\n"Сізге 50 000₸ әлеуметтік төлем тағайындалды. Алу үшін сілтемені ашыңыз: egov-portal-kz.com/payment. Сілтеме 24 сағат жарамды."\n\nБұл жағдайда не істейсіз?',
+                    content: 'Вы получаете SMS с приятной новостью о социальной выплате.\n\nОт: 1414 (Fake)\n"Вам назначена социальная выплата 50 000₸. Для получения перейдите по ссылке: egov-portal-kz.com/payment. Срок действия ссылки 24 часа."',
+                    contentEn: 'You receive an SMS with pleasant news about a social payment.\n\nFrom: 1414 (Fake)\n"You have been assigned a social payment of 50,000₸. To receive it, follow the link: egov-portal-kz.com/payment. Link valid for 24 hours."',
+                    contentKk: 'Сізге әлеуметтік төлем туралы қуанышты хабармен SMS келеді.\n\nКімнен: 1414 (Жалған)\n"Сізге 50 000₸ әлеуметтік төлем тағайындалды. Алу үшін сілтемені ашыңыз: egov-portal-kz.com/payment. Сілтеме 24 сағат жарамды."',
                     options: [
                         {
                             id: 'opt1',
@@ -257,9 +257,9 @@ export const SCENARIOS: Scenario[] = [
                 {
                     id: 'step1',
                     type: 'question',
-                    content: 'В Telegram приходит сообщение от "HR менеджера".\n\nHR Manager Anna:\n"Здравствуйте! Ищем сотрудников на удаленку. Задача: ставить лайки на товары Wildberries/Ozon. Оплата: от 25 000₸ в день. Интересно?"\n\nЧто вы сделаете в этой ситуации?',
-                    contentEn: 'You receive a Telegram message from an "HR manager".\n\nHR Manager Anna:\n"Hello! We are looking for remote employees. Task: like products on Wildberries/Ozon. Payment: from 25,000₸ per day. Interested?"\n\nWhat will you do in this situation?',
-                    contentKk: 'Telegram-ға "HR менеджерден" хабарлама келеді.\n\nHR Manager Anna:\n"Сәлеметсіз бе! Қашықтан жұмыс істейтін қызметкерлер іздейміз. Тапсырма: Wildberries/Ozon тауарларына лайк қою. Төлем: күніне 25 000₸-ден. Қызықты ма?"\n\nБұл жағдайда не істейсіз?',
+                    content: 'В Telegram приходит сообщение от "HR менеджера".\n\nHR Manager Anna:\n"Здравствуйте! Ищем сотрудников на удаленку. Задача: ставить лайки на товары Wildberries/Ozon. Оплата: от 25 000₸ в день. Интересно?"',
+                    contentEn: 'You receive a Telegram message from an "HR manager".\n\nHR Manager Anna:\n"Hello! We are looking for remote employees. Task: like products on Wildberries/Ozon. Payment: from 25,000₸ per day. Interested?"',
+                    contentKk: 'Telegram-ға "HR менеджерден" хабарлама келеді.\n\nHR Manager Anna:\n"Сәлеметсіз бе! Қашықтан жұмыс істейтін қызметкерлер іздейміз. Тапсырма: Wildberries/Ozon тауарларына лайк қою. Төлем: күніне 25 000₸-ден. Қызықты ма?"',
                     options: [
                         {
                             id: 'opt1',
@@ -334,9 +334,9 @@ export const SCENARIOS: Scenario[] = [
                 {
                     id: 'step1',
                     type: 'question',
-                    content: 'SMS от службы доставки (хотя вы ничего не ждете, или ждете, что делает это опаснее).\n\nKazPost:\n"Ваша посылка прибыла на склад, но адрес указан неверно. Для доставки обновите адрес и оплатите пошлину 450₸ по ссылке: kazpost-delivery-track.com"\n\nЧто вы сделаете в этой ситуации?',
-                    contentEn: 'SMS from delivery service (even though you\'re not expecting anything, or you are, which makes it more dangerous).\n\nKazPost:\n"Your parcel has arrived at the warehouse, but the address is incorrect. To deliver, update the address and pay a 450₸ fee via link: kazpost-delivery-track.com"\n\nWhat will you do in this situation?',
-                    contentKk: 'Жеткізу қызметінен SMS (ештеңе күтпесеңіз де, немесе күтсеңіз де, бұл қауіптірек етеді).\n\nKazPost:\n"Сәлемдемеңіз қоймаға келді, бірақ мекенжай қате көрсетілген. Жеткізу үшін мекенжайды жаңартып, 450₸ баж төлеңіз: kazpost-delivery-track.com"\n\nБұл жағдайда не істейсіз?',
+                    content: 'SMS от службы доставки (хотя вы ничего не ждете, или ждете, что делает это опаснее).\n\nKazPost:\n"Ваша посылка прибыла на склад, но адрес указан неверно. Для доставки обновите адрес и оплатите пошлину 450₸ по ссылке: kazpost-delivery-track.com"',
+                    contentEn: 'SMS from delivery service (even though you\'re not expecting anything, or you are, which makes it more dangerous).\n\nKazPost:\n"Your parcel has arrived at the warehouse, but the address is incorrect. To deliver, update the address and pay a 450₸ fee via link: kazpost-delivery-track.com"',
+                    contentKk: 'Жеткізу қызметінен SMS (ештеңе күтпесеңіз де, немесе күтсеңіз де, бұл қауіптірек етеді).\n\nKazPost:\n"Сәлемдемеңіз қоймаға келді, бірақ мекенжай қате көрсетілген. Жеткізу үшін мекенжайды жаңартып, 450₸ баж төлеңіз: kazpost-delivery-track.com"',
                     options: [
                         {
                             id: 'opt1',
