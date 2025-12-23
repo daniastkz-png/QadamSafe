@@ -39,6 +39,18 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
         return step.content;
     };
 
+    const getLocalizedContext = (step: ScenarioStep) => {
+        if (i18n.language === 'en' && step.contextEn) return step.contextEn;
+        if (i18n.language === 'kk' && step.contextKk) return step.contextKk;
+        return step.context || '';
+    };
+
+    const getLocalizedQuestion = (step: ScenarioStep) => {
+        if (i18n.language === 'en' && step.questionEn) return step.questionEn;
+        if (i18n.language === 'kk' && step.questionKk) return step.questionKk;
+        return step.question || '';
+    };
+
     const getLocalizedOptionText = (option: ScenarioOption) => {
         if (i18n.language === 'en' && option.textEn) return option.textEn;
         if (i18n.language === 'kk' && option.textKk) return option.textKk;
@@ -148,62 +160,86 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
 
             {/* Step Content */}
             <div className="cyber-card mb-6">
-                <div className="flex items-start gap-3 mb-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyber-green/20 flex items-center justify-center">
-                        <span className="text-cyber-green font-bold">{currentStepIndex + 1}</span>
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="text-sm font-medium text-cyber-green mb-1">
-                            {t(`scenario.${currentStep.type}`)}
-                        </h3>
-                        <div className="text-lg text-foreground leading-relaxed whitespace-pre-line">
-                            {getLocalizedContent(currentStep)}
+                {/* Context Block (if available) */}
+                {(currentStep.context || currentStep.contextEn || currentStep.contextKk) && (
+                    <div className="mb-6 p-4 bg-muted/30 rounded-lg border border-border">
+                        <div className="flex items-start gap-3">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyber-blue/20 flex items-center justify-center">
+                                <span className="text-cyber-blue font-bold">{currentStepIndex + 1}</span>
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="text-sm font-medium text-cyber-blue mb-2">
+                                    {t('scenario.information')}
+                                </h3>
+                                <div className="text-base text-foreground leading-relaxed whitespace-pre-line">
+                                    {getLocalizedContext(currentStep)}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
-                {/* Options - now integrated in the same card */}
-                {currentStep.options && currentStep.options.length > 0 && (
-                    <div className="mt-6 pt-6 border-t border-border">
-                        <h4 className="text-base font-semibold text-cyber-green mb-4">
-                            {t('scenario.chooseAction')}
+                {/* Question Block (if available) or fallback to content */}
+                {(currentStep.question || currentStep.questionEn || currentStep.questionKk) ? (
+                    <div className="mb-4">
+                        <h4 className="text-lg font-semibold text-cyber-green mb-4">
+                            {getLocalizedQuestion(currentStep)}
                         </h4>
-                        <div className="space-y-3">
-                            {shuffledOptions.map((option) => {
-                                const isSelected = selectedOption === option.id;
-                                return (
-                                    <button
-                                        key={option.id}
-                                        onClick={() => !showExplanation && handleOptionSelect(option)}
-                                        disabled={showExplanation}
-                                        className={`w-full text-left p-4 rounded-lg border-2 transition-all ${isSelected
-                                            ? getOutcomeColor(option.outcomeType)
-                                            : 'border-border hover:border-cyber-green/50 bg-card'
-                                            } ${showExplanation ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                                    >
-                                        <div className="flex items-start gap-3">
+                    </div>
+                ) : (
+                    // Fallback for old format (no context/question split)
+                    <div className="flex items-start gap-3 mb-4">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyber-green/20 flex items-center justify-center">
+                            <span className="text-cyber-green font-bold">{currentStepIndex + 1}</span>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-sm font-medium text-cyber-green mb-1">
+                                {t(`scenario.${currentStep.type}`)}
+                            </h3>
+                            <div className="text-lg text-foreground leading-relaxed whitespace-pre-line">
+                                {getLocalizedContent(currentStep)}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Options */}
+                {currentStep.options && currentStep.options.length > 0 && (
+                    <div className="space-y-3">
+                        {shuffledOptions.map((option) => {
+                            const isSelected = selectedOption === option.id;
+                            return (
+                                <button
+                                    key={option.id}
+                                    onClick={() => !showExplanation && handleOptionSelect(option)}
+                                    disabled={showExplanation}
+                                    className={`w-full text-left p-4 rounded-lg border-2 transition-all ${isSelected
+                                        ? getOutcomeColor(option.outcomeType)
+                                        : 'border-border hover:border-cyber-green/50 bg-card'
+                                        } ${showExplanation ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                >
+                                    <div className="flex items-start gap-3">
+                                        {isSelected && showExplanation && (
+                                            <div className="flex-shrink-0 mt-1">
+                                                {getOutcomeIcon(option.outcomeType)}
+                                            </div>
+                                        )}
+                                        <div className="flex-1">
+                                            <p className="text-foreground font-medium">
+                                                {getLocalizedOptionText(option)}
+                                            </p>
                                             {isSelected && showExplanation && (
-                                                <div className="flex-shrink-0 mt-1">
-                                                    {getOutcomeIcon(option.outcomeType)}
+                                                <div className="mt-3 pt-3 border-t border-border">
+                                                    <p className="text-sm text-muted-foreground">
+                                                        {getLocalizedExplanation(option)}
+                                                    </p>
                                                 </div>
                                             )}
-                                            <div className="flex-1">
-                                                <p className="text-foreground font-medium">
-                                                    {getLocalizedOptionText(option)}
-                                                </p>
-                                                {isSelected && showExplanation && (
-                                                    <div className="mt-3 pt-3 border-t border-border">
-                                                        <p className="text-sm text-muted-foreground">
-                                                            {getLocalizedExplanation(option)}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </div>
                                         </div>
-                                    </button>
-                                );
-                            })}
-                        </div>
+                                    </div>
+                                </button>
+                            );
+                        })}
                     </div>
                 )}
             </div>

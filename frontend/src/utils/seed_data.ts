@@ -26,6 +26,12 @@ export const SCENARIOS: Scenario[] = [
                 {
                     id: 'step1',
                     type: 'question',
+                    context: 'Вы получаете сообщение в WhatsApp с незнакомого номера. На фото профиля — ваш сын или брат.\n\nСообщение:\n"Мам, привет. Я телефон потерял, это номер друга. Скинь срочно 15 000 ₸ на Каспи, очень надо, потом объясню. Номер: +7 705 XXX XX XX"',
+                    contextEn: 'You receive a WhatsApp message from an unknown number. The profile picture shows your son or brother.\n\nMessage:\n"Mom, hi. I lost my phone, this is my friend\'s number. Send 15,000 ₸ to Kaspi urgently, I really need it, I\'ll explain later. Number: +7 705 XXX XX XX"',
+                    contextKk: 'Сізге белгісіз нөмірден WhatsApp хабарламасы келеді. Профиль суретінде — сіздің ұлыңыз немесе ағаңыз.\n\nХабарлама:\n"Апа, сәлем. Телефонымды жоғалттым, бұл досымның нөмірі. Каспиге 15 000 ₸ жіберші, өте керек, кейін түсіндіремін. Нөмір: +7 705 XXX XX XX"',
+                    question: 'Что вы сделаете в этой ситуации?',
+                    questionEn: 'What will you do in this situation?',
+                    questionKk: 'Бұл жағдайда не істейсіз?',
                     content: 'Вы получаете сообщение в WhatsApp с незнакомого номера. На фото профиля — ваш сын или брат.\n\nСообщение:\n"Мам, привет. Я телефон потерял, это номер друга. Скинь срочно 15 000 ₸ на Каспи, очень надо, потом объясню. Номер: +7 705 XXX XX XX"\n\nЧто вы сделаете в этой ситуации?',
                     contentEn: 'You receive a WhatsApp message from an unknown number. The profile picture shows your son or brother.\n\nMessage:\n"Mom, hi. I lost my phone, this is my friend\'s number. Send 15,000 ₸ to Kaspi urgently, I really need it, I\'ll explain later. Number: +7 705 XXX XX XX"\n\nWhat will you do in this situation?',
                     contentKk: 'Сізге белгісіз нөмірден WhatsApp хабарламасы келеді. Профиль суретінде — сіздің ұлыңыз немесе ағаңыз.\n\nХабарлама:\n"Апа, сәлем. Телефонымды жоғалттым, бұл досымның нөмірі. Каспиге 15 000 ₸ жіберші, өте керек, кейін түсіндіремін. Нөмір: +7 705 XXX XX XX"\n\nБұл жағдайда не істейсіз?',
@@ -36,9 +42,9 @@ export const SCENARIOS: Scenario[] = [
                             textEn: 'Follow the link to verify information',
                             textKk: 'Ақпаратты тексеру үшін сілтемені ашамын',
                             outcomeType: 'dangerous',
-                            explanation: 'Опасно! В данном сценарии нет ссылки, но если бы была — это типичная ловушка. Никогда не переходите по подозрительным ссылкам.',
-                            explanationEn: 'Dangerous! There is no link in this scenario, but if there was — it would be a typical trap. Never click on suspicious links.',
-                            explanationKk: 'Қауіпті! Бұл сценарийде сілтеме жоқ, бірақ болса — бұл типтік тұзақ. Күдікті сілтемелерді ешқашан ашпаңыз.'
+                            explanation: 'Опасно! В данном сценарии нет ссылки, но если бы была — это типичная ловушка. Никогда не переходите по подозрительным ссылкам.\n\nВывод: Никогда не переводите деньги "родственникам" с незнакомых номеров без личного подтверждения голосом.',
+                            explanationEn: 'Dangerous! There is no link in this scenario, but if there was — it would be a typical trap. Never click on suspicious links.\n\nConclusion: Never transfer money to "relatives" from unknown numbers without personal voice confirmation.',
+                            explanationKk: 'Қауіпті! Бұл сценарийде сілтеме жоқ, бірақ болса — бұл типтік тұзақ. Күдікті сілтемелерді ешқашан ашпаңыз.\n\nҚорытынды: Белгісіз нөмірлерден "туыстарға" дауыспен жеке растамай ақша аудармаңыз.'
                         },
                         {
                             id: 'opt2',
@@ -46,9 +52,9 @@ export const SCENARIOS: Scenario[] = [
                             textEn: 'Reply to the message and clarify details',
                             textKk: 'Хабарламаға жауап беріп, егжей-тегжейін сұраймын',
                             outcomeType: 'risky',
-                            explanation: 'Рискованно. Мошенники могут продолжить давить на эмоции и убедить вас перевести деньги. Лучше не вступать в диалог.',
-                            explanationEn: 'Risky. Scammers may continue to pressure you emotionally and convince you to transfer money. Better not to engage.',
-                            explanationKk: 'Тәуекелді. Алаяқтар эмоцияға қысым жасауды жалғастырып, ақша аударуға сендіре алады. Диалогқа түспеген дұрыс.'
+                            explanation: 'Рискованно. Мошенники могут продолжить давить на эмоции и убедить вас перевести деньги. Лучше не вступать в диалог.\n\nВывод: Никогда не переводите деньги "родственникам" с незнакомых номеров без личного подтверждения голосом.',
+                            explanationEn: 'Risky. Scammers may continue to pressure you emotionally and convince you to transfer money. Better not to engage.\n\nConclusion: Never transfer money to "relatives" from unknown numbers without personal voice confirmation.',
+                            explanationKk: 'Тәуекелді. Алаяқтар эмоцияға қысым жасауды жалғастырып, ақша аударуға сендіре алады. Диалогқа түспеген дұрыс.\n\nҚорытынды: Белгісіз нөмірлерден "туыстарға" дауыспен жеке растамай ақша аудармаңыз.'
                         },
                         {
                             id: 'opt3',
@@ -56,9 +62,9 @@ export const SCENARIOS: Scenario[] = [
                             textEn: 'Check information via official bank app',
                             textKk: 'Банктің ресми қосымшасы арқылы ақпаратты тексеремін',
                             outcomeType: 'safe',
-                            explanation: 'Хорошее решение для проверки банковских операций, но в данном случае лучше позвонить родственнику на старый номер.',
-                            explanationEn: 'Good solution for checking bank operations, but in this case it\'s better to call your relative on their old number.',
-                            explanationKk: 'Банк операцияларын тексеру үшін жақсы шешім, бірақ бұл жағдайда туысқаныңызға ескі нөмірге қоңырау шалған дұрыс.'
+                            explanation: 'Хорошее решение для проверки банковских операций, но в данном случае лучше позвонить родственнику на старый номер.\n\nВывод: Никогда не переводите деньги "родственникам" с незнакомых номеров без личного подтверждения голосом.',
+                            explanationEn: 'Good solution for checking bank operations, but in this case it\'s better to call your relative on their old number.\n\nConclusion: Never transfer money to "relatives" from unknown numbers without personal voice confirmation.',
+                            explanationKk: 'Банк операцияларын тексеру үшін жақсы шешім, бірақ бұл жағдайда туысқаныңызға ескі нөмірге қоңырау шалған дұрыс.\n\nҚорытынды: Белгісіз нөмірлерден "туыстарға" дауыспен жеке растамай ақша аудармаңыз.'
                         },
                         {
                             id: 'opt4',
@@ -66,18 +72,11 @@ export const SCENARIOS: Scenario[] = [
                             textEn: 'Ignore the message',
                             textKk: 'Хабарламаны елемеймін',
                             outcomeType: 'safe',
-                            explanation: 'Правильно! Лучше всего — позвонить на старый номер родственника и проверить. Игнорирование подозрительных сообщений — безопасная стратегия.',
-                            explanationEn: 'Correct! The best option is to call your relative\'s old number and verify. Ignoring suspicious messages is a safe strategy.',
-                            explanationKk: 'Дұрыс! Ең жақсысы — туысқаныңыздың ескі нөміріне қоңырау шалып тексеру. Күдікті хабарламаларды елемеу — қауіпсіз стратегия.'
+                            explanation: 'Правильно! Лучше всего — позвонить на старый номер родственника и проверить. Игнорирование подозрительных сообщений — безопасная стратегия.\n\nВывод: Никогда не переводите деньги "родственникам" с незнакомых номеров без личного подтверждения голосом.',
+                            explanationEn: 'Correct! The best option is to call your relative\'s old number and verify. Ignoring suspicious messages is a safe strategy.\n\nConclusion: Never transfer money to "relatives" from unknown numbers without personal voice confirmation.',
+                            explanationKk: 'Дұрыс! Ең жақсысы — туысқаныңыздың ескі нөміріне қоңырау шалып тексеру. Күдікті хабарламаларды елемеу — қауіпсіз стратегия.\n\nҚорытынды: Белгісіз нөмірлерден "туыстарға" дауыспен жеке растамай ақша аудармаңыз.'
                         }
                     ]
-                },
-                {
-                    id: 'step2',
-                    type: 'information',
-                    content: 'Вывод: Никогда не переводите деньги "родственникам" с незнакомых номеров без личного подтверждения голосом.',
-                    contentEn: 'Conclusion: Never transfer money to "relatives" from unknown numbers without personal voice confirmation.',
-                    contentKk: 'Қорытынды: Белгісіз нөмірлерден "туыстарға" дауыспен жеке растамай ақша аудармаңыз.'
                 }
             ]
         }

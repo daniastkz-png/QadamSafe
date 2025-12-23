@@ -39,9 +39,15 @@ export interface ScenarioContent {
 export interface ScenarioStep {
     id: string;
     type: 'question' | 'information' | 'decision';
-    content: string;
+    content: string; // Legacy field, kept for backward compatibility
     contentEn?: string;
     contentKk?: string;
+    context?: string; // Scenario context (SMS text, call description, etc.)
+    contextEn?: string;
+    contextKk?: string;
+    question?: string; // The actual question ("What will you do?")
+    questionEn?: string;
+    questionKk?: string;
     options?: ScenarioOption[];
     explanation?: string;
     explanationEn?: string;
