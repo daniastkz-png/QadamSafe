@@ -205,14 +205,29 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                     </div>
                 )}
 
+                {/* Completion/Information Block (type === information with messageText) */}
+                {currentStep.type === 'information' && currentStep.visualType === 'text' && (
+                    <div className="mb-6 p-6 bg-gradient-to-br from-cyber-green/10 to-cyber-blue/10 rounded-xl border border-cyber-green/30">
+                        <div className="text-center mb-4">
+                            <span className="text-4xl">🎉</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-cyber-green text-center mb-4">
+                            {getLocalizedContent(currentStep)}
+                        </h3>
+                        <div className="text-foreground leading-relaxed whitespace-pre-line">
+                            {getLocalizedMessageText(currentStep)}
+                        </div>
+                    </div>
+                )}
+
                 {/* Question Block (if available) or fallback to content */}
-                {(currentStep.question || currentStep.questionEn || currentStep.questionKk) ? (
+                {currentStep.type !== 'information' && (currentStep.question || currentStep.questionEn || currentStep.questionKk) ? (
                     <div className="mb-4">
                         <h4 className="text-lg font-semibold text-cyber-green mb-4">
                             {getLocalizedQuestion(currentStep)}
                         </h4>
                     </div>
-                ) : (
+                ) : currentStep.type !== 'information' && (
                     // Fallback for old format (no context/question split)
                     <div className="flex items-start gap-3 mb-4">
                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyber-green/20 flex items-center justify-center">
