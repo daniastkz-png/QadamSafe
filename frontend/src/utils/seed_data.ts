@@ -489,18 +489,32 @@ export const SCENARIOS: Scenario[] = [
     }
 ];
 
+// IDs of old scenarios that should be deleted
+const OLD_SCENARIO_IDS = [
+    'scenario_sms_01',
+    'scenario_001_family',
+    'scenario_family_01',
+];
+
 export const seedScenarios = async () => {
     try {
         console.log('Starting batch seed of scenarios...');
         const batch = writeBatch(db);
 
+        // Delete old scenarios with deprecated IDs
+        OLD_SCENARIO_IDS.forEach((oldId) => {
+            const oldDocRef = doc(db, 'scenarios', oldId);
+            batch.delete(oldDocRef);
+        });
+
+        // Add/update new scenarios
         SCENARIOS.forEach((scenario) => {
             const docRef = doc(db, 'scenarios', scenario.id);
             batch.set(docRef, scenario);
         });
 
         await batch.commit();
-        console.log('All 5 scenarios seeded successfully!');
+        console.log('Old scenarios deleted, new scenarios seeded successfully!');
         return true;
     } catch (error) {
         console.error('Error seeding scenarios:', error);
