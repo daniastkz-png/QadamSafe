@@ -78,7 +78,7 @@
   }
   
   .cyber-card {
-    @apply bg-card border border-border rounded-lg p-6 
+    @apply bg-card border border-border rounded-lg p-4 sm:p-6 
            hover:border-cyber-green/50 transition-all duration-300;
   }
   
