@@ -54,11 +54,9 @@ export const LandingPage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
-                        <div className="flex items-center gap-3">
-                            <img src="/logo-new.jpg" alt="QadamSafe" className="w-9 h-9 rounded-lg border border-cyber-green/50 shadow-[0_0_10px_rgba(0,255,65,0.2)]" />
-                            <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyber-green to-cyber-blue drop-shadow-[0_0_5px_rgba(0,255,65,0.3)]">
-                                QadamSafe
-                            </span>
+                        <div className="flex items-center gap-2">
+                            <Shield className="w-8 h-8 text-cyber-green" />
+                            <span className="text-xl font-bold text-cyber-green">QadamSafe</span>
                         </div>
 
                         {/* Desktop Navigation */}

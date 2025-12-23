@@ -22,11 +22,9 @@ export const Sidebar: React.FC = () => {
         <div className="w-64 h-screen bg-card border-r border-border flex flex-col fixed left-0 top-0 overflow-y-auto">
             {/* Logo */}
             <div className="p-6 border-b border-border">
-                <h1 className="flex items-center gap-3">
-                    <img src="/logo-new.jpg" alt="QadamSafe" className="w-9 h-9 rounded-lg border border-cyber-green/50 shadow-[0_0_10px_rgba(0,255,65,0.2)]" />
-                    <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyber-green to-cyber-blue drop-shadow-[0_0_5px_rgba(0,255,65,0.3)]">
-                        {t('common.appName')}
-                    </span>
+                <h1 className="text-2xl font-bold text-cyber-green flex items-center gap-2">
+                    <Shield className="w-8 h-8" />
+                    {t('common.appName')}
                 </h1>
             </div>
 
