@@ -167,10 +167,10 @@ export const AuthPage: React.FC = () => {
                         <div className="space-y-8 animate-fade-in-up max-w-xl">
                             {/* Logo */}
                             <div className="inline-flex items-center gap-3">
-                                <div className="p-3 bg-cyber-green/10 border border-cyber-green/30 rounded-lg">
-                                    <Shield className="w-10 h-10 text-cyber-green" />
-                                </div>
-                                <span className="text-2xl font-bold text-cyber-green">QadamSafe</span>
+                                <img src="/logo-new.jpg" alt="QadamSafe" className="w-12 h-12 rounded-xl border border-cyber-green/50 shadow-[0_0_15px_rgba(0,255,65,0.3)]" />
+                                <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyber-green to-cyber-blue drop-shadow-[0_0_5px_rgba(0,255,65,0.3)]">
+                                    QadamSafe
+                                </span>
                             </div>
 
                             {/* Main Heading */}
@@ -214,10 +214,10 @@ export const AuthPage: React.FC = () => {
                         <div className="lg:hidden mb-8">
                             {/* Logo */}
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="p-3 bg-cyber-green/10 border border-cyber-green/30 rounded-lg">
-                                    <Shield className="w-10 h-10 text-cyber-green" />
-                                </div>
-                                <span className="text-2xl font-bold text-cyber-green">QadamSafe</span>
+                                <img src="/logo-new.jpg" alt="QadamSafe" className="w-10 h-10 rounded-lg border border-cyber-green/50 shadow-[0_0_10px_rgba(0,255,65,0.2)]" />
+                                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyber-green to-cyber-blue drop-shadow-[0_0_5px_rgba(0,255,65,0.3)]">
+                                    QadamSafe
+                                </span>
                             </div>
 
                             {/* Main Heading */}
