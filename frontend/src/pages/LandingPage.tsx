@@ -424,24 +424,17 @@ export const LandingPage: React.FC = () => {
                                     {howItWorksSlides.map((slide, index) => (
                                         <div
                                             key={index}
-                                            className="w-full flex-shrink-0 flex flex-col items-center justify-center bg-cyber-green/5 p-2 md:p-4"
+                                            className={`w-full flex-shrink-0 flex items-center justify-center bg-cyber-green/5 ${slide.step === 1 ? 'p-2 md:p-4' : 'p-0'
+                                                }`}
                                         >
-                                            {/* For step 1: phone mockup (vertical), for step 2-3: UI screenshots (horizontal) */}
                                             <img
                                                 src={slide.image}
                                                 alt={`Step ${slide.step}`}
-                                                className={`w-full h-auto object-contain rounded-xl shadow-2xl border border-white/10 ${slide.step === 1
-                                                        ? 'max-w-xs md:max-w-sm'
-                                                        : ''
+                                                className={`rounded-xl shadow-2xl border border-white/10 ${slide.step === 1
+                                                        ? 'w-full h-auto object-contain'
+                                                        : 'w-full h-[300px] md:h-auto object-cover object-top md:object-contain'
                                                     }`}
-                                                style={slide.step !== 1 ? { minHeight: '200px' } : undefined}
                                             />
-                                            {/* Mobile helper text for small images */}
-                                            {(slide.step === 2 || slide.step === 3) && (
-                                                <p className="md:hidden text-xs text-muted-foreground mt-3 text-center">
-                                                    Поверните телефон для лучшего просмотра
-                                                </p>
-                                            )}
                                         </div>
                                     ))}
                                 </div>
