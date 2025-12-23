@@ -486,6 +486,9 @@
         "cautiousFeedback": "Great choice! Always verify the source",
         "nextScenario": "Next scenario",
         "tryReal": "Try Real Scenarios",
+        "tryRealButton": "Try Real Scenarios",
+        "riskyTitle": "⚠️ Be Careful!",
+        "safeTitle": "✅ Excellent!",
         "hint": "Scenarios based on real fraud cases in Kazakhstan.\nTexts adapted for education.",
         "scenario1": {
             "contact": "Unknown Number",
@@ -493,7 +496,10 @@
             "question": "What do you do?",
             "choice1": "Transfer immediately — it might be an emergency",
             "choice2": "Ask for a voice message",
-            "choice3": "Call his old number"
+            "choice3": "Call his old number",
+            "explanation1": "This is a classic 'Mom, I'm in trouble' scam. Scammers exploit emotions and urgency. They know parents won't think twice if their child asks for help.\n\nAlways verify the caller's identity through another channel!",
+            "explanation2": "Good move! Voice messages are hard to fake. The scammer will likely refuse or make excuses.\n\nYou recognized the urgency manipulation attempt.",
+            "explanation3": "Right decision! Calling the known number is the best way to verify.\n\nScammers count on you not calling back and trusting their word."
         },
         "scenario2": {
             "contact": "Security Service",
@@ -501,7 +507,10 @@
             "question": "Your action?",
             "choice1": "Give the code — need to save the money",
             "choice2": "Hang up and check the banking app",
-            "choice3": "Call the official bank number"
+            "choice3": "Call the official bank number",
+            "explanation1": "The SMS code is the key to your money! Banks NEVER ask for codes to 'cancel' transactions. This scheme works because it creates panic.\n\nBy giving the code, you authorize the transfer to scammers yourself.",
+            "explanation2": "Excellent decision! Checking in the official app is a safe way to verify.\n\nScammers don't want you to think — they need your panic.",
+            "explanation3": "Correct! You can find the official bank number on your card or website.\n\nYou didn't give in to pressure and chose a verified channel."
         },
         "scenario3": {
             "contact": "1414 (Egov)",
@@ -509,7 +518,10 @@
             "question": "How do you react?",
             "choice1": "Click and enter card details",
             "choice2": "Check on the official egov.kz website",
-            "choice3": "Call the service center (1414)"
+            "choice3": "Call the service center (1414)",
+            "explanation1": "Phishing site! Notice: 'egov-portal-kz.com' is NOT the official egov.kz.\n\nScammers create similar domains to steal card data. You never need to enter card details to receive payments!",
+            "explanation2": "Correct! The official website is only egov.kz.\n\nYou verified the source before entering personal data. This is a key digital security skill.",
+            "explanation3": "Excellent decision! Calling the official line will confirm if there's a payment.\n\nScammers rely on greed and urgency — you didn't fall for it."
         },
         "scenario4": {
             "contact": "HR Manager",
@@ -517,7 +529,10 @@
             "question": "Your reply?",
             "choice1": "Yes, interested! (Easy money)",
             "choice2": "Ask for company name and contract",
-            "choice3": "Block the contact"
+            "choice3": "Block the contact",
+            "explanation1": "This is a classic 'easy money' scheme. First they pay you a little, then ask for a 'deposit' or 'training fee'.\n\n25,000₸ per day for likes is unrealistic. Remember: if an offer sounds too good, it's a scam.",
+            "explanation2": "Smart approach! Legal work always involves contracts and official registration.\n\nScammers won't be able to provide documents — they'll disappear.",
+            "explanation3": "Right decision! You immediately recognized the fraud scheme.\n\nSuch offers are a typical trap for those seeking easy money."
         },
         "scenario5": {
             "contact": "KazPost Delivery",
@@ -525,7 +540,10 @@
             "question": "What will you do?",
             "choice1": "Pay it, the amount is small",
             "choice2": "Check tracking number on post.kz",
-            "choice3": "Call the post office hotline"
+            "choice3": "Call the post office hotline",
+            "explanation1": "Small amount — on purpose! Scammers expect you won't verify because of just 450₸.\n\nBut on the phishing site, they'll get your card data and can withdraw ALL your money.",
+            "explanation2": "Excellent! KazPost's official website is post.kz. You can check the real package status there.\n\nYou didn't fall for the small amount and verified the information.",
+            "explanation3": "Correct! Calling the hotline will confirm if there's a package.\n\nOfficial services never send payment links via SMS."
         }
     }
 }

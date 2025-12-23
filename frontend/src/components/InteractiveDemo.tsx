@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, Package, Landmark, ArrowRight } from 'lucide-react';
+import { Phone, Package, Landmark, ArrowRight, CheckCircle, AlertTriangle } from 'lucide-react';
 
 interface InteractiveDemoProps {
     navigate: (path: string) => void;
@@ -28,6 +28,7 @@ interface Scenario {
     question: string;
     choices: string[];
     riskyChoices: number[];
+    explanations: string[]; // Explanation for each choice
 }
 
 const scenarios: Scenario[] = [
@@ -39,7 +40,8 @@ const scenarios: Scenario[] = [
         message: 'demo.scenario1.message',
         question: 'demo.scenario1.question',
         choices: ['demo.scenario1.choice1', 'demo.scenario1.choice2', 'demo.scenario1.choice3'],
-        riskyChoices: [0]
+        riskyChoices: [0],
+        explanations: ['demo.scenario1.explanation1', 'demo.scenario1.explanation2', 'demo.scenario1.explanation3']
     },
     {
         id: 2,
@@ -49,7 +51,8 @@ const scenarios: Scenario[] = [
         message: 'demo.scenario2.message',
         question: 'demo.scenario2.question',
         choices: ['demo.scenario2.choice1', 'demo.scenario2.choice2', 'demo.scenario2.choice3'],
-        riskyChoices: [0]
+        riskyChoices: [0],
+        explanations: ['demo.scenario2.explanation1', 'demo.scenario2.explanation2', 'demo.scenario2.explanation3']
     },
     {
         id: 3,
@@ -59,7 +62,8 @@ const scenarios: Scenario[] = [
         message: 'demo.scenario3.message',
         question: 'demo.scenario3.question',
         choices: ['demo.scenario3.choice1', 'demo.scenario3.choice2', 'demo.scenario3.choice3'],
-        riskyChoices: [0]
+        riskyChoices: [0],
+        explanations: ['demo.scenario3.explanation1', 'demo.scenario3.explanation2', 'demo.scenario3.explanation3']
     },
     {
         id: 4,
@@ -69,7 +73,8 @@ const scenarios: Scenario[] = [
         message: 'demo.scenario4.message',
         question: 'demo.scenario4.question',
         choices: ['demo.scenario4.choice1', 'demo.scenario4.choice2', 'demo.scenario4.choice3'],
-        riskyChoices: [0]
+        riskyChoices: [0],
+        explanations: ['demo.scenario4.explanation1', 'demo.scenario4.explanation2', 'demo.scenario4.explanation3']
     },
     {
         id: 5,
@@ -79,7 +84,8 @@ const scenarios: Scenario[] = [
         message: 'demo.scenario5.message',
         question: 'demo.scenario5.question',
         choices: ['demo.scenario5.choice1', 'demo.scenario5.choice2', 'demo.scenario5.choice3'],
-        riskyChoices: [0]
+        riskyChoices: [0],
+        explanations: ['demo.scenario5.explanation1', 'demo.scenario5.explanation2', 'demo.scenario5.explanation3']
     }
 ];
 
@@ -120,7 +126,7 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
         }, 150); // Update every 150ms -> 15s total duration
 
         return () => clearInterval(interval);
-    }, [isPaused, selectedChoice, scenarioOrder]); // Added scenarioOrder dep
+    }, [isPaused, selectedChoice, scenarioOrder]);
 
     const handleChoice = (index: number) => {
         setSelectedChoice(index);
@@ -169,7 +175,6 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                                 </p>
                             </div>
                         </div>
-                        {/* Counter deleted */}
                     </div>
 
                     {/* Message */}
@@ -179,7 +184,7 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                         </p>
                     </div>
 
-                    {!selectedChoice ? (
+                    {selectedChoice === null ? (
                         <>
                             {/* Question */}
                             <div className="pt-2">
@@ -202,47 +207,64 @@ export const InteractiveDemo: React.FC<InteractiveDemoProps> = ({ navigate, t })
                             </div>
                         </>
                     ) : (
-                        <div className="space-y-3 pt-2">
-                            <div className="grid grid-cols-2 gap-3 h-full">
-                                {/* Feedback Block */}
-                                <div className={`p-3 rounded-lg border flex flex-col justify-center text-center ${isRisky ? 'bg-cyber-yellow/10 border-cyber-yellow/20' : 'bg-cyber-green/10 border-cyber-green/20'
-                                    }`}>
-                                    <p className={`text-xs font-semibold leading-snug ${isRisky ? 'text-cyber-yellow' : 'text-cyber-green'
-                                        }`}>
-                                        {isRisky
-                                            ? t('demo.riskyFeedback', 'Так часто начинаются реальные случаи мошенничества')
-                                            : t('demo.cautiousFeedback', 'Вы выбрали осторожную стратегию')
-                                        }
+                        <div className="space-y-4">
+                            {/* Selected Choice - Fixed */}
+                            <div className={`px-4 py-3 rounded-lg border-2 ${isRisky
+                                ? 'border-cyber-yellow/50 bg-cyber-yellow/10'
+                                : 'border-cyber-green/50 bg-cyber-green/10'
+                                }`}>
+                                <div className="flex items-center gap-2">
+                                    {isRisky ? (
+                                        <AlertTriangle className="w-5 h-5 text-cyber-yellow flex-shrink-0" />
+                                    ) : (
+                                        <CheckCircle className="w-5 h-5 text-cyber-green flex-shrink-0" />
+                                    )}
+                                    <p className="text-sm font-medium text-foreground">
+                                        {t(scenario.choices[selectedChoice], '')}
                                     </p>
                                 </div>
+                            </div>
 
-                                {/* Try Real Button Block */}
+                            {/* Explanation Block */}
+                            <div className={`p-4 rounded-lg border ${isRisky
+                                ? 'bg-cyber-yellow/5 border-cyber-yellow/30'
+                                : 'bg-cyber-green/5 border-cyber-green/30'
+                                }`}>
+                                <h4 className={`text-sm font-bold mb-2 ${isRisky ? 'text-cyber-yellow' : 'text-cyber-green'}`}>
+                                    {isRisky
+                                        ? t('demo.riskyTitle', '⚠️ Осторожно!')
+                                        : t('demo.safeTitle', '✅ Отлично!')
+                                    }
+                                </h4>
+                                <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">
+                                    {t(scenario.explanations[selectedChoice], '')}
+                                </p>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-3">
+                                {/* Try Real Scenarios Button */}
                                 <button
                                     onClick={handleTryReal}
-                                    className="p-3 rounded-lg cyber-button flex flex-col items-center justify-center text-center group bg-cyber-green/10 hover:bg-cyber-green/20 border border-cyber-green/50 transition-all"
+                                    className="flex-1 py-3 rounded-lg cyber-button text-sm font-bold"
                                 >
-                                    <span className="text-xs font-bold text-cyber-green group-hover:text-white transition-colors mb-1">
-                                        QadamSafe
-                                    </span>
-                                    <span className="text-[10px] text-muted-foreground group-hover:text-cyber-green/80 leading-tight">
-                                        {t('demo.tryReal', 'Попробовать реальные сценарии')}
-                                    </span>
+                                    {t('demo.tryRealButton', 'Попробовать реальные сценарии')}
                                 </button>
                             </div>
 
                             {/* Next Scenario Button */}
                             <button
                                 onClick={handleNext}
-                                className="w-full py-2 text-xs text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-2 opacity-60 hover:opacity-100"
+                                className="w-full py-2 text-sm text-muted-foreground hover:text-cyber-green transition-all flex items-center justify-center gap-2"
                             >
                                 {t('demo.nextScenario', 'Следующий сценарий')}
-                                <ArrowRight className="w-3 h-3" />
+                                <ArrowRight className="w-4 h-4" />
                             </button>
                         </div>
                     )}
 
                     {/* Disclaimer */}
-                    {!selectedChoice && (
+                    {selectedChoice === null && (
                         <div className="pt-4 border-t border-border/50">
                             <p className="text-xs text-muted-foreground text-center leading-relaxed">
                                 {t('demo.hint', 'Сценарий основан на реальных случаях мошенничества в Казахстане.\nФормулировки адаптированы в образовательных целях.')}
