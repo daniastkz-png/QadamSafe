@@ -424,12 +424,12 @@ export const LandingPage: React.FC = () => {
                                     {howItWorksSlides.map((slide, index) => (
                                         <div
                                             key={index}
-                                            className={`w-full flex-shrink-0 flex items-center justify-center bg-cyber-green/5 ${(slide.step === 2 || slide.step === 3) ? 'p-0' : 'p-8 md:p-12'}`}
+                                            className="w-full flex-shrink-0 flex items-center justify-center bg-cyber-green/5 p-2 md:p-4"
                                         >
                                             <img
                                                 src={slide.image}
                                                 alt={`Step ${slide.step}`}
-                                                className={`h-auto object-contain rounded-xl shadow-2xl border border-white/10 ${(slide.step === 2 || slide.step === 3) ? 'w-full' : 'w-full max-w-sm md:max-w-md'}`}
+                                                className="w-full h-auto object-contain rounded-xl shadow-2xl border border-white/10"
                                             />
                                         </div>
                                     ))}
