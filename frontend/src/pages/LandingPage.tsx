@@ -116,7 +116,7 @@ export const LandingPage: React.FC = () => {
                         </div>
 
                         {/* Right side: CTA Buttons, Language Switcher & Mobile Menu Button */}
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 md:gap-3">
                             {/* Desktop CTA Buttons */}
                             <div className="hidden md:flex items-center gap-3">
                                 <button
@@ -138,13 +138,13 @@ export const LandingPage: React.FC = () => {
                             {/* Mobile menu button */}
                             <button
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
+                                className="md:hidden p-2 -mr-2 text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 rounded-lg transition-all"
                                 aria-label="Toggle menu"
                             >
                                 {mobileMenuOpen ? (
-                                    <X className="w-6 h-6" />
+                                    <X className="w-7 h-7" />
                                 ) : (
-                                    <Menu className="w-6 h-6" />
+                                    <Menu className="w-7 h-7" />
                                 )}
                             </button>
                         </div>
@@ -424,16 +424,12 @@ export const LandingPage: React.FC = () => {
                                     {howItWorksSlides.map((slide, index) => (
                                         <div
                                             key={index}
-                                            className={`w-full flex-shrink-0 flex items-center justify-center bg-cyber-green/5 ${slide.step === 1 ? 'p-2 md:p-4' : 'p-0'
-                                                }`}
+                                            className={`w-full flex-shrink-0 flex items-center justify-center bg-cyber-green/5 ${(slide.step === 2 || slide.step === 3) ? 'p-0' : 'p-8 md:p-12'}`}
                                         >
                                             <img
                                                 src={slide.image}
                                                 alt={`Step ${slide.step}`}
-                                                className={`rounded-xl shadow-2xl border border-white/10 ${slide.step === 1
-                                                        ? 'w-full h-auto object-contain'
-                                                        : 'w-full h-[300px] md:h-auto object-cover object-top md:object-contain'
-                                                    }`}
+                                                className={`h-auto object-contain rounded-xl shadow-2xl border border-white/10 ${(slide.step === 2 || slide.step === 3) ? 'w-full' : 'w-full max-w-sm md:max-w-md'}`}
                                             />
                                         </div>
                                     ))}
