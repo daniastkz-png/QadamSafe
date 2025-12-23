@@ -76,7 +76,7 @@ export const LandingPage: React.FC = () => {
                         </div>
 
                         {/* Desktop Navigation */}
-                        <div className="hidden md:flex items-center gap-8">
+                        <div className="hidden md:flex items-center gap-12">
                             <button
                                 onClick={() => scrollToSection('what-you-learn')}
                                 className={`text-xl font-semibold transition-all duration-300 ${activeSection === 'what-you-learn'
