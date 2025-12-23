@@ -181,6 +181,7 @@
         "registerError": "Тіркелу қатесі",
         "orContinueWith": "немесе",
         "continueWithGoogle": "Google арқылы жалғастыру",
+        "registerWithGoogle": "Google арқылы тіркелу",
         "googleError": "Google арқылы кіру қатесі",
         "emailRequired": "Email міндетті",
         "passwordRequired": "Құпия сөз міндетті",

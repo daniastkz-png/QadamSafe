@@ -173,6 +173,7 @@
         "registerError": "Registration error",
         "orContinueWith": "or",
         "continueWithGoogle": "Continue with Google",
+        "registerWithGoogle": "Sign up with Google",
         "googleError": "Google sign-in error",
         "emailRequired": "Email is required",
         "passwordRequired": "Password is required",

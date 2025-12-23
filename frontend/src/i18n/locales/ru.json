@@ -118,6 +118,7 @@
         "registerError": "Ошибка регистрации",
         "orContinueWith": "или",
         "continueWithGoogle": "Продолжить с Google",
+        "registerWithGoogle": "Зарегистрироваться через Google",
         "googleError": "Ошибка входа через Google",
         "emailRequired": "Email обязателен",
         "passwordRequired": "Пароль обязателен",
