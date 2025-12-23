@@ -62,7 +62,31 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
     const getLocalizedExplanation = (option: ScenarioOption) => {
         if (i18n.language === 'en' && option.explanationEn) return option.explanationEn;
         if (i18n.language === 'kk' && option.explanationKk) return option.explanationKk;
-        return option.explanation || '';
+
+        // Return explanation or generate fallback based on outcome type
+        if (option.explanation) return option.explanation;
+
+        // Fallback explanations if none provided
+        const fallbacks = {
+            safe: {
+                ru: 'Отличный выбор! Вы проявили бдительность и не поддались на уловку мошенников.',
+                en: 'Excellent choice! You showed vigilance and didn\'t fall for the scam.',
+                kk: 'Тамаша таңдау! Сіз қырағылық танытып, алаяқтардың айласына түсмедіңіз.'
+            },
+            risky: {
+                ru: 'Этот вариант небезопасен. Мошенники могут использовать такое поведение против вас.',
+                en: 'This option is not safe. Scammers can use this behavior against you.',
+                kk: 'Бұл нұсқа қауіпсіз емес. Алаяқтар мұндай мінез-құлықты сізге қарсы қолдана алады.'
+            },
+            dangerous: {
+                ru: 'Опасный выбор! Это именно то, чего добиваются мошенники. В реальной жизни это привело бы к потере денег или данных.',
+                en: 'Dangerous choice! This is exactly what scammers want. In real life, this would lead to loss of money or data.',
+                kk: 'Қауіпті таңдау! Бұл дәл алаяқтар қалағаны. Нақты өмірде бұл ақша немесе деректерді жоғалтуға алып келер еді.'
+            }
+        };
+
+        const lang = i18n.language === 'en' ? 'en' : (i18n.language === 'kk' ? 'kk' : 'ru');
+        return fallbacks[option.outcomeType as keyof typeof fallbacks]?.[lang] || fallbacks.risky.ru;
     };
 
     const getLocalizedSenderName = (step: ScenarioStep) => {
