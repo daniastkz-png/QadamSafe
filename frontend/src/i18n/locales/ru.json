@@ -323,7 +323,12 @@
         "outcome_safe": "Безопасно",
         "outcome_risky": "Рискованно",
         "outcome_dangerous": "Опасно",
-        "chooseAction": "Что вы сделаете?"
+        "chooseAction": "Что вы сделаете?",
+        "feedback": {
+            "safe": "Отличное решение!",
+            "risky": "Стоит быть осторожнее",
+            "dangerous": "Это могло быть опасно"
+        }
     },
     "progress": {
         "title": "Ваш прогресс",

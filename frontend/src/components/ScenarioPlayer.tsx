@@ -281,40 +281,75 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                 {/* Options */}
                 {currentStep.options && currentStep.options.length > 0 && (
                     <div className="space-y-3">
-                        {shuffledOptions.map((option) => {
-                            const isSelected = selectedOption === option.id;
-                            return (
-                                <button
-                                    key={option.id}
-                                    onClick={() => !showExplanation && handleOptionSelect(option)}
-                                    disabled={showExplanation}
-                                    className={`w-full text-left p-4 rounded-lg border-2 transition-all ${isSelected
-                                        ? getOutcomeColor(option.outcomeType)
-                                        : 'border-border hover:border-cyber-green/50 bg-card'
-                                        } ${showExplanation ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                                >
-                                    <div className="flex items-start gap-3">
-                                        {isSelected && showExplanation && (
-                                            <div className="flex-shrink-0 mt-1">
-                                                {getOutcomeIcon(option.outcomeType)}
-                                            </div>
-                                        )}
-                                        <div className="flex-1">
+                        {shuffledOptions
+                            .filter(option => !showExplanation || option.id === selectedOption)
+                            .map((option) => {
+                                const isSelected = selectedOption === option.id;
+                                return (
+                                    <button
+                                        key={option.id}
+                                        onClick={() => !showExplanation && handleOptionSelect(option)}
+                                        disabled={showExplanation}
+                                        className={`w-full text-left p-4 rounded-lg border-2 transition-all ${isSelected && showExplanation
+                                                ? getOutcomeColor(option.outcomeType)
+                                                : isSelected
+                                                    ? 'border-cyber-green bg-cyber-green/10'
+                                                    : 'border-border hover:border-cyber-green/50 bg-card'
+                                            } ${showExplanation ? 'cursor-default' : 'cursor-pointer'}`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            {isSelected && showExplanation && (
+                                                <div className="flex-shrink-0">
+                                                    {getOutcomeIcon(option.outcomeType)}
+                                                </div>
+                                            )}
                                             <p className="text-foreground font-medium">
                                                 {getLocalizedOptionText(option)}
                                             </p>
-                                            {isSelected && showExplanation && (
-                                                <div className="mt-3 pt-3 border-t border-border">
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {getLocalizedExplanation(option)}
-                                                    </p>
-                                                </div>
-                                            )}
                                         </div>
-                                    </div>
-                                </button>
-                            );
-                        })}
+                                    </button>
+                                );
+                            })}
+                    </div>
+                )}
+
+                {/* Explanation Block - appears after selection */}
+                {showExplanation && selectedOptionData && (
+                    <div className={`mt-6 p-5 rounded-xl border-2 ${selectedOptionData.outcomeType === 'safe'
+                            ? 'bg-cyber-green/5 border-cyber-green/30'
+                            : selectedOptionData.outcomeType === 'risky'
+                                ? 'bg-cyber-yellow/5 border-cyber-yellow/30'
+                                : 'bg-cyber-red/5 border-cyber-red/30'
+                        }`}>
+                        <div className="flex items-start gap-3">
+                            <div className="flex-shrink-0 mt-0.5">
+                                {selectedOptionData.outcomeType === 'safe' ? (
+                                    <CheckCircle className="w-6 h-6 text-cyber-green" />
+                                ) : selectedOptionData.outcomeType === 'risky' ? (
+                                    <AlertTriangle className="w-6 h-6 text-cyber-yellow" />
+                                ) : (
+                                    <XCircle className="w-6 h-6 text-cyber-red" />
+                                )}
+                            </div>
+                            <div className="flex-1">
+                                <h4 className={`font-semibold mb-2 ${selectedOptionData.outcomeType === 'safe'
+                                        ? 'text-cyber-green'
+                                        : selectedOptionData.outcomeType === 'risky'
+                                            ? 'text-cyber-yellow'
+                                            : 'text-cyber-red'
+                                    }`}>
+                                    {selectedOptionData.outcomeType === 'safe'
+                                        ? t('scenario.feedback.safe')
+                                        : selectedOptionData.outcomeType === 'risky'
+                                            ? t('scenario.feedback.risky')
+                                            : t('scenario.feedback.dangerous')
+                                    }
+                                </h4>
+                                <p className="text-foreground leading-relaxed whitespace-pre-line">
+                                    {getLocalizedExplanation(selectedOptionData)}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

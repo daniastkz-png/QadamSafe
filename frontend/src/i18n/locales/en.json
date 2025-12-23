@@ -363,7 +363,12 @@
         "outcome_safe": "Safe",
         "outcome_risky": "Risky",
         "outcome_dangerous": "Dangerous",
-        "chooseAction": "What will you do?"
+        "chooseAction": "What will you do?",
+        "feedback": {
+            "safe": "Great decision!",
+            "risky": "Be more careful",
+            "dangerous": "This could have been risky"
+        }
     },
     "progress": {
         "title": "Your Progress",

@@ -362,7 +362,12 @@
         "outcome_safe": "Қауіпсіз",
         "outcome_risky": "Тәуекелді",
         "outcome_dangerous": "Қауіпті",
-        "chooseAction": "Не істейсіз?"
+        "chooseAction": "Не істейсіз?",
+        "feedback": {
+            "safe": "Тамаша шешім!",
+            "risky": "Абайырақ болған жөн",
+            "dangerous": "Бұл қауіпті болуы мүмкін еді"
+        }
     },
     "progress": {
         "title": "Сіздің прогресс",
