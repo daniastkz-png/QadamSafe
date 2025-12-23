@@ -20,7 +20,7 @@ export interface Scenario {
     description: string;
     descriptionEn?: string;
     descriptionKk?: string;
-    type: 'EMAIL_PHISHING' | 'SMS_PHISHING' | 'FAKE_WEBSITE' | 'SOCIAL_ENGINEERING' | 'MALWARE_DETECTION';
+    type: 'EMAIL_PHISHING' | 'SMS_PHISHING' | 'FAKE_WEBSITE' | 'SOCIAL_ENGINEERING' | 'MALWARE_DETECTION' | 'PHISHING' | 'INVESTMENT_SCAM';
     difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
     requiredTier: 'FREE' | 'PRO' | 'BUSINESS';
     pointsReward: number;
@@ -55,7 +55,7 @@ export interface ScenarioStep {
     nextStepId?: string; // For linear progression
     // Immersive visualization options
     visualType?: 'phone' | 'text'; // Type of visualization
-    phoneMessageType?: 'sms' | 'whatsapp' | 'telegram'; // Messenger type for phone visual
+    phoneMessageType?: 'sms' | 'whatsapp' | 'telegram' | 'call'; // Messenger type for phone visual
     senderName?: string;
     senderNameEn?: string;
     senderNameKk?: string;
