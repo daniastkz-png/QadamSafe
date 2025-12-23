@@ -24,6 +24,7 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [showExplanation, setShowExplanation] = useState(false);
+    const [showCompletionBlock, setShowCompletionBlock] = useState(false);
     const [decisions, setDecisions] = useState<any[]>([]);
 
     const currentStep = scenario.content.steps[currentStepIndex];
@@ -74,6 +75,20 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
         if (i18n.language === 'en' && step.messageTextEn) return step.messageTextEn;
         if (i18n.language === 'kk' && step.messageTextKk) return step.messageTextKk;
         return step.messageText || '';
+    };
+
+    const getLocalizedCompletionTitle = () => {
+        if (!scenario.completionBlock) return '';
+        if (i18n.language === 'en' && scenario.completionBlock.titleEn) return scenario.completionBlock.titleEn;
+        if (i18n.language === 'kk' && scenario.completionBlock.titleKk) return scenario.completionBlock.titleKk;
+        return scenario.completionBlock.title;
+    };
+
+    const getLocalizedCompletionSummary = () => {
+        if (!scenario.completionBlock) return '';
+        if (i18n.language === 'en' && scenario.completionBlock.summaryEn) return scenario.completionBlock.summaryEn;
+        if (i18n.language === 'kk' && scenario.completionBlock.summaryKk) return scenario.completionBlock.summaryKk;
+        return scenario.completionBlock.summary;
     };
 
     const getOutcomeIcon = (outcomeType: string) => {
@@ -141,13 +156,45 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
             setSelectedOption(null);
             setShowExplanation(false);
         } else {
-            // Scenario complete
-            onComplete(decisions);
+            // Check if we should show completion block
+            if (scenario.completionBlock && !showCompletionBlock) {
+                setShowCompletionBlock(true);
+                setShowExplanation(false);
+            } else {
+                // Scenario complete
+                onComplete(decisions);
+            }
         }
     };
 
     const isLastStep = currentStepIndex === scenario.content.steps.length - 1;
     const selectedOptionData = shuffledOptions.find(opt => opt.id === selectedOption);
+
+    if (showCompletionBlock && scenario.completionBlock) {
+        return (
+            <div className="max-w-3xl mx-auto">
+                <div className="cyber-card mb-6 p-8 bg-gradient-to-br from-cyber-green/10 to-cyber-blue/10 border border-cyber-green/30">
+                    <div className="text-center mb-6">
+                        <span className="text-6xl animate-bounce inline-block">🎉</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-cyber-green text-center mb-6">
+                        {getLocalizedCompletionTitle()}
+                    </h3>
+                    <div className="text-foreground text-lg leading-relaxed whitespace-pre-line bg-background/50 p-6 rounded-xl border border-white/5">
+                        {getLocalizedCompletionSummary()}
+                    </div>
+                </div>
+
+                <button
+                    onClick={() => onComplete(decisions)}
+                    className="cyber-button w-full flex items-center justify-center gap-2"
+                >
+                    <CheckCircle className="w-5 h-5" />
+                    {t('scenario.completeScenario')}
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-3xl mx-auto">
@@ -205,20 +252,7 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                     </div>
                 )}
 
-                {/* Completion/Information Block (type === information with messageText) */}
-                {currentStep.type === 'information' && currentStep.visualType === 'text' && (
-                    <div className="mb-6 p-6 bg-gradient-to-br from-cyber-green/10 to-cyber-blue/10 rounded-xl border border-cyber-green/30">
-                        <div className="text-center mb-4">
-                            <span className="text-4xl">🎉</span>
-                        </div>
-                        <h3 className="text-xl font-bold text-cyber-green text-center mb-4">
-                            {getLocalizedContent(currentStep)}
-                        </h3>
-                        <div className="text-foreground leading-relaxed whitespace-pre-line">
-                            {getLocalizedMessageText(currentStep)}
-                        </div>
-                    </div>
-                )}
+
 
                 {/* Question Block (if available) or fallback to content */}
                 {currentStep.type !== 'information' && (currentStep.question || currentStep.questionEn || currentStep.questionKk) ? (

@@ -28,6 +28,14 @@ export interface Scenario {
     prerequisiteScenarioId?: string;
     isLegitimate: boolean;
     content: ScenarioContent;
+    completionBlock?: {
+        title: string;
+        titleEn?: string;
+        titleKk?: string;
+        summary: string;
+        summaryEn?: string;
+        summaryKk?: string;
+    };
     createdAt: string;
     updatedAt: string;
 }
