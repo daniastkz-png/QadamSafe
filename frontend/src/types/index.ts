@@ -53,6 +53,17 @@ export interface ScenarioStep {
     explanationEn?: string;
     explanationKk?: string;
     nextStepId?: string; // For linear progression
+    // Immersive visualization options
+    visualType?: 'phone' | 'text'; // Type of visualization
+    phoneMessageType?: 'sms' | 'whatsapp' | 'telegram'; // Messenger type for phone visual
+    senderName?: string;
+    senderNameEn?: string;
+    senderNameKk?: string;
+    senderNumber?: string;
+    messageText?: string; // Short message for phone display
+    messageTextEn?: string;
+    messageTextKk?: string;
+    profileEmoji?: string; // Emoji for sender avatar
 }
 
 export interface ScenarioOption {

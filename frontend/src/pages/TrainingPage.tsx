@@ -114,9 +114,26 @@ export const TrainingPage: React.FC = () => {
             <TopNavBar />
 
             <div className="max-w-7xl mx-auto p-8">
-                <h1 className="text-4xl font-bold text-cyber-green mb-8">
-                    {t('training.title')}
-                </h1>
+                <div className="flex items-center justify-between mb-8">
+                    <h1 className="text-4xl font-bold text-cyber-green">
+                        {t('training.title')}
+                    </h1>
+                    <button
+                        onClick={handleManualSeed}
+                        disabled={seeding}
+                        className="cyber-button-secondary text-sm px-4 py-2 flex items-center gap-2"
+                        title="Обновить сценарии из seed_data.ts"
+                    >
+                        {seeding ? (
+                            <>
+                                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-cyber-green"></span>
+                                Обновление...
+                            </>
+                        ) : (
+                            '🔄 Обновить сценарии'
+                        )}
+                    </button>
+                </div>
 
                 {loading ? (
                     <div className="text-center py-20">
@@ -274,7 +291,6 @@ export const TrainingPage: React.FC = () => {
                     </div>
                 )}
             </div>
-
 
             {/* Toast Notification */}
             {toast.visible && (

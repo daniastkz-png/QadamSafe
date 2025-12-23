@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Scenario, ScenarioStep, ScenarioOption } from '../types';
 import { ArrowRight, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
+import { PhoneSimulator } from './PhoneSimulator';
 
 interface ScenarioPlayerProps {
     scenario: Scenario;
@@ -61,6 +62,18 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
         if (i18n.language === 'en' && option.explanationEn) return option.explanationEn;
         if (i18n.language === 'kk' && option.explanationKk) return option.explanationKk;
         return option.explanation || '';
+    };
+
+    const getLocalizedSenderName = (step: ScenarioStep) => {
+        if (i18n.language === 'en' && step.senderNameEn) return step.senderNameEn;
+        if (i18n.language === 'kk' && step.senderNameKk) return step.senderNameKk;
+        return step.senderName || '';
+    };
+
+    const getLocalizedMessageText = (step: ScenarioStep) => {
+        if (i18n.language === 'en' && step.messageTextEn) return step.messageTextEn;
+        if (i18n.language === 'kk' && step.messageTextKk) return step.messageTextKk;
+        return step.messageText || '';
     };
 
     const getOutcomeIcon = (outcomeType: string) => {
@@ -160,8 +173,21 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
 
             {/* Step Content */}
             <div className="cyber-card mb-6">
-                {/* Context Block (if available) */}
-                {(currentStep.context || currentStep.contextEn || currentStep.contextKk) && (
+                {/* Phone Simulator Visual (if visual type is phone) */}
+                {currentStep.visualType === 'phone' && currentStep.messageText && (
+                    <div className="mb-6">
+                        <PhoneSimulator
+                            messageType={currentStep.phoneMessageType || 'whatsapp'}
+                            senderName={getLocalizedSenderName(currentStep)}
+                            senderNumber={currentStep.senderNumber}
+                            messageText={getLocalizedMessageText(currentStep)}
+                            profileEmoji={currentStep.profileEmoji}
+                        />
+                    </div>
+                )}
+
+                {/* Text Context Block (if no phone visual and context is available) */}
+                {currentStep.visualType !== 'phone' && (currentStep.context || currentStep.contextEn || currentStep.contextKk) && (
                     <div className="mb-6 p-4 bg-muted/30 rounded-lg border border-border">
                         <div className="flex items-start gap-3">
                             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyber-blue/20 flex items-center justify-center">
