@@ -12,6 +12,7 @@ export const LandingPage: React.FC = () => {
     const [activeSection, setActiveSection] = useState('hero');
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [currentSlide, setCurrentSlide] = useState(0);
 
     // Smooth scroll to section
     const scrollToSection = (sectionId: string) => {
@@ -42,6 +43,21 @@ export const LandingPage: React.FC = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Slides data for how-it-works carousel
+    const howItWorksSlides = [
+        { image: '/step1-scenario.png', step: 1 },
+        { image: '/step2-decision.png', step: 2 },
+        { image: '/step3-feedback.png', step: 3 },
+    ];
+
+    // Auto-rotate slides
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % howItWorksSlides.length);
+        }, 4000);
+        return () => clearInterval(interval);
+    }, [howItWorksSlides.length]);
 
     const toggleFaq = (index: number) => {
         setOpenFaq(openFaq === index ? null : index);
@@ -392,6 +408,51 @@ export const LandingPage: React.FC = () => {
                                 <p className="text-muted-foreground">
                                     {t('landing.howItWorks.step3Desc')}
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Image Carousel */}
+                    <div className="mt-16">
+                        <div className="relative max-w-4xl mx-auto">
+                            {/* Main Image Container */}
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-cyber-green/30 bg-background/50 backdrop-blur-sm shadow-2xl shadow-cyber-green/10">
+                                <div
+                                    className="flex transition-transform duration-700 ease-in-out"
+                                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                                >
+                                    {howItWorksSlides.map((slide, index) => (
+                                        <div key={index} className="w-full flex-shrink-0">
+                                            <img
+                                                src={slide.image}
+                                                alt={`Step ${slide.step}`}
+                                                className="w-full h-auto object-cover"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Step indicator overlay */}
+                                <div className="absolute top-4 left-4 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-lg border border-cyber-green/30">
+                                    <span className="text-cyber-green font-bold text-lg">
+                                        {t(`landing.howItWorks.step${currentSlide + 1}Title`)}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Dots Navigation */}
+                            <div className="flex justify-center gap-3 mt-6">
+                                {howItWorksSlides.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setCurrentSlide(index)}
+                                        className={`w-3 h-3 rounded-full transition-all duration-300 ${currentSlide === index
+                                                ? 'bg-cyber-green w-8'
+                                                : 'bg-border hover:bg-cyber-green/50'
+                                            }`}
+                                        aria-label={`Go to slide ${index + 1}`}
+                                    />
+                                ))}
                             </div>
                         </div>
                     </div>
