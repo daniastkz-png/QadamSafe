@@ -349,6 +349,7 @@
         "question": "Question",
         "information": "Information",
         "decision": "Decision Making",
+        "chooseAction": "What will you do in this situation?",
         "submit": "Submit",
         "explanation": "Explanation",
         "nextStep": "Next Step",

@@ -309,6 +309,7 @@
         "question": "Вопрос",
         "information": "Информация",
         "decision": "Принятие решения",
+        "chooseAction": "Что вы сделаете в этой ситуации?",
         "submit": "Отправить",
         "explanation": "Объяснение",
         "nextStep": "Следующий шаг",

@@ -345,6 +345,7 @@
         "question": "Сұрақ",
         "information": "Ақпарат",
         "decision": "Шешім қабылдау",
+        "chooseAction": "Бұл жағдайда не істейсіз?",
         "submit": "Жіберу",
         "correct": "Дұрыс!",
         "incorrect": "Қате",

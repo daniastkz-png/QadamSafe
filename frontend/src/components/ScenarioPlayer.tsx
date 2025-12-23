@@ -148,23 +148,33 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
 
             {/* Step Content */}
             <div className="cyber-card mb-6">
-                <div className="flex items-start gap-3 mb-4">
+                {/* Step Type Badge */}
+                <div className="flex items-center gap-2 mb-4">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyber-green/20 flex items-center justify-center">
                         <span className="text-cyber-green font-bold">{currentStepIndex + 1}</span>
                     </div>
-                    <div className="flex-1">
-                        <h3 className="text-sm font-medium text-cyber-green mb-1">
-                            {t(`scenario.${currentStep.type}`)}
-                        </h3>
-                        <div className="text-lg text-foreground leading-relaxed whitespace-pre-line">
-                            {getLocalizedContent(currentStep)}
-                        </div>
-                    </div>
+                    <h3 className="text-sm font-medium text-cyber-green">
+                        {t(`scenario.${currentStep.type}`)}
+                    </h3>
                 </div>
+
+                {/* Scenario Content */}
+                <div className="text-foreground leading-relaxed whitespace-pre-line mb-6">
+                    {getLocalizedContent(currentStep)}
+                </div>
+
+                {/* Question Prompt (if options exist) */}
+                {currentStep.options && currentStep.options.length > 0 && (
+                    <div className="border-t border-border pt-4 mb-4">
+                        <p className="text-lg font-semibold text-cyber-green mb-4">
+                            {t('scenario.chooseAction')}
+                        </p>
+                    </div>
+                )}
 
                 {/* Options */}
                 {currentStep.options && currentStep.options.length > 0 && (
-                    <div className="space-y-3 mt-6">
+                    <div className="space-y-3">
                         {shuffledOptions.map((option) => {
                             const isSelected = selectedOption === option.id;
                             return (
