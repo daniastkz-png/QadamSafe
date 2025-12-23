@@ -43,13 +43,15 @@
         "whatYouLearn": {
             "title": "What You'll Learn",
             "card1Title": "Recognizing Phishing and Fraud",
-            "card1Desc": "Learn to distinguish real messages from fake ones",
-            "card2Title": "Analyzing Messages, Calls and Emails",
-            "card2Desc": "Check suspicious contacts before taking action",
-            "card3Title": "Understanding Safe Situations",
-            "card3Desc": "Know when you can act without concerns",
-            "card4Title": "Informed Decisions",
-            "card4Desc": "Make decisions based on knowledge, not guesses"
+            "card1Desc": "Learn to distinguish real messages from fake ones through hands-on practice",
+            "card2Title": "Practice with Real Scenarios",
+            "card2Desc": "Go through interactive situations with SMS, calls and websites — just like in real life",
+            "card3Title": "Analyzing Messages, Calls and Emails",
+            "card3Desc": "Learn to spot suspicious details before taking action",
+            "card4Title": "Understanding Mistakes and Correct Decisions",
+            "card4Desc": "After each choice, see an explanation of why the decision was safe or risky",
+            "card5Title": "Safe Digital Habits",
+            "card5Desc": "Apply your knowledge immediately — in messengers, calls and social media"
         },
         "howItWorks": {
             "title": "How It Works",
