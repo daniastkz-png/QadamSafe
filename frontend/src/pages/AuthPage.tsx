@@ -27,7 +27,6 @@ export const AuthPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPrivacy, setAcceptPrivacy] = useState(false);
-    const [acceptMarketing, setAcceptMarketing] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
@@ -591,18 +590,6 @@ export const AuthPage: React.FC = () => {
                                                 />
                                                 <span className="text-sm text-foreground">
                                                     {t('auth.acceptPrivacy', 'Я принимаю')} <a href="#" className="text-cyber-green hover:underline">{t('auth.privacyPolicy', 'Политику конфиденциальности')}</a> *
-                                                </span>
-                                            </label>
-
-                                            <label className="flex items-start gap-2 cursor-pointer">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={acceptMarketing}
-                                                    onChange={(e) => setAcceptMarketing(e.target.checked)}
-                                                    className="mt-1 w-4 h-4 rounded border-cyber-green/30 text-cyber-green focus:ring-cyber-green"
-                                                />
-                                                <span className="text-sm text-foreground">
-                                                    {t('auth.acceptMarketing', 'Я хочу получать образовательные материалы и уведомления')}
                                                 </span>
                                             </label>
                                         </div>
