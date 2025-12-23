@@ -79,36 +79,36 @@ export const LandingPage: React.FC = () => {
                         <div className="hidden md:flex items-center gap-8">
                             <button
                                 onClick={() => scrollToSection('what-you-learn')}
-                                className={`text-lg font-medium transition-colors ${activeSection === 'what-you-learn'
-                                    ? 'text-cyber-green'
-                                    : 'text-muted-foreground hover:text-foreground'
+                                className={`text-xl font-semibold transition-all duration-300 ${activeSection === 'what-you-learn'
+                                    ? 'text-cyber-green drop-shadow-[0_0_8px_rgba(0,255,157,0.6)]'
+                                    : 'text-muted-foreground hover:text-cyber-green hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)]'
                                     }`}
                             >
                                 {t('landing.nav.whatYouLearn')}
                             </button>
                             <button
                                 onClick={() => scrollToSection('how-it-works')}
-                                className={`text-lg font-medium transition-colors ${activeSection === 'how-it-works'
-                                    ? 'text-cyber-green'
-                                    : 'text-muted-foreground hover:text-foreground'
+                                className={`text-xl font-semibold transition-all duration-300 ${activeSection === 'how-it-works'
+                                    ? 'text-cyber-green drop-shadow-[0_0_8px_rgba(0,255,157,0.6)]'
+                                    : 'text-muted-foreground hover:text-cyber-green hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)]'
                                     }`}
                             >
                                 {t('landing.nav.howItWorks')}
                             </button>
                             <button
                                 onClick={() => scrollToSection('access')}
-                                className={`text-lg font-medium transition-colors ${activeSection === 'access'
-                                    ? 'text-cyber-green'
-                                    : 'text-muted-foreground hover:text-foreground'
+                                className={`text-xl font-semibold transition-all duration-300 ${activeSection === 'access'
+                                    ? 'text-cyber-green drop-shadow-[0_0_8px_rgba(0,255,157,0.6)]'
+                                    : 'text-muted-foreground hover:text-cyber-green hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)]'
                                     }`}
                             >
                                 {t('landing.nav.access')}
                             </button>
                             <button
                                 onClick={() => scrollToSection('faq')}
-                                className={`text-lg font-medium transition-colors ${activeSection === 'faq'
-                                    ? 'text-cyber-green'
-                                    : 'text-muted-foreground hover:text-foreground'
+                                className={`text-xl font-semibold transition-all duration-300 ${activeSection === 'faq'
+                                    ? 'text-cyber-green drop-shadow-[0_0_8px_rgba(0,255,157,0.6)]'
+                                    : 'text-muted-foreground hover:text-cyber-green hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)]'
                                     }`}
                             >
                                 {t('landing.nav.faq')}
@@ -159,7 +159,7 @@ export const LandingPage: React.FC = () => {
                                         scrollToSection('what-you-learn');
                                         setMobileMenuOpen(false);
                                     }}
-                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                    className="block w-full text-left px-4 py-4 rounded-md text-lg font-semibold text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)] active:text-cyber-green active:drop-shadow-[0_0_12px_rgba(0,255,157,0.6)] transition-all duration-300"
                                 >
                                     {t('landing.nav.whatYouLearn')}
                                 </button>
@@ -168,7 +168,7 @@ export const LandingPage: React.FC = () => {
                                         scrollToSection('how-it-works');
                                         setMobileMenuOpen(false);
                                     }}
-                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                    className="block w-full text-left px-4 py-4 rounded-md text-lg font-semibold text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)] active:text-cyber-green active:drop-shadow-[0_0_12px_rgba(0,255,157,0.6)] transition-all duration-300"
                                 >
                                     {t('landing.nav.howItWorks')}
                                 </button>
@@ -177,7 +177,7 @@ export const LandingPage: React.FC = () => {
                                         scrollToSection('access');
                                         setMobileMenuOpen(false);
                                     }}
-                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                    className="block w-full text-left px-4 py-4 rounded-md text-lg font-semibold text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)] active:text-cyber-green active:drop-shadow-[0_0_12px_rgba(0,255,157,0.6)] transition-all duration-300"
                                 >
                                     {t('landing.nav.access')}
                                 </button>
@@ -186,7 +186,7 @@ export const LandingPage: React.FC = () => {
                                         scrollToSection('faq');
                                         setMobileMenuOpen(false);
                                     }}
-                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                    className="block w-full text-left px-4 py-4 rounded-md text-lg font-semibold text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)] active:text-cyber-green active:drop-shadow-[0_0_12px_rgba(0,255,157,0.6)] transition-all duration-300"
                                 >
                                     {t('landing.nav.faq')}
                                 </button>
