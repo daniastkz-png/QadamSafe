@@ -109,6 +109,9 @@ export const TrainingPage: React.FC = () => {
         s => s.isUnlocked !== false && !getScenarioProgress(s.id)?.completed
     )?.id;
 
+    // Check if admin mode (for reseeding)
+    const isAdmin = window.location.search.includes('admin=true');
+
     return (
         <div className="min-h-screen bg-background">
             <TopNavBar />
@@ -118,6 +121,23 @@ export const TrainingPage: React.FC = () => {
                     <h1 className="text-4xl font-bold text-cyber-green">
                         {t('training.title')}
                     </h1>
+                    {isAdmin && (
+                        <button
+                            onClick={handleManualSeed}
+                            disabled={seeding}
+                            className="cyber-button-secondary text-sm px-4 py-2 flex items-center gap-2"
+                            title="Обновить сценарии из seed_data.ts"
+                        >
+                            {seeding ? (
+                                <>
+                                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-cyber-green"></span>
+                                    Обновление...
+                                </>
+                            ) : (
+                                '🔄 Обновить сценарии'
+                            )}
+                        </button>
+                    )}
                 </div>
 
                 {loading ? (
