@@ -1,13 +1,16 @@
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { LandingPage } from './pages/LandingPage';
 import { AuthPage } from './pages/AuthPage';
 import { PartnersPage } from './pages/PartnersPage';
 import { WelcomePage } from './pages/WelcomePage';
 import { TrainingPage } from './pages/TrainingPage';
 import { ScenarioPage } from './pages/ScenarioPage';
+import { AIScenarioPage } from './pages/AIScenarioPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { SubscriptionPage } from './pages/SubscriptionPage';
@@ -16,9 +19,11 @@ import './i18n/i18n';
 
 function App() {
     return (
-        <BrowserRouter>
-            <AuthProvider>
-                <Routes>
+        <ErrorBoundary>
+            <BrowserRouter>
+                <ToastProvider>
+                    <AuthProvider>
+                        <Routes>
                     {/* Public Routes */}
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/auth" element={<AuthPage />} />
@@ -47,6 +52,22 @@ function App() {
                         element={
                             <ProtectedRoute>
                                 <ScenarioPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/ai-scenarios"
+                        element={
+                            <ProtectedRoute>
+                                <AIScenarioPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/ai-scenarios/:scenarioId"
+                        element={
+                            <ProtectedRoute>
+                                <AIScenarioPage />
                             </ProtectedRoute>
                         }
                     />
@@ -85,9 +106,11 @@ function App() {
 
                     {/* Catch all - redirect to landing */}
                     <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-            </AuthProvider>
-        </BrowserRouter>
+                        </Routes>
+                    </AuthProvider>
+                </ToastProvider>
+            </BrowserRouter>
+        </ErrorBoundary>
     );
 }
 

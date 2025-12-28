@@ -19,6 +19,24 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Handle response errors globally
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        // Handle 401 Unauthorized - logout user
+        if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            // Redirect to login if not already on auth page
+            if (!window.location.pathname.includes('/auth') && !window.location.pathname.includes('/')) {
+                window.location.href = '/';
+            }
+        }
+
+        // Return error for component-level handling
+        return Promise.reject(error);
+    }
+);
+
 // Auth API
 export const authAPI = {
     register: async (data: { email: string; password: string; name?: string; language?: string }) => {

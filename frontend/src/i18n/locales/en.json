@@ -346,7 +346,30 @@
         "noScenarios": "No scenarios available",
         "prerequisiteRequired": "Complete previous scenarios first",
         "aiComingSoon": "Coming Soon: AI Scenarios",
-        "aiComingSoonDesc": "After completing all training scenarios, personalized AI-generated scenarios will appear here"
+        "aiComingSoonDesc": "After completing all training scenarios, personalized AI-generated scenarios will appear here",
+        "aiScenarios": "AI Scenarios",
+        "aiScenariosDesc": "Unique scenarios created by Gemini AI specially for you",
+        "unlimited": "Unlimited",
+        "tryAI": "Try AI"
+    },
+    "ai": {
+        "title": "AI Scenarios",
+        "subtitle": "Unique scenarios created by neural network",
+        "generated": "AI Generated",
+        "selectTopic": "Select Topic",
+        "generate": "Generate Scenario",
+        "generating": "Generating...",
+        "generatingHint": "Gemini is creating a unique scenario specially for you...",
+        "showHistory": "History",
+        "hideHistory": "Hide History",
+        "yourScenarios": "Your Scenarios",
+        "noHistory": "You haven't generated any scenarios yet",
+        "howItWorks": "How does it work?",
+        "step1": "Select a fraud topic for training",
+        "step2": "Gemini AI will create a unique realistic scenario",
+        "step3": "Complete the scenario and earn points for correct decisions",
+        "unique": "Each scenario is unique — generate as many as you want!",
+        "error": "Generation error"
     },
     "scenario": {
         "step": "Step",

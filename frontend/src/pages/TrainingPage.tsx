@@ -240,37 +240,41 @@ export const TrainingPage: React.FC = () => {
                             );
                         })}
 
-                        {/* AI Scenarios Coming Soon Card - Always visible */}
-                        <div className="cyber-card relative border-cyber-blue/50 bg-cyber-blue/5">
+                        {/* AI Scenarios Card - Now Active! */}
+                        <div
+                            onClick={() => navigate('/ai-scenarios')}
+                            className="cyber-card relative cursor-pointer border-purple-500/50 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 hover:border-purple-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all group"
+                        >
                             <div className="absolute top-4 right-4">
-                                <Lock className="w-6 h-6 text-cyber-blue" />
+                                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 text-white text-xs font-bold animate-pulse">
+                                    ✨ NEW
+                                </div>
                             </div>
 
                             <div className="flex items-start justify-between mb-4">
-                                <h3 className="text-xl font-semibold text-cyber-blue flex-1">
-                                    {t('training.aiComingSoon')}
+                                <h3 className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex-1">
+                                    {t('training.aiScenarios', 'ИИ Сценарии')}
                                 </h3>
                             </div>
 
                             <p className="text-muted-foreground mb-4">
-                                {t('training.aiComingSoonDesc')}
+                                {t('training.aiScenariosDesc', 'Уникальные сценарии, созданные нейросетью Gemini специально для вас')}
                             </p>
 
                             <div className="flex items-center gap-4 mb-4">
-                                <span className="px-3 py-1 rounded-md border border-cyber-blue/30 text-sm font-medium text-cyber-blue">
-                                    {t('training.expert')}
+                                <span className="px-3 py-1 rounded-md border border-purple-500/30 text-sm font-medium text-purple-400">
+                                    Gemini AI
                                 </span>
-                                <span className="text-cyber-blue text-sm">
-                                    {t('common.comingSoon')}
+                                <span className="text-cyan-400 text-sm">
+                                    {t('training.unlimited', 'Безлимитно')}
                                 </span>
                             </div>
 
                             <button
-                                disabled
-                                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium bg-muted text-muted-foreground cursor-not-allowed"
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium bg-gradient-to-r from-purple-500 to-cyan-500 text-white group-hover:shadow-lg transition-all"
                             >
-                                <Lock className="w-5 h-5" />
-                                {t('common.comingSoon')}
+                                <Play className="w-5 h-5" />
+                                {t('training.tryAI', 'Попробовать ИИ')}
                             </button>
                         </div>
                     </div>

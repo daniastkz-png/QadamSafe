@@ -37,9 +37,6 @@ app.use(errorHandler);
 
 // Start server
 const PORT = config.port;
-app.get("/health", (req, res) => {
-    res.json({ status: "ok" });
-});
 
 app.listen(PORT, () => {
     console.log(`🚀 QadamSafe Backend running on port ${PORT}`);

@@ -5,6 +5,7 @@ import { firebaseProgressAPI } from '../services/firebase';
 import { TrendingUp, Target, AlertTriangle, CheckCircle, XCircle, Shield } from 'lucide-react';
 import type { ProgressStats, UserProgress } from '../types';
 import { useAuth } from '../contexts/AuthContext';
+import { Skeleton, SkeletonList } from '../components/Skeleton';
 
 export const ProgressPage: React.FC = () => {
     const { t } = useTranslation();
@@ -58,9 +59,25 @@ export const ProgressPage: React.FC = () => {
                 </h1>
 
                 {loading ? (
-                    <div className="text-center py-20">
-                        <div className="text-cyber-green text-xl animate-pulse-glow">
-                            {t('common.loading')}
+                    <div className="space-y-8">
+                        {/* Stats Grid Skeleton */}
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {Array.from({ length: 4 }).map((_, i) => (
+                                <div key={i} className="cyber-card">
+                                    <div className="flex items-center gap-4">
+                                        <Skeleton variant="circular" width={48} height={48} />
+                                        <div className="flex-1 space-y-2">
+                                            <Skeleton variant="text" width="60%" />
+                                            <Skeleton variant="text" width="40%" height={32} />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        {/* Recent Activity Skeleton */}
+                        <div className="cyber-card">
+                            <Skeleton variant="text" width="200px" height={32} className="mb-6" />
+                            <SkeletonList items={5} />
                         </div>
                     </div>
                 ) : (

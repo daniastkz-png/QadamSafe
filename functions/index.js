@@ -4,9 +4,14 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Initialize Firebase Admin
 admin.initializeApp();
+
+// Initialize Gemini AI
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyA6g6kFF-8-7fdlyKOAYfrxIb7kGDt65jI";
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const db = admin.firestore();
 
 // JWT Secret (set in Firebase Functions config)
@@ -324,6 +329,191 @@ app.get("/api/achievements/user", authMiddleware, async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// ============= AI SCENARIO GENERATION =============
+const AI_SCENARIO_PROMPT = `Ты эксперт по кибербезопасности. Создай интерактивный обучающий сценарий о мошенничестве.
+
+ВАЖНО: Верни ТОЛЬКО валидный JSON без markdown, без \`\`\`json, просто чистый JSON объект.
+
+Формат ответа (строго следуй этой структуре):
+{
+  "title": "Название сценария на русском",
+  "titleEn": "Title in English",
+  "titleKk": "Қазақша атауы",
+  "description": "Краткое описание на русском",
+  "descriptionEn": "Brief description in English",
+  "descriptionKk": "Қысқаша сипаттама қазақша",
+  "steps": [
+    {
+      "id": "step1",
+      "type": "question",
+      "visualType": "phone",
+      "phoneMessageType": "sms или whatsapp или telegram или call",
+      "senderName": "Имя отправителя",
+      "senderNameEn": "Sender name",
+      "senderNameKk": "Жіберуші аты",
+      "senderNumber": "+7 7XX XXX XX XX",
+      "profileEmoji": "подходящий emoji",
+      "messageText": "Текст сообщения мошенника на русском с emoji",
+      "messageTextEn": "Message text in English",
+      "messageTextKk": "Хабарлама мәтіні қазақша",
+      "question": "Вопрос для пользователя",
+      "questionEn": "Question in English",
+      "questionKk": "Сұрақ қазақша",
+      "options": [
+        {
+          "id": "opt1",
+          "text": "Опасный выбор (попасться на уловку)",
+          "textEn": "Dangerous choice",
+          "textKk": "Қауіпті таңдау",
+          "outcomeType": "dangerous",
+          "explanation": "Подробное объяснение почему это опасно, с советом 💡",
+          "explanationEn": "Detailed explanation in English",
+          "explanationKk": "Толық түсіндірме қазақша"
+        },
+        {
+          "id": "opt2", 
+          "text": "Безопасный выбор",
+          "textEn": "Safe choice",
+          "textKk": "Қауіпсіз таңдау",
+          "outcomeType": "safe",
+          "explanation": "Объяснение почему это правильно 💡",
+          "explanationEn": "Explanation in English",
+          "explanationKk": "Түсіндірме қазақша"
+        },
+        {
+          "id": "opt3",
+          "text": "Рискованный выбор",
+          "textEn": "Risky choice", 
+          "textKk": "Тәуекелді таңдау",
+          "outcomeType": "risky",
+          "explanation": "Объяснение почему это рискованно 💡",
+          "explanationEn": "Explanation in English",
+          "explanationKk": "Түсіндірме қазақша"
+        }
+      ]
+    }
+  ],
+  "completionBlock": {
+    "title": "🎉 Сценарий пройден!",
+    "titleEn": "🎉 Scenario Complete!",
+    "titleKk": "🎉 Сценарий аяқталды!",
+    "summary": "📌 Итоги и советы по защите",
+    "summaryEn": "📌 Summary and protection tips",
+    "summaryKk": "📌 Қорытындылар мен қорғау кеңестері"
+  }
+}
+
+Создай сценарий с 2-3 шагами (steps). Каждый шаг должен быть реалистичной ситуацией мошенничества в Казахстане.
+Используй местные банки (Kaspi, Halyk, Forte), госуслуги (eGov), местные номера телефонов.
+Объяснения должны быть подробными и образовательными.`;
+
+app.post("/api/ai/generate-scenario", authMiddleware, async (req, res) => {
+    try {
+        const { topic, language } = req.body;
+
+        // Define topic prompts
+        const topicPrompts = {
+            sms_phishing: "Тема: SMS-фишинг от банка или лотереи. Мошенник присылает SMS о блокировке карты или выигрыше.",
+            phone_scam: "Тема: Телефонный звонок от 'службы безопасности банка'. Мошенник звонит и пугает подозрительной операцией.",
+            social_engineering: "Тема: Сообщение от 'родственника' или 'друга' с просьбой о деньгах с нового номера.",
+            fake_government: "Тема: Фейковые госуслуги. Мошенник обещает выплату от государства через поддельный сайт.",
+            investment_scam: "Тема: Инвестиционное мошенничество. Обещание гарантированного высокого дохода.",
+            online_shopping: "Тема: Мошенничество при онлайн-покупках. Фейковый продавец на OLX или Kaspi Объявлениях.",
+            romance_scam: "Тема: Романтическое мошенничество в соцсетях. Знакомство онлайн с последующей просьбой о деньгах.",
+            job_scam: "Тема: Мошенничество с вакансиями. Предложение работы с предоплатой или сбором данных."
+        };
+
+        const selectedTopic = topicPrompts[topic] || topicPrompts.sms_phishing;
+        const fullPrompt = AI_SCENARIO_PROMPT + "\n\n" + selectedTopic;
+
+        // Call Gemini AI
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const result = await model.generateContent(fullPrompt);
+        const response = await result.response;
+        let text = response.text();
+
+        // Clean the response - remove markdown code blocks if present
+        text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+        // Parse the JSON response
+        let scenarioData;
+        try {
+            scenarioData = JSON.parse(text);
+        } catch (parseError) {
+            console.error("Failed to parse AI response:", text);
+            return res.status(500).json({ error: "Failed to parse AI response", raw: text });
+        }
+
+        // Create a complete scenario object
+        const now = new Date().toISOString();
+        const scenarioId = `ai_scenario_${Date.now()}`;
+
+        const scenario = {
+            id: scenarioId,
+            title: scenarioData.title,
+            titleEn: scenarioData.titleEn,
+            titleKk: scenarioData.titleKk,
+            description: scenarioData.description,
+            descriptionEn: scenarioData.descriptionEn,
+            descriptionKk: scenarioData.descriptionKk,
+            type: topic?.toUpperCase() || "AI_GENERATED",
+            difficulty: "INTERMEDIATE",
+            requiredTier: "FREE",
+            pointsReward: 15,
+            order: 100, // AI scenarios come after manual ones
+            isLegitimate: false,
+            isAIGenerated: true,
+            generatedAt: now,
+            content: {
+                steps: scenarioData.steps
+            },
+            completionBlock: scenarioData.completionBlock,
+            createdAt: now,
+            updatedAt: now
+        };
+
+        // Optionally save to Firestore for the user
+        const userId = req.user.userId;
+        await db.collection("users").doc(userId).collection("aiScenarios").doc(scenarioId).set(scenario);
+
+        res.status(200).json({ scenario });
+    } catch (error) {
+        console.error("AI Scenario generation error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get user's AI-generated scenarios
+app.get("/api/ai/scenarios", authMiddleware, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const snapshot = await db.collection("users").doc(userId).collection("aiScenarios")
+            .orderBy("createdAt", "desc")
+            .limit(20)
+            .get();
+
+        const scenarios = snapshot.docs.map(doc => doc.data());
+        res.status(200).json(scenarios);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get available AI topics
+app.get("/api/ai/topics", authMiddleware, async (req, res) => {
+    const topics = [
+        { id: "sms_phishing", name: "SMS-фишинг", nameEn: "SMS Phishing", nameKk: "SMS-фишинг", icon: "📱", color: "cyber-green" },
+        { id: "phone_scam", name: "Телефонные мошенники", nameEn: "Phone Scams", nameKk: "Телефон алаяқтары", icon: "📞", color: "cyber-yellow" },
+        { id: "social_engineering", name: "Социальная инженерия", nameEn: "Social Engineering", nameKk: "Әлеуметтік инженерия", icon: "👤", color: "cyber-blue" },
+        { id: "fake_government", name: "Фейковые госуслуги", nameEn: "Fake Government", nameKk: "Жалған мемлекеттік қызметтер", icon: "🏛️", color: "cyber-red" },
+        { id: "investment_scam", name: "Инвестиционное мошенничество", nameEn: "Investment Scams", nameKk: "Инвестициялық алаяқтық", icon: "💰", color: "cyber-yellow" },
+        { id: "online_shopping", name: "Онлайн-покупки", nameEn: "Online Shopping", nameKk: "Онлайн-сатып алу", icon: "🛒", color: "cyber-green" },
+        { id: "romance_scam", name: "Романтические мошенники", nameEn: "Romance Scams", nameKk: "Романтикалық алаяқтық", icon: "💕", color: "cyber-red" },
+        { id: "job_scam", name: "Мошенничество с работой", nameEn: "Job Scams", nameKk: "Жұмыс алаяқтығы", icon: "💼", color: "cyber-blue" }
+    ];
+    res.status(200).json(topics);
 });
 
 // Health check
