@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { TopNavBar } from '../components/TopNavBar';
+import { DashboardLayout } from '../components/DashboardLayout';
 import { firebaseScenariosAPI, firebaseProgressAPI } from '../services/firebase';
 import { Lock, Play, CheckCircle } from 'lucide-react';
 import type { Scenario, UserProgress } from '../types';
@@ -110,190 +110,191 @@ export const TrainingPage: React.FC = () => {
     )?.id;
 
     return (
-        <div className="min-h-screen bg-background">
-            <TopNavBar />
+        <DashboardLayout>
+            <div className="min-h-screen bg-background">
 
-            <div className="max-w-7xl mx-auto p-8">
-                <div className="flex items-center justify-between mb-8">
-                    <h1 className="text-4xl font-bold text-cyber-green">
-                        {t('training.title')}
-                    </h1>
-                </div>
-
-                {loading ? (
-                    <div className="text-center py-20">
-                        <div className="text-cyber-green text-xl animate-pulse-glow">
-                            {t('common.loading')}
-                        </div>
+                <div className="max-w-7xl mx-auto p-8">
+                    <div className="flex items-center justify-between mb-8">
+                        <h1 className="text-4xl font-bold text-cyber-green">
+                            {t('training.title')}
+                        </h1>
                     </div>
-                ) : scenarios.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-12">
-                        <div className="text-center py-12 w-full max-w-md">
-                            <div className="text-cyber-green text-lg animate-pulse-glow mb-4">
-                                {t('training.initializing', 'Инициализация обучения...')}
+
+                    {loading ? (
+                        <div className="text-center py-20">
+                            <div className="text-cyber-green text-xl animate-pulse-glow">
+                                {t('common.loading')}
                             </div>
-                            <p className="text-sm text-muted-foreground mb-6">
-                                Если сценарии не появляются автоматически, нажмите кнопку ниже.
-                            </p>
-                            <button
-                                onClick={handleManualSeed}
-                                disabled={seeding}
-                                className="cyber-button px-6 py-2 flex items-center justify-center gap-2 mx-auto"
-                            >
-                                {seeding ? (
-                                    <>
-                                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-background"></span>
-                                        Создаем...
-                                    </>
-                                ) : (
-                                    'Загрузить сценарии'
-                                )}
-                            </button>
                         </div>
-                    </div>
-                ) : (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {scenarios.map((scenario) => {
-                            const scenarioProgress = getScenarioProgress(scenario.id);
-                            const isCompleted = scenarioProgress?.completed || false;
-                            const isLocked = scenario.isUnlocked === false;
-                            const isNext = scenario.id === nextScenarioId;
-
-                            return (
-                                <div
-                                    key={scenario.id}
-                                    className={`cyber-card relative ${isCompleted ? 'border-cyber-green/50' : ''
-                                        } ${isNext ? 'ring-2 ring-cyber-green/50' : ''} ${isLocked ? 'opacity-60' : ''
-                                        }`}
+                    ) : scenarios.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-12">
+                            <div className="text-center py-12 w-full max-w-md">
+                                <div className="text-cyber-green text-lg animate-pulse-glow mb-4">
+                                    {t('training.initializing', 'Инициализация обучения...')}
+                                </div>
+                                <p className="text-sm text-muted-foreground mb-6">
+                                    Если сценарии не появляются автоматически, нажмите кнопку ниже.
+                                </p>
+                                <button
+                                    onClick={handleManualSeed}
+                                    disabled={seeding}
+                                    className="cyber-button px-6 py-2 flex items-center justify-center gap-2 mx-auto"
                                 >
-                                    {/* Lock Overlay */}
-                                    {isLocked && (
-                                        <div className="absolute top-4 right-4">
-                                            <Lock className="w-6 h-6 text-muted-foreground" />
-                                        </div>
+                                    {seeding ? (
+                                        <>
+                                            <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-background"></span>
+                                            Создаем...
+                                        </>
+                                    ) : (
+                                        'Загрузить сценарии'
                                     )}
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {scenarios.map((scenario) => {
+                                const scenarioProgress = getScenarioProgress(scenario.id);
+                                const isCompleted = scenarioProgress?.completed || false;
+                                const isLocked = scenario.isUnlocked === false;
+                                const isNext = scenario.id === nextScenarioId;
 
-                                    {/* Next Indicator */}
-                                    {isNext && !isCompleted && (
-                                        <div className="absolute -top-2 -right-2 bg-cyber-green text-background px-3 py-1 rounded-full text-xs font-bold">
-                                            {t('training.next')}
-                                        </div>
-                                    )}
-
-                                    {/* Header */}
-                                    <div className="flex items-start justify-between mb-4">
-                                        <h3 className="text-xl font-semibold text-foreground flex-1">
-                                            {getLocalizedTitle(scenario)}
-                                        </h3>
-                                        {isCompleted && (
-                                            <CheckCircle className="w-6 h-6 text-cyber-green flex-shrink-0" />
-                                        )}
-                                    </div>
-
-                                    {/* Description */}
-                                    <p className="text-muted-foreground mb-4 line-clamp-3">
-                                        {getLocalizedDescription(scenario)}
-                                    </p>
-
-                                    {/* Difficulty & Points */}
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <span
-                                            className={`px-3 py-1 rounded-md border text-sm font-medium ${getDifficultyColor(
-                                                scenario.difficulty
-                                            )}`}
-                                        >
-                                            {t(`training.${scenario.difficulty.toLowerCase()}`)}
-                                        </span>
-                                        <span className="text-cyber-green text-sm">
-                                            +{scenario.pointsReward} {t('training.points')}
-                                        </span>
-                                    </div>
-
-                                    {/* Action Button */}
-                                    <button
-                                        onClick={() => handleStartScenario(scenario)}
-                                        className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium transition-all ${isLocked
-                                            ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                                            : isCompleted
-                                                ? 'bg-muted text-foreground hover:bg-muted/80'
-                                                : 'cyber-button'
+                                return (
+                                    <div
+                                        key={scenario.id}
+                                        className={`cyber-card relative ${isCompleted ? 'border-cyber-green/50' : ''
+                                            } ${isNext ? 'ring-2 ring-cyber-green/50' : ''} ${isLocked ? 'opacity-60' : ''
                                             }`}
                                     >
-                                        {isLocked ? (
-                                            <>
-                                                <Lock className="w-5 h-5" />
-                                                {t('training.locked')}
-                                            </>
-                                        ) : isCompleted ? (
-                                            <>
-                                                <CheckCircle className="w-5 h-5" />
-                                                {t('training.retryScenario')}
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Play className="w-5 h-5" />
-                                                {t('training.startScenario')}
-                                            </>
+                                        {/* Lock Overlay */}
+                                        {isLocked && (
+                                            <div className="absolute top-4 right-4">
+                                                <Lock className="w-6 h-6 text-muted-foreground" />
+                                            </div>
                                         )}
-                                    </button>
-                                </div>
-                            );
-                        })}
 
-                        {/* AI Scenarios Card - Now Active! */}
-                        <div
-                            onClick={() => navigate('/ai-scenarios')}
-                            className="cyber-card relative cursor-pointer border-purple-500/50 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 hover:border-purple-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all group"
-                        >
-                            <div className="absolute top-4 right-4">
-                                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 text-white text-xs font-bold animate-pulse">
-                                    ✨ NEW
-                                </div>
-                            </div>
+                                        {/* Next Indicator */}
+                                        {isNext && !isCompleted && (
+                                            <div className="absolute -top-2 -right-2 bg-cyber-green text-background px-3 py-1 rounded-full text-xs font-bold">
+                                                {t('training.next')}
+                                            </div>
+                                        )}
 
-                            <div className="flex items-start justify-between mb-4">
-                                <h3 className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex-1">
-                                    {t('training.aiScenarios', 'ИИ Сценарии')}
-                                </h3>
-                            </div>
+                                        {/* Header */}
+                                        <div className="flex items-start justify-between mb-4">
+                                            <h3 className="text-xl font-semibold text-foreground flex-1">
+                                                {getLocalizedTitle(scenario)}
+                                            </h3>
+                                            {isCompleted && (
+                                                <CheckCircle className="w-6 h-6 text-cyber-green flex-shrink-0" />
+                                            )}
+                                        </div>
 
-                            <p className="text-muted-foreground mb-4">
-                                {t('training.aiScenariosDesc', 'Уникальные сценарии, созданные нейросетью Gemini специально для вас')}
-                            </p>
+                                        {/* Description */}
+                                        <p className="text-muted-foreground mb-4 line-clamp-3">
+                                            {getLocalizedDescription(scenario)}
+                                        </p>
 
-                            <div className="flex items-center gap-4 mb-4">
-                                <span className="px-3 py-1 rounded-md border border-purple-500/30 text-sm font-medium text-purple-400">
-                                    Gemini AI
-                                </span>
-                                <span className="text-cyan-400 text-sm">
-                                    {t('training.unlimited', 'Безлимитно')}
-                                </span>
-                            </div>
+                                        {/* Difficulty & Points */}
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <span
+                                                className={`px-3 py-1 rounded-md border text-sm font-medium ${getDifficultyColor(
+                                                    scenario.difficulty
+                                                )}`}
+                                            >
+                                                {t(`training.${scenario.difficulty.toLowerCase()}`)}
+                                            </span>
+                                            <span className="text-cyber-green text-sm">
+                                                +{scenario.pointsReward} {t('training.points')}
+                                            </span>
+                                        </div>
 
-                            <button
-                                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium bg-gradient-to-r from-purple-500 to-cyan-500 text-white group-hover:shadow-lg transition-all"
+                                        {/* Action Button */}
+                                        <button
+                                            onClick={() => handleStartScenario(scenario)}
+                                            className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium transition-all ${isLocked
+                                                ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                                                : isCompleted
+                                                    ? 'bg-muted text-foreground hover:bg-muted/80'
+                                                    : 'cyber-button'
+                                                }`}
+                                        >
+                                            {isLocked ? (
+                                                <>
+                                                    <Lock className="w-5 h-5" />
+                                                    {t('training.locked')}
+                                                </>
+                                            ) : isCompleted ? (
+                                                <>
+                                                    <CheckCircle className="w-5 h-5" />
+                                                    {t('training.retryScenario')}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Play className="w-5 h-5" />
+                                                    {t('training.startScenario')}
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                );
+                            })}
+
+                            {/* AI Scenarios Card - Now Active! */}
+                            <div
+                                onClick={() => navigate('/ai-scenarios')}
+                                className="cyber-card relative cursor-pointer border-purple-500/50 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 hover:border-purple-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all group"
                             >
-                                <Play className="w-5 h-5" />
-                                {t('training.tryAI', 'Попробовать ИИ')}
-                            </button>
+                                <div className="absolute top-4 right-4">
+                                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 text-white text-xs font-bold animate-pulse">
+                                        ✨ NEW
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start justify-between mb-4">
+                                    <h3 className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex-1">
+                                        {t('training.aiScenarios', 'ИИ Сценарии')}
+                                    </h3>
+                                </div>
+
+                                <p className="text-muted-foreground mb-4">
+                                    {t('training.aiScenariosDesc', 'Уникальные сценарии, созданные нейросетью Gemini специально для вас')}
+                                </p>
+
+                                <div className="flex items-center gap-4 mb-4">
+                                    <span className="px-3 py-1 rounded-md border border-purple-500/30 text-sm font-medium text-purple-400">
+                                        Gemini AI
+                                    </span>
+                                    <span className="text-cyan-400 text-sm">
+                                        {t('training.unlimited', 'Безлимитно')}
+                                    </span>
+                                </div>
+
+                                <button
+                                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium bg-gradient-to-r from-purple-500 to-cyan-500 text-white group-hover:shadow-lg transition-all"
+                                >
+                                    <Play className="w-5 h-5" />
+                                    {t('training.tryAI', 'Попробовать ИИ')}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Toast Notification */}
+                {toast.visible && (
+                    <div className="fixed top-24 right-8 z-50 animate-fade-in">
+                        <div className="bg-gradient-to-r from-cyber-yellow/20 to-cyber-yellow/10 border-2 border-cyber-yellow rounded-lg px-5 py-4 shadow-[0_0_30px_rgba(255,204,0,0.3)] backdrop-blur-md">
+                            <div className="flex items-center gap-3">
+                                <div className="flex-shrink-0">
+                                    <Lock className="w-5 h-5 text-cyber-yellow" />
+                                </div>
+                                <p className="text-sm font-medium text-foreground">{toast.message}</p>
+                            </div>
                         </div>
                     </div>
                 )}
             </div>
-
-            {/* Toast Notification */}
-            {toast.visible && (
-                <div className="fixed top-24 right-8 z-50 animate-fade-in">
-                    <div className="bg-gradient-to-r from-cyber-yellow/20 to-cyber-yellow/10 border-2 border-cyber-yellow rounded-lg px-5 py-4 shadow-[0_0_30px_rgba(255,204,0,0.3)] backdrop-blur-md">
-                        <div className="flex items-center gap-3">
-                            <div className="flex-shrink-0">
-                                <Lock className="w-5 h-5 text-cyber-yellow" />
-                            </div>
-                            <p className="text-sm font-medium text-foreground">{toast.message}</p>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+        </DashboardLayout>
     );
 };

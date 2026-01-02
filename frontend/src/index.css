@@ -3,122 +3,135 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 142 76% 36%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 142 76% 36%;
-    --radius: 0.5rem;
-  }
+    :root {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 142 76% 36%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 142 76% 36%;
+        --radius: 0.5rem;
+    }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+            'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+            sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
 }
 
 @layer components {
-  .cyber-border {
-    @apply border border-cyber-green/30 shadow-[0_0_10px_rgba(0,255,65,0.1)];
-  }
-  
-  .cyber-border-red {
-    @apply border border-cyber-red/30 shadow-[0_0_10px_rgba(255,0,64,0.1)];
-  }
-  
-  .cyber-border-yellow {
-    @apply border border-cyber-yellow/30 shadow-[0_0_10px_rgba(255,204,0,0.1)];
-  }
-  
-  .cyber-glow {
-    @apply shadow-[0_0_20px_rgba(0,255,65,0.3)];
-  }
-  
-  .cyber-glow-red {
-    @apply shadow-[0_0_20px_rgba(255,0,64,0.3)];
-  }
-  
-  .cyber-glow-yellow {
-    @apply shadow-[0_0_20px_rgba(255,204,0,0.3)];
-  }
-  
-  .cyber-button {
-    @apply px-6 py-3 bg-cyber-green text-black font-semibold rounded-md 
-           hover:bg-cyber-green-dark transition-all duration-200 
-           hover:shadow-[0_0_20px_rgba(0,255,65,0.5)];
-  }
-  
-  .cyber-button-secondary {
-    @apply px-6 py-3 bg-transparent border-2 border-cyber-green text-cyber-green 
-           font-semibold rounded-md hover:bg-cyber-green/10 transition-all duration-200;
-  }
-  
-  .cyber-card {
-    @apply bg-card border border-border rounded-lg p-4 sm:p-6 
-           hover:border-cyber-green/50 transition-all duration-300;
-  }
-  
-  .cyber-input {
-    @apply w-full px-4 py-2 bg-background border border-border rounded-md 
-           text-foreground focus:outline-none focus:border-cyber-green 
-           focus:ring-1 focus:ring-cyber-green transition-all;
-  }
+    .cyber-border {
+        @apply border border-cyber-green/30 shadow-[0_0_10px_#00ff411a];
+    }
+
+    .cyber-border-red {
+        @apply border border-cyber-red/30 shadow-[0_0_10px_#ff00401a];
+    }
+
+    .cyber-border-yellow {
+        @apply border border-cyber-yellow/30 shadow-[0_0_10px_#ffcc001a];
+    }
+
+    .cyber-glow {
+        @apply shadow-[0_0_20px_#00ff414d];
+    }
+
+    .cyber-glow-red {
+        @apply shadow-[0_0_20px_#ff00404d];
+    }
+
+    .cyber-glow-yellow {
+        @apply shadow-[0_0_20px_#ffcc004d];
+    }
+
+    .cyber-button {
+        @apply px-6 py-3 bg-cyber-green text-black font-semibold rounded-md hover:bg-cyber-green-dark transition-all duration-200 hover:shadow-[0_0_20px_#00ff4180];
+    }
+
+    .cyber-button-secondary {
+        @apply px-6 py-3 bg-transparent border-2 border-cyber-green text-cyber-green font-semibold rounded-md hover:bg-cyber-green/10 transition-all duration-200;
+    }
+
+    .cyber-card {
+        @apply bg-card border border-border rounded-lg p-4 sm:p-6 hover:border-cyber-green/50 transition-all duration-300;
+    }
+
+    .cyber-input {
+        @apply w-full px-4 py-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:border-cyber-green focus:ring-1 focus:ring-cyber-green transition-all;
+    }
 }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+    background: hsl(var(--background));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--border));
-  border-radius: 5px;
+    background: hsl(var(--border));
+    border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
+    background: hsl(var(--primary));
 }
 
 /* Toast animation */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Slide in from right animation */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
 }

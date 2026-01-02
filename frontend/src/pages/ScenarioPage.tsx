@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { TopNavBar } from '../components/TopNavBar';
+import { DashboardLayout } from '../components/DashboardLayout';
 import { ScenarioPlayer } from '../components/ScenarioPlayer';
 import { firebaseScenariosAPI } from '../services/firebase';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import type { Scenario } from '../types';
-import { ArrowLeft } from 'lucide-react';
 
 export const ScenarioPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -16,112 +16,101 @@ export const ScenarioPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        const loadScenario = async () => {
+            if (!id) return;
+            try {
+                setLoading(true);
+                const data = await firebaseScenariosAPI.getById(id);
+                setScenario(data as Scenario);
+            } catch (err) {
+                console.error('Failed to load scenario:', err);
+                setError(t('common.error', 'Произошла ошибка при загрузке сценария'));
+            } finally {
+                setLoading(false);
+            }
+        };
+
         loadScenario();
-    }, [id]);
-
-    const loadScenario = async () => {
-        if (!id) return;
-
-        try {
-            const data = await firebaseScenariosAPI.getById(id);
-            setScenario(data as Scenario);
-        } catch (err) {
-            setError((err as Error).message);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [id, t]);
 
     const handleComplete = async (decisions: any[]) => {
-        if (!scenario) return;
+        if (!scenario || !id) return;
 
         try {
-            // Calculate score and mistakes based on outcome types
-            let score = 0;
-            let mistakes = 0;
+            // Calculate score
+            const safeDecisions = decisions.filter((d: any) => d.outcomeType === 'safe').length;
+            const totalDecisions = decisions.length;
+            const score = Math.round((safeDecisions / totalDecisions) * scenario.pointsReward);
+            const mistakes = totalDecisions - safeDecisions;
 
-            decisions.forEach((decision) => {
-                if (decision.outcomeType === 'safe') {
-                    score += 10;
-                } else if (decision.outcomeType === 'risky') {
-                    score += 5;
-                    mistakes += 1;
-                } else if (decision.outcomeType === 'dangerous') {
-                    mistakes += 1;
-                }
-            });
-
-            await firebaseScenariosAPI.complete(scenario.id, {
+            await firebaseScenariosAPI.complete(id, {
                 score,
                 mistakes,
-                decisions,
+                decisions
             });
 
-            // Navigate back to training page
+            // Navigate back to training page after short delay or show success message there
+            // For now, let's go back to training list
             navigate('/training');
         } catch (err) {
-            console.error('Failed to complete scenario:', err);
+            console.error('Failed to save progress:', err);
         }
     };
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-background">
-                <TopNavBar />
-                <div className="max-w-7xl mx-auto p-8">
-                    <div className="text-center py-20">
-                        <div className="text-cyber-green text-xl animate-pulse-glow">
-                            {t('common.loading')}
-                        </div>
-                    </div>
+            <DashboardLayout>
+                <div className="min-h-screen bg-background flex items-center justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-cyber-green" />
                 </div>
-            </div>
+            </DashboardLayout>
         );
     }
 
     if (error || !scenario) {
         return (
-            <div className="min-h-screen bg-background">
-                <TopNavBar />
-                <div className="max-w-7xl mx-auto p-8">
-                    <div className="cyber-card text-center py-12">
-                        <p className="text-cyber-red mb-4">{error || t('scenario.notFound')}</p>
-                        <button
-                            onClick={() => navigate('/training')}
-                            className="cyber-button inline-flex items-center gap-2"
-                        >
-                            <ArrowLeft className="w-4 h-4" />
-                            {t('scenario.backToTraining')}
-                        </button>
+            <DashboardLayout>
+                <div className="min-h-screen bg-background p-8">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="bg-cyber-red/10 border border-cyber-red/30 p-6 rounded-lg text-center">
+                            <h2 className="text-xl font-bold text-cyber-red mb-2">
+                                {error || t('scenario.notFound', 'Сценарий не найден')}
+                            </h2>
+                            <button
+                                onClick={() => navigate('/training')}
+                                className="text-muted-foreground hover:text-foreground underline"
+                            >
+                                {t('common.backToTraining', 'Вернуться к обучению')}
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </DashboardLayout>
         );
     }
 
     return (
-        <div className="min-h-screen bg-background">
-            <TopNavBar />
-
-            <div className="max-w-7xl mx-auto px-4 py-6 sm:p-8">
-                {/* Header */}
-                <div className="mb-8">
+        <DashboardLayout>
+            <div className="min-h-screen bg-background">
+                <div className="max-w-4xl mx-auto p-4 sm:p-8">
                     <button
                         onClick={() => navigate('/training')}
-                        className="text-cyber-green hover:text-cyber-green/80 transition-colors inline-flex items-center gap-2 mb-4"
+                        className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
-                        {t('scenario.backToTraining')}
+                        {t('common.back', 'Назад')}
                     </button>
-                    <h1 className="text-4xl font-bold text-cyber-green">
+
+                    <h1 className="text-2xl font-bold text-cyber-green mb-6">
                         {scenario.title}
                     </h1>
-                    <p className="text-muted-foreground mt-2">{scenario.description}</p>
-                </div>
 
-                {/* Scenario Player */}
-                <ScenarioPlayer scenario={scenario} onComplete={handleComplete} />
+                    <ScenarioPlayer
+                        scenario={scenario}
+                        onComplete={handleComplete}
+                    />
+                </div>
             </div>
-        </div>
+        </DashboardLayout>
     );
 };
