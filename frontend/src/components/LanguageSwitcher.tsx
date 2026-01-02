@@ -50,19 +50,19 @@ export const LanguageSwitcher: React.FC = () => {
     }, []);
 
     return (
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative w-full" ref={dropdownRef}>
             {/* Current Language Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-background/50 border border-border rounded-md hover:border-cyber-green/50 transition-all text-sm font-medium text-foreground"
+                className="w-full flex items-center justify-between px-3 py-2 bg-background/50 border border-border rounded-md hover:border-cyber-green/50 transition-all text-sm font-medium text-foreground"
             >
                 <span>{currentLanguage.label}</span>
-                <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute top-full mt-1 right-0 bg-card border border-border rounded-md shadow-lg overflow-hidden z-50 min-w-[80px]">
+                <div className="absolute bottom-full mb-1 left-0 w-full bg-card border border-border rounded-md shadow-lg overflow-hidden z-50">
                     {otherLanguages.map((lang) => (
                         <button
                             key={lang.code}
