@@ -445,7 +445,14 @@
         "businessFeature3": "Corporate statistics",
         "businessFeature4": "Certificates",
         "businessFeature5": "Priority support",
-        "upgradeNote": "This is a demo version. Real payments are not supported."
+        "upgradeNote": "This is a demo version. Real payments are not supported.",
+        "billedMonthly": "Billed monthly",
+        "billed3Months": "Billed every 3 months",
+        "per3Months": "for 3 months",
+        "badgeFree": "To explore the platform and basic threat scenarios",
+        "badgePro": "For personal use",
+        "badgeBusiness": "For teams and educational institutions",
+        "save": "Save"
     },
     "language": {
         "select": "Select language",

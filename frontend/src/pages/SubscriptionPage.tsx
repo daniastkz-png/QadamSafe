@@ -15,7 +15,7 @@ export const SubscriptionPage: React.FC = () => {
             name: t('subscription.free'),
             price: '0 ₸',
             icon: <Check className="w-8 h-8" />,
-            badge: 'Для знакомства с платформой и базовыми сценариями угроз',
+            badge: t('subscription.badgeFree'),
             features: [
                 t('subscription.freeFeature1'),
                 t('subscription.freeFeature2'),
@@ -26,10 +26,10 @@ export const SubscriptionPage: React.FC = () => {
             tier: 'PRO',
             name: t('subscription.pro'),
             price: '2.490 ₸',
-            period: t('subscription.perMonth', 'в месяц'),
-            billingCycle: t('subscription.billedMonthly', 'Списывается каждый месяц'),
+            period: t('subscription.perMonth'),
+            billingCycle: t('subscription.billedMonthly'),
             icon: <Crown className="w-8 h-8" />,
-            badge: 'Для личного использования',
+            badge: t('subscription.badgePro'),
             features: [
                 t('subscription.proFeature1'),
                 t('subscription.proFeature2'),
@@ -42,12 +42,12 @@ export const SubscriptionPage: React.FC = () => {
             tier: 'BUSINESS',
             name: t('subscription.business'),
             price: '5.900 ₸',
-            period: t('subscription.per3Months', 'за 3 месяца'),
-            billingCycle: t('subscription.billed3Months', 'Списывается каждые 3 месяца'),
+            period: t('subscription.per3Months'),
+            billingCycle: t('subscription.billed3Months'),
             pricePerMonth: '1.967 ₸',
             savings: '21%',
             icon: <Building2 className="w-8 h-8" />,
-            badge: 'Для команд и образовательных учреждений',
+            badge: t('subscription.badgeBusiness'),
             bestValue: true,
             features: [
                 t('subscription.businessFeature1'),
@@ -132,7 +132,7 @@ export const SubscriptionPage: React.FC = () => {
                                         {plan.savings && (
                                             <div className="mt-2 flex items-center justify-center gap-2">
                                                 <span className="inline-block px-3 py-1 bg-cyber-green/20 border border-cyber-green rounded-full text-xs font-bold text-cyber-green">
-                                                    Экономия {plan.savings}
+                                                    {t('subscription.save')} {plan.savings}
                                                 </span>
                                             </div>
                                         )}
@@ -141,7 +141,7 @@ export const SubscriptionPage: React.FC = () => {
                                         {plan.pricePerMonth && (
                                             <div className="mt-2">
                                                 <span className="text-sm text-muted-foreground">
-                                                    = {plan.pricePerMonth} в месяц
+                                                    = {plan.pricePerMonth} {t('subscription.perMonth')}
                                                 </span>
                                             </div>
                                         )}
