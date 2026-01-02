@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { achievementsAPI } from '../services/api';
-import { Award, Lock, CheckCircle, Shield, TrendingUp } from 'lucide-react';
+import { Award, Lock, CheckCircle, TrendingUp, User, UserCheck, UserCog, UserPlus } from 'lucide-react';
 import type { UserAchievement } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -35,12 +35,7 @@ export const AchievementsPage: React.FC = () => {
         };
     };
 
-    const getRankColor = (rank: number) => {
-        if (rank === 4) return 'text-yellow-400 border-yellow-400 bg-yellow-400/10'; // Platinum/Gold for Rank 4
-        if (rank === 3) return 'text-cyber-green border-cyber-green bg-cyber-green/10';
-        if (rank === 2) return 'text-cyber-yellow border-cyber-yellow bg-cyber-yellow/10';
-        return 'text-gray-400 border-gray-400 bg-gray-400/10';
-    };
+
 
     const getLocalizedTitle = (achievement: UserAchievement) => {
         if (i18n.language === 'en' && achievement.achievement.titleEn) {
@@ -69,141 +64,160 @@ export const AchievementsPage: React.FC = () => {
     const currentRank = user?.rank || 1;
     const rankInfo = getRankInfo(currentRank);
 
+    const getRankIcon = (rank: number, className: string) => {
+        switch (rank) {
+            case 1: return <User className={className} />;
+            case 2: return <UserPlus className={className} />;
+            case 3: return <UserCog className={className} />;
+            case 4: return <UserCheck className={className} />;
+            default: return <User className={className} />;
+        }
+    };
+
     return (
         <DashboardLayout>
             <div className="min-h-screen bg-background">
 
                 <div className="max-w-7xl mx-auto p-8">
-                    <h1 className="text-4xl font-bold text-cyber-green mb-8">
+                    <h1 className="text-4xl font-bold text-cyber-green mb-8 drop-shadow-[0_0_10px_rgba(0,255,65,0.3)]">
                         {t('achievements.title')}
                     </h1>
 
-                    {/* Rank Display Section */}
-                    <div className={`cyber-card mb-8 border-2 ${getRankColor(currentRank)}`}>
-                        <div className="flex items-start gap-6">
-                            <div className={`w-20 h-20 rounded-lg flex items-center justify-center ${getRankColor(currentRank)}`}>
-                                <Shield className="w-10 h-10" />
+                    {/* Current Rank Hero Section */}
+                    <div className="relative mb-12 overflow-hidden rounded-2xl border border-cyber-green/50 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-1 shadow-[0_0_20px_rgba(0,255,65,0.1)]">
+                        <div className={`absolute inset-0 bg-gradient-to-r ${currentRank === 4 ? 'from-yellow-400/20 to-yellow-600/20' :
+                            currentRank === 3 ? 'from-green-400/20 to-emerald-600/20' :
+                                currentRank === 2 ? 'from-cyan-400/20 to-blue-600/20' :
+                                    'from-gray-400/20 to-gray-600/20'
+                            } opacity-60 backdrop-blur-md`} />
+
+                        <div className="relative flex flex-col md:flex-row items-center gap-8 p-8 md:p-12">
+                            {/* Rank Icon with Glow */}
+                            <div className="relative group">
+                                <div className={`absolute inset-0 blur-3xl opacity-60 transition-opacity duration-500 group-hover:opacity-80 ${currentRank === 4 ? 'bg-yellow-400' :
+                                    currentRank === 3 ? 'bg-green-400' :
+                                        currentRank === 2 ? 'bg-cyan-400' :
+                                            'bg-gray-400'
+                                    }`} />
+                                <div className={`relative flex h-36 w-36 items-center justify-center rounded-2xl border-2 bg-black/60 backdrop-blur-md transition-all duration-300 group-hover:scale-105 ${currentRank === 4 ? 'border-yellow-400 text-yellow-400 shadow-[0_0_40px_rgba(250,204,21,0.4)]' :
+                                    currentRank === 3 ? 'border-green-400 text-green-400 shadow-[0_0_40px_rgba(74,222,128,0.4)]' :
+                                        currentRank === 2 ? 'border-cyan-400 text-cyan-400 shadow-[0_0_40px_rgba(34,211,238,0.4)]' :
+                                            'border-gray-400 text-gray-200 shadow-[0_0_40px_rgba(156,163,175,0.4)]'
+                                    }`}>
+                                    {getRankIcon(currentRank, "h-20 w-20")}
+                                </div>
                             </div>
-                            <div className="flex-1">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <h2 className="text-2xl font-bold text-foreground">{t('ranks.title')}</h2>
-                                    <span className={`text-xl font-semibold ${getRankColor(currentRank).split(' ')[0]}`}>
+
+                            {/* Rank Info */}
+                            <div className="flex-1 text-center md:text-left">
+                                <div className="mb-3 flex flex-col md:flex-row items-center gap-4">
+                                    <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">
+                                        {t('ranks.title')}
+                                    </h2>
+                                    <span className={`rounded-full px-6 py-1.5 text-sm font-extrabold uppercase tracking-wider shadow-lg ${currentRank === 4 ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400' :
+                                        currentRank === 3 ? 'bg-green-400/20 text-green-300 border border-green-400' :
+                                            currentRank === 2 ? 'bg-cyan-400/20 text-cyan-300 border border-cyan-400' :
+                                                'bg-gray-400/20 text-gray-100 border border-gray-400'
+                                        }`}>
                                         {rankInfo.name}
                                     </span>
                                 </div>
-                                <p className="text-muted-foreground mb-4">{rankInfo.description}</p>
+
+                                <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-md">
+                                    {rankInfo.name}
+                                </h3>
+
+                                <p className="mb-8 text-lg text-gray-200 max-w-2xl leading-relaxed">
+                                    {rankInfo.description}
+                                </p>
 
                                 {rankInfo.nextRankProgress && (
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <TrendingUp className="w-4 h-4" />
-                                        <span>{rankInfo.nextRankProgress}</span>
+                                    <div className="flex items-center justify-center md:justify-start gap-4 rounded-xl bg-black/40 p-5 border border-white/10 backdrop-blur-sm hover:bg-black/50 transition-colors">
+                                        <div className="rounded-full bg-cyber-green/20 p-3 text-cyber-green shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+                                            <TrendingUp className="h-6 w-6" />
+                                        </div>
+                                        <div className="text-left">
+                                            <p className="text-sm font-medium text-gray-300 mb-0.5">{t('ranks.nextGoal')}</p>
+                                            <p className="text-lg font-bold text-white">{rankInfo.nextRankProgress}</p>
+                                        </div>
                                     </div>
                                 )}
                             </div>
                         </div>
                     </div>
 
-                    {/* Ranks Overview Table */}
-                    <div className="mb-8">
-                        <h2 className="text-2xl font-bold text-foreground mb-4">{t('ranks.overview')}</h2>
-                        <p className="text-muted-foreground mb-6">{t('ranks.allRanks')}</p>
-
-                        <div className="grid gap-4">
-                            {/* Rank 1 - Начальный */}
-                            <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#2A2F3A' }}>
-                                <div className="p-6">
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                            <Shield className="w-6 h-6 text-gray-400" />
-                                            <h3 className="text-xl font-bold text-gray-200">{t('ranks.rank1')}</h3>
-                                        </div>
-                                        {currentRank === 1 && (
-                                            <span className="px-3 py-1 bg-gray-600/30 text-gray-300 text-sm rounded-full">
-                                                {t('subscription.current')}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="text-gray-400 mb-3">{t('ranks.description1')}</p>
-                                    <div className="flex items-start gap-2 text-sm">
-                                        <span className="text-gray-500">{t('ranks.howToEarn')}:</span>
-                                        <span className="text-gray-400">{t('ranks.requirement1')}</span>
-                                    </div>
-                                </div>
+                    {/* Ranks Overview - Grid Layout */}
+                    <div className="mb-16">
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h2 className="text-3xl font-bold text-white mb-2 drop-shadow-md">{t('ranks.overview')}</h2>
+                                <p className="text-gray-300 text-lg">{t('ranks.allRanks')}</p>
                             </div>
+                        </div>
 
-                            {/* Rank 2 - Продвинутый */}
-                            <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#34423F' }}>
-                                <div className="p-6">
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                            <Shield className="w-6 h-6 text-cyan-400" />
-                                            <h3 className="text-xl font-bold text-cyan-200">{t('ranks.rank2')}</h3>
-                                        </div>
-                                        {currentRank === 2 && (
-                                            <span className="px-3 py-1 bg-cyan-600/30 text-cyan-300 text-sm rounded-full">
-                                                {t('subscription.current')}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="text-gray-400 mb-3">{t('ranks.description2')}</p>
-                                    <div className="flex items-start gap-2 text-sm">
-                                        <span className="text-gray-500">{t('ranks.howToEarn')}:</span>
-                                        <span className="text-gray-400">{t('ranks.requirement2')}</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                            {[1, 2, 3, 4].map((rank) => {
+                                const isCurrent = currentRank === rank;
+                                const isUnlocked = currentRank >= rank;
+                                const isLocked = currentRank < rank;
 
-                            {/* Rank 3 - Эксперт */}
-                            <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#1F5E44' }}>
-                                <div className="p-6">
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                            <Shield className="w-6 h-6 text-green-400" />
-                                            <h3 className="text-xl font-bold text-green-200">{t('ranks.rank3')}</h3>
-                                        </div>
-                                        {currentRank === 3 && (
-                                            <span className="px-3 py-1 bg-green-600/30 text-green-300 text-sm rounded-full">
-                                                {t('subscription.current')}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="text-gray-400 mb-3">{t('ranks.description3')}</p>
-                                    <div className="flex items-start gap-2 text-sm">
-                                        <span className="text-gray-500">{t('ranks.howToEarn')}:</span>
-                                        <span className="text-gray-400">{t('ranks.requirement3')}</span>
-                                    </div>
-                                </div>
-                            </div>
+                                const styles = {
+                                    1: { color: 'text-gray-200', border: 'border-gray-400', bg: 'from-gray-800', glow: 'shadow-gray-400/30' },
+                                    2: { color: 'text-cyan-300', border: 'border-cyan-400', bg: 'from-cyan-900', glow: 'shadow-cyan-400/30' },
+                                    3: { color: 'text-green-300', border: 'border-green-400', bg: 'from-green-900', glow: 'shadow-green-400/30' },
+                                    4: { color: 'text-yellow-300', border: 'border-yellow-400', bg: 'from-yellow-900', glow: 'shadow-yellow-400/30' },
+                                }[rank] || { color: 'text-gray-200', border: 'border-gray-400', bg: 'from-gray-800', glow: 'shadow-gray-400/30' };
 
-                            {/* Rank 4 - Надёжный */}
-                            <div className="rounded-lg overflow-hidden border-2" style={{
-                                backgroundColor: '#174C3A',
-                                borderColor: '#C8B37A'
-                            }}>
-                                <div className="p-6">
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                            <Shield className="w-6 h-6" style={{ color: '#C8B37A' }} />
-                                            <h3 className="text-xl font-bold" style={{ color: '#C8B37A' }}>
-                                                {t('ranks.rank4')}
+                                return (
+                                    <div
+                                        key={rank}
+                                        className={`group relative overflow-hidden rounded-xl border transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl ${isCurrent ? `border-2 ${styles.border} ${styles.glow} shadow-xl ring-1 ring-offset-2 ring-offset-background ${styles.color} bg-black/40` :
+                                            isUnlocked ? 'border-white/20 opacity-80 hover:opacity-100 hover:border-white/40 bg-black/30' :
+                                                'border-white/10 opacity-50 grayscale hover:grayscale-0 hover:opacity-70 bg-black/20'
+                                            }`}
+                                    >
+                                        <div className={`absolute inset-0 bg-gradient-to-br ${styles.bg} via-black/50 to-black opacity-60`} />
+
+                                        <div className="relative p-6 flex flex-col h-full">
+                                            {/* Header */}
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className={`rounded-lg p-3 bg-black/50 border border-white/20 backdrop-blur-md ${styles.color} shadow-lg`}>
+                                                    {getRankIcon(rank, "w-8 h-8")}
+                                                </div>
+                                                {isCurrent && (
+                                                    <span className={`px-3 py-1 text-xs font-extrabold rounded-full bg-black/60 border border-current ${styles.color} animate-pulse shadow-[0_0_10px_currentColor]`}>
+                                                        {t('subscription.current')}
+                                                    </span>
+                                                )}
+                                                {isLocked && <Lock className="w-5 h-5 text-gray-500" />}
+                                                {isUnlocked && !isCurrent && <CheckCircle className="w-5 h-5 text-gray-400" />}
+                                            </div>
+
+                                            {/* Content */}
+                                            <h3 className={`text-2xl font-bold mb-3 group-hover:text-white transition-colors ${isCurrent ? 'text-white' : 'text-gray-200'} drop-shadow-sm`}>
+                                                {t(`ranks.rank${rank}`)}
                                             </h3>
+
+                                            <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed">
+                                                {t(`ranks.description${rank}`)}
+                                            </p>
+
+                                            {/* Requirements Footer */}
+                                            <div className="mt-auto pt-4 border-t border-white/10">
+                                                <div className="flex items-center gap-2 mb-1.5">
+                                                    <Award className="w-4 h-4 text-gray-400" />
+                                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                                                        {t('ranks.howToEarn')}
+                                                    </span>
+                                                </div>
+                                                <p className={`text-sm font-medium ${isCurrent || isUnlocked ? styles.color : 'text-gray-400'}`}>
+                                                    {t(`ranks.requirement${rank}`)}
+                                                </p>
+                                            </div>
                                         </div>
-                                        {currentRank === 4 && (
-                                            <span className="px-3 py-1 text-sm rounded-full" style={{
-                                                backgroundColor: 'rgba(200, 179, 122, 0.2)',
-                                                color: '#C8B37A'
-                                            }}>
-                                                {t('subscription.current')}
-                                            </span>
-                                        )}
                                     </div>
-                                    <p className="text-gray-400 mb-3">{t('ranks.description4')}</p>
-                                    <div className="flex items-start gap-2 text-sm">
-                                        <span className="text-gray-500">{t('ranks.howToEarn')}:</span>
-                                        <span className="text-gray-400">{t('ranks.requirement4')}</span>
-                                    </div>
-                                </div>
-                            </div>
+                                );
+                            })}
                         </div>
                     </div>
 

@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, updateDoc, limit } from 'firebase/firestore';
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, updateDoc, limit, onSnapshot } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 // Firebase configuration
@@ -264,9 +264,63 @@ export const firebaseProgressAPI = {
             throw new Error('Not authenticated');
         }
 
-        const progressQuery = query(collection(db, 'progress'), where('userId', '==', currentUser.uid));
+        const progressQuery = query(
+            collection(db, 'progress'),
+            where('userId', '==', currentUser.uid),
+            orderBy('completedAt', 'desc')
+        );
         const progressSnap = await getDocs(progressQuery);
-        return progressSnap.docs.map(d => d.data());
+        return progressSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    },
+
+    // Real-time listener for progress updates
+    subscribeToProgress: (callback: (progress: any[]) => void) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return () => {};
+        }
+
+        // Query with completed filter first
+        const progressQuery = query(
+            collection(db, 'progress'),
+            where('userId', '==', currentUser.uid),
+            where('completed', '==', true),
+            limit(20)
+        );
+
+        const unsubscribe = onSnapshot(progressQuery, async (snapshot) => {
+            let progress = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            
+            // Sort by completedAt in memory (in case Firestore index is not available)
+            progress = progress.sort((a: any, b: any) => {
+                const dateA = a.completedAt?.toDate ? a.completedAt.toDate() : new Date(a.completedAt || 0);
+                const dateB = b.completedAt?.toDate ? b.completedAt.toDate() : new Date(b.completedAt || 0);
+                return dateB.getTime() - dateA.getTime();
+            }).slice(0, 10);
+            
+            // Load scenario data for each progress item
+            const progressWithScenarios = await Promise.all(
+                progress.map(async (p: any) => {
+                    if (p.scenarioId) {
+                        try {
+                            const scenarioDoc = await getDoc(doc(db, 'scenarios', p.scenarioId));
+                            if (scenarioDoc.exists()) {
+                                p.scenario = { id: scenarioDoc.id, ...scenarioDoc.data() };
+                            }
+                        } catch (error) {
+                            console.error('Error loading scenario:', error);
+                        }
+                    }
+                    return p;
+                })
+            );
+            
+            callback(progressWithScenarios);
+        }, (error) => {
+            console.error('Error subscribing to progress:', error);
+        });
+
+        return unsubscribe;
     },
 
     getStats: async () => {
