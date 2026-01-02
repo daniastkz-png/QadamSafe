@@ -369,7 +369,14 @@
         "step2": "Gemini AI will create a unique realistic scenario",
         "step3": "Complete the scenario and earn points for correct decisions",
         "unique": "Each scenario is unique — generate as many as you want!",
-        "error": "Generation error"
+        "unique": "Each scenario is unique — generate as many as you want!",
+        "error": "Generation error",
+        "initializing": "Initializing Training...",
+        "clickIfNoScenarios": "If scenarios don't appear automatically, click the button below.",
+        "loadScenarios": "Load Scenarios",
+        "creating": "Creating...",
+        "scenariosCreated": "Scenarios successfully created!",
+        "scenarioCreationError": "Error creating scenarios"
     },
     "scenario": {
         "step": "Step",

@@ -50,11 +50,11 @@ export const TrainingPage: React.FC = () => {
         try {
             await seedScenarios();
             await loadData();
-            setToast({ message: 'Сценарии успешно созданы!', visible: true });
+            setToast({ message: t('ai.scenariosCreated'), visible: true });
             setTimeout(() => setToast({ message: '', visible: false }), 3000);
         } catch (e) {
             console.error(e);
-            setToast({ message: 'Ошибка создания сценариев', visible: true });
+            setToast({ message: t('ai.scenarioCreationError'), visible: true });
         } finally {
             setSeeding(false);
         }
@@ -130,10 +130,10 @@ export const TrainingPage: React.FC = () => {
                         <div className="flex flex-col items-center justify-center py-12">
                             <div className="text-center py-12 w-full max-w-md">
                                 <div className="text-cyber-green text-lg animate-pulse-glow mb-4">
-                                    {t('training.initializing', 'Инициализация обучения...')}
+                                    {t('ai.initializing')}
                                 </div>
                                 <p className="text-sm text-muted-foreground mb-6">
-                                    Если сценарии не появляются автоматически, нажмите кнопку ниже.
+                                    {t('ai.clickIfNoScenarios')}
                                 </p>
                                 <button
                                     onClick={handleManualSeed}
@@ -143,10 +143,10 @@ export const TrainingPage: React.FC = () => {
                                     {seeding ? (
                                         <>
                                             <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-background"></span>
-                                            Создаем...
+                                            {t('ai.creating')}
                                         </>
                                     ) : (
-                                        'Загрузить сценарии'
+                                        t('ai.loadScenarios')
                                     )}
                                 </button>
                             </div>
