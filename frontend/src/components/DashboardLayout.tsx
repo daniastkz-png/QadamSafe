@@ -13,7 +13,8 @@ import {
     Menu,
     X,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Bot
 } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
@@ -30,6 +31,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     const navItems = [
         { to: '/welcome', icon: Shield, label: t('sidebar.welcome') },
         { to: '/training', icon: BookOpen, label: t('sidebar.training') },
+        { to: '/assistant', icon: Bot, label: t('sidebar.assistant') },
         { to: '/progress', icon: TrendingUp, label: t('sidebar.progress') },
         { to: '/achievements', icon: Award, label: t('sidebar.achievements') },
         { to: '/subscription', icon: CreditCard, label: t('sidebar.subscription') },
@@ -152,7 +154,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                             className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
                             onClick={() => setMobileMenuOpen(false)}
                         />
-                        
+
                         {/* Mobile Menu Drawer (right side) */}
                         <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-card border-l border-border shadow-2xl z-50 md:hidden flex flex-col animate-slide-in-right">
                             {/* Drawer Header */}

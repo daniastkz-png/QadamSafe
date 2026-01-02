@@ -174,8 +174,8 @@ export const firebaseScenariosAPI = {
             throw new Error('Not authenticated');
         }
 
-        // Get all scenarios
-        const scenariosQuery = query(collection(db, 'scenarios'), orderBy('order'));
+        // Get all scenarios without ordering first to debug
+        const scenariosQuery = query(collection(db, 'scenarios'));
         const scenariosSnap = await getDocs(scenariosQuery);
         const scenarios = scenariosSnap.docs.map(d => d.data());
 
@@ -277,7 +277,7 @@ export const firebaseProgressAPI = {
     subscribeToProgress: (callback: (progress: any[]) => void) => {
         const currentUser = auth.currentUser;
         if (!currentUser) {
-            return () => {};
+            return () => { };
         }
 
         // Query with completed filter first
@@ -290,14 +290,14 @@ export const firebaseProgressAPI = {
 
         const unsubscribe = onSnapshot(progressQuery, async (snapshot) => {
             let progress = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-            
+
             // Sort by completedAt in memory (in case Firestore index is not available)
             progress = progress.sort((a: any, b: any) => {
                 const dateA = a.completedAt?.toDate ? a.completedAt.toDate() : new Date(a.completedAt || 0);
                 const dateB = b.completedAt?.toDate ? b.completedAt.toDate() : new Date(b.completedAt || 0);
                 return dateB.getTime() - dateA.getTime();
             }).slice(0, 10);
-            
+
             // Load scenario data for each progress item
             const progressWithScenarios = await Promise.all(
                 progress.map(async (p: any) => {
@@ -314,7 +314,7 @@ export const firebaseProgressAPI = {
                     return p;
                 })
             );
-            
+
             callback(progressWithScenarios);
         }, (error) => {
             console.error('Error subscribing to progress:', error);
@@ -639,6 +639,95 @@ export const firebaseAIAPI = {
 
         return { success: true, score: data.score, mistakes: data.mistakes };
     },
+};
+
+// ============= AI ASSISTANT API =============
+
+const AI_ASSISTANT_SYSTEM_PROMPT = `
+You are QadamSafe AI, an advanced cybersecurity assistant.
+Your goal is to educate users about digital safety, analyze potential threats, and provide actionable advice.
+
+Tone: Professional, vigilant, encouraging, yet serious about threats. "Cyberpunk" flavor is allowed but keep it professional.
+Style: Concise, clear, easy to understand. Avoid jargon where possible, or explain it.
+
+Capabilities:
+1. Threat Analysis: If a user pastes a message/email, analyze it for phishing indicators (urgency, suspicious links, emotional manipulation).
+2. Password Advice: Explain how to create strong passwords.
+3. Education: Explain terms like 2FA, VPN, Phishing, Malware.
+4. Roleplay: If requested, act as a scammer to train the user (but make it clear it's a simulation).
+
+Safety Rules:
+- NEVER ask for real passwords, credit card numbers, or personal info.
+- If a user shares real sensitive data, tell them to delete it immediately.
+- Do not provide instructions on how to hack or exploit systems (defensive only).
+- If asked about non-cybersecurity topics, politely redirect to cybersecurity.
+
+Format: Keep answers relatively short (under 200 words) unless asked for details. Use formatting (bold, lists) for readability.
+`;
+
+export const firebaseAssistantAPI = {
+    sendMessage: async (message: string, history: { role: 'user' | 'model'; parts: string }[]) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            throw new Error('Not authenticated');
+        }
+
+        // Construct the full prompt including history context
+        // Gemini API structure for chat history
+        const contents = [
+            {
+                role: 'user',
+                parts: [{ text: AI_ASSISTANT_SYSTEM_PROMPT }]
+            },
+            {
+                role: 'model',
+                parts: [{ text: "Understood. I am QadamSafe AI, ready to assist with cybersecurity queries." }]
+            },
+            ...history.map(msg => ({
+                role: msg.role,
+                parts: [{ text: msg.parts }]
+            })),
+            {
+                role: 'user',
+                parts: [{ text: message }]
+            }
+        ];
+
+        try {
+            const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: contents,
+                    generationConfig: {
+                        temperature: 0.7,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 2048,
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || 'Failed to get AI response');
+            }
+
+            const data = await response.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+            if (!text) {
+                throw new Error('Empty response from AI');
+            }
+
+            return text;
+        } catch (error) {
+            console.error("AI Assistant Error:", error);
+            throw error;
+        }
+    }
 };
 
 export { auth, db };

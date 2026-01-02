@@ -32,14 +32,51 @@ export const TrainingPage: React.FC = () => {
 
     const loadData = async () => {
         try {
-            const [scenariosData, progressData] = await Promise.all([
-                firebaseScenariosAPI.getAll(),
-                firebaseProgressAPI.getProgress(),
-            ]);
-            setScenarios(scenariosData as any);
-            setProgress(progressData as any);
+            console.log('Loading data...');
+
+            // 1. Load Scenarios
+            let scenariosData;
+            try {
+                scenariosData = await firebaseScenariosAPI.getAll();
+                console.log('Scenarios loaded:', scenariosData?.length);
+            } catch (e) {
+                console.error('Error loading scenarios:', e);
+                throw new Error('Не удалось загрузить сценарии: ' + (e instanceof Error ? e.message : String(e)));
+            }
+
+            // 2. Load Progress
+            let progressData: any[] = [];
+            try {
+                progressData = await firebaseProgressAPI.getProgress();
+                console.log('Progress loaded:', progressData?.length);
+            } catch (e) {
+                console.error('Error loading progress (non-critical):', e);
+                // Progress failure shouldn't block scenarios, but we should know
+                setToast({ message: 'Ошибка загрузки прогресса (Инфо)', visible: true });
+            }
+
+            // Calculate unlocked status
+            const sortedScenarios = (scenariosData as any[]).sort((a, b) => a.order - b.order);
+
+            const processedScenarios = sortedScenarios.map((scenario, index) => {
+                if (index === 0) return { ...scenario, isUnlocked: true };
+                const prevScenario = sortedScenarios[index - 1];
+                const prevProgress = progressData.find((p: any) => p.scenarioId === prevScenario.id);
+                return { ...scenario, isUnlocked: !!prevProgress?.completed };
+            });
+
+            setScenarios(processedScenarios);
+            setProgress(progressData);
+
+            if (processedScenarios.length === 0) {
+                console.warn('Scenarios list is empty after load');
+            }
+
+            return true; // Success
         } catch (error) {
-            console.error('Failed to load training data:', error);
+            console.error('Fatal error in loadData:', error);
+            setToast({ message: `Ошибка: ${error instanceof Error ? error.message : 'Unknown'}`, visible: true });
+            return false; // Failed
         } finally {
             setLoading(false);
         }
@@ -49,12 +86,19 @@ export const TrainingPage: React.FC = () => {
         setSeeding(true);
         try {
             await seedScenarios();
-            await loadData();
-            setToast({ message: t('ai.scenariosCreated'), visible: true });
-            setTimeout(() => setToast({ message: '', visible: false }), 3000);
+            // Add a small delay for consistency
+            await new Promise(r => setTimeout(r, 1000));
+            const success = await loadData();
+
+            if (success) {
+                setToast({ message: 'Сценарии успешно созданы и загружены!', visible: true });
+            }
+            // If loadData failed, it already showed an error toast, so we don't overwrite it
+
+            setTimeout(() => setToast({ message: '', visible: false }), 4000);
         } catch (e) {
             console.error(e);
-            setToast({ message: t('ai.scenarioCreationError'), visible: true });
+            setToast({ message: 'Ошибка создания сценариев: ' + (e instanceof Error ? e.message : String(e)), visible: true });
         } finally {
             setSeeding(false);
         }
@@ -130,10 +174,10 @@ export const TrainingPage: React.FC = () => {
                         <div className="flex flex-col items-center justify-center py-12">
                             <div className="text-center py-12 w-full max-w-md">
                                 <div className="text-cyber-green text-lg animate-pulse-glow mb-4">
-                                    {t('ai.initializing')}
+                                    {t('training.initializing', 'Инициализация обучения...')}
                                 </div>
                                 <p className="text-sm text-muted-foreground mb-6">
-                                    {t('ai.clickIfNoScenarios')}
+                                    Если сценарии не появляются автоматически, нажмите кнопку ниже.
                                 </p>
                                 <button
                                     onClick={handleManualSeed}
@@ -143,10 +187,10 @@ export const TrainingPage: React.FC = () => {
                                     {seeding ? (
                                         <>
                                             <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-background"></span>
-                                            {t('ai.creating')}
+                                            Создаем...
                                         </>
                                     ) : (
-                                        t('ai.loadScenarios')
+                                        'Загрузить сценарии'
                                     )}
                                 </button>
                             </div>
