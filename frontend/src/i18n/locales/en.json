@@ -262,7 +262,7 @@
         "description4": "You completed all scenarios without a single error",
         "requirement1": "Automatically upon registration",
         "requirement2": "Complete 3 scenarios without dangerous decisions",
-        "requirement3": "Complete 5+ scenarios with 70%+ safe decisions",
+        "requirement3": "Complete 5 scenarios with 70%+ safe decisions",
         "requirement4": "Complete all 5 scenarios without a single error",
         "overview": "Ranks Overview",
         "allRanks": "All system ranks",
@@ -270,7 +270,7 @@
         "nextGoal": "Next goal",
         "progress": {
             "toRank2": "Complete 3 scenarios without dangerous decisions",
-            "toRank3": "Complete 5+ scenarios with 70%+ safe decisions"
+            "toRank3": "Complete 5 scenarios with 70%+ safe decisions"
         }
     },
     "dashboard": {
