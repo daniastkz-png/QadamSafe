@@ -49,7 +49,9 @@ export const SettingsPage: React.FC = () => {
 
     // Profile state
     const [username, setUsername] = useState(user?.name || '');
-    const [selectedAvatar, setSelectedAvatar] = useState('🛡️');
+    const [selectedAvatar, setSelectedAvatar] = useState(() => {
+        return localStorage.getItem('userAvatar') || '🛡️';
+    });
     const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
     // UI state
@@ -63,21 +65,49 @@ export const SettingsPage: React.FC = () => {
     const [currentLevel, setCurrentLevel] = useState(1);
     const [loading, setLoading] = useState(true);
 
-    // Notification preferences
-    const [notifications, setNotifications] = useState({
-        email: true,
-        push: false,
-        weeklyReport: true,
-        reminders: false
+    // Notification preferences - load from localStorage
+    const [notifications, setNotifications] = useState(() => {
+        const saved = localStorage.getItem('notificationPrefs');
+        return saved ? JSON.parse(saved) : {
+            email: true,
+            push: false,
+            weeklyReport: true,
+            reminders: false
+        };
     });
 
-    // Sound & Haptics
-    const [soundEnabled, setSoundEnabled] = useState(true);
-    const [vibrationEnabled, setVibrationEnabled] = useState(true);
+    // Sound & Haptics - load from localStorage
+    const [soundEnabled, setSoundEnabled] = useState(() => {
+        const saved = localStorage.getItem('soundEnabled');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
+    const [vibrationEnabled, setVibrationEnabled] = useState(() => {
+        const saved = localStorage.getItem('vibrationEnabled');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
 
     // Stats
     const accountCreatedDate = user?.createdAt ? new Date(user.createdAt.seconds * 1000) : new Date();
     const daysSinceJoin = Math.floor((Date.now() - accountCreatedDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    // Save notifications to localStorage when changed
+    useEffect(() => {
+        localStorage.setItem('notificationPrefs', JSON.stringify(notifications));
+    }, [notifications]);
+
+    // Save sound/vibration to localStorage when changed
+    useEffect(() => {
+        localStorage.setItem('soundEnabled', JSON.stringify(soundEnabled));
+    }, [soundEnabled]);
+
+    useEffect(() => {
+        localStorage.setItem('vibrationEnabled', JSON.stringify(vibrationEnabled));
+    }, [vibrationEnabled]);
+
+    // Save avatar to localStorage when changed
+    useEffect(() => {
+        localStorage.setItem('userAvatar', selectedAvatar);
+    }, [selectedAvatar]);
 
     useEffect(() => {
         const fetchProgress = async () => {
@@ -108,6 +138,7 @@ export const SettingsPage: React.FC = () => {
     }, []);
 
     const handleSaveProfile = () => {
+        localStorage.setItem('userName', username);
         setShowSaveSuccess(true);
         setTimeout(() => setShowSaveSuccess(false), 3000);
     };
@@ -122,10 +153,39 @@ export const SettingsPage: React.FC = () => {
         setTimeout(() => setShowPasswordModal(false), 3000);
     };
 
-    const handleExportData = (format: 'pdf' | 'json') => {
-        // Placeholder for export functionality
-        console.log(`Exporting as ${format}`);
-        alert(t('settings.export.comingSoon'));
+    const handleExportData = async (format: 'pdf' | 'json') => {
+        const exportData = {
+            user: { email: user?.email, name: username, tier, rank: currentRank },
+            stats: { completedScenarios, totalScenarios, daysSinceJoin },
+            settings: { notifications, soundEnabled, vibrationEnabled },
+            exportDate: new Date().toISOString()
+        };
+
+        if (format === 'json') {
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `qadamsafe-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } else {
+            // For PDF, create a simple text export
+            const text = `QadamSafe - ${t('settings.export.title')}\n\n` +
+                `Email: ${user?.email}\n` +
+                `${t('settings.stats.scenarios')}: ${completedScenarios}/${totalScenarios}\n` +
+                `${t('settings.stats.level')}: ${currentLevel}\n` +
+                `${t('settings.stats.daysWithUs')}: ${daysSinceJoin}\n` +
+                `\n${t('settings.export.title')}: ${new Date().toLocaleDateString(i18n.language)}`;
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `qadamsafe-data-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
     };
 
     const toggleSection = (section: string) => {
