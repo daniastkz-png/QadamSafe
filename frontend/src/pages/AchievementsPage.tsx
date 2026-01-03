@@ -31,7 +31,7 @@ export const AchievementsPage: React.FC = () => {
         return {
             name: t(`ranks.rank${rank}`),
             description: t(`ranks.description${rank}`),
-            nextRankProgress: rank < 4 ? t(`ranks.progress.toRank${rank + 1}`) : null,
+            nextRankProgress: rank < 3 ? t(`ranks.progress.toRank${rank + 1}`) : null,
         };
     };
 

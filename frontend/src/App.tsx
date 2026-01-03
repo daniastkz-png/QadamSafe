@@ -1,6 +1,7 @@
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -21,104 +22,106 @@ import './i18n/i18n';
 function App() {
     return (
         <ErrorBoundary>
-            <BrowserRouter>
-                <ToastProvider>
-                    <AuthProvider>
-                        <Routes>
-                            {/* Public Routes */}
-                            <Route path="/" element={<LandingPage />} />
-                            <Route path="/auth" element={<AuthPage />} />
-                            <Route path="/partners" element={<PartnersPage />} />
+            <ThemeProvider>
+                <BrowserRouter>
+                    <ToastProvider>
+                        <AuthProvider>
+                            <Routes>
+                                {/* Public Routes */}
+                                <Route path="/" element={<LandingPage />} />
+                                <Route path="/auth" element={<AuthPage />} />
+                                <Route path="/partners" element={<PartnersPage />} />
 
-                            {/* Redirect dashboard to progress */}
-                            <Route path="/dashboard" element={<Navigate to="/progress" replace />} />
-                            <Route
-                                path="/welcome"
-                                element={
-                                    <ProtectedRoute>
-                                        <WelcomePage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/training"
-                                element={
-                                    <ProtectedRoute>
-                                        <TrainingPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/training/:id"
-                                element={
-                                    <ProtectedRoute>
-                                        <ScenarioPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/ai-scenarios"
-                                element={
-                                    <ProtectedRoute>
-                                        <AIScenarioPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/ai-scenarios/:scenarioId"
-                                element={
-                                    <ProtectedRoute>
-                                        <AIScenarioPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/assistant"
-                                element={
-                                    <ProtectedRoute>
-                                        <AIAssistantPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/progress"
-                                element={
-                                    <ProtectedRoute>
-                                        <ProgressPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/achievements"
-                                element={
-                                    <ProtectedRoute>
-                                        <AchievementsPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/subscription"
-                                element={
-                                    <ProtectedRoute>
-                                        <SubscriptionPage />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/settings"
-                                element={
-                                    <ProtectedRoute>
-                                        <SettingsPage />
-                                    </ProtectedRoute>
-                                }
-                            />
+                                {/* Redirect dashboard to progress */}
+                                <Route path="/dashboard" element={<Navigate to="/progress" replace />} />
+                                <Route
+                                    path="/welcome"
+                                    element={
+                                        <ProtectedRoute>
+                                            <WelcomePage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/training"
+                                    element={
+                                        <ProtectedRoute>
+                                            <TrainingPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/training/:id"
+                                    element={
+                                        <ProtectedRoute>
+                                            <ScenarioPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/ai-scenarios"
+                                    element={
+                                        <ProtectedRoute>
+                                            <AIScenarioPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/ai-scenarios/:scenarioId"
+                                    element={
+                                        <ProtectedRoute>
+                                            <AIScenarioPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/assistant"
+                                    element={
+                                        <ProtectedRoute>
+                                            <AIAssistantPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/progress"
+                                    element={
+                                        <ProtectedRoute>
+                                            <ProgressPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/achievements"
+                                    element={
+                                        <ProtectedRoute>
+                                            <AchievementsPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/subscription"
+                                    element={
+                                        <ProtectedRoute>
+                                            <SubscriptionPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/settings"
+                                    element={
+                                        <ProtectedRoute>
+                                            <SettingsPage />
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-                            {/* Catch all - redirect to landing */}
-                            <Route path="*" element={<Navigate to="/" replace />} />
-                        </Routes>
-                    </AuthProvider>
-                </ToastProvider>
-            </BrowserRouter>
+                                {/* Catch all - redirect to landing */}
+                                <Route path="*" element={<Navigate to="/" replace />} />
+                            </Routes>
+                        </AuthProvider>
+                    </ToastProvider>
+                </BrowserRouter>
+            </ThemeProvider>
         </ErrorBoundary>
     );
 }

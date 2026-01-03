@@ -2,22 +2,25 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { firebaseAuthAPI } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
-import { ChevronDown } from 'lucide-react';
+import { Globe, Check } from 'lucide-react';
 
-export const LanguageSwitcher: React.FC = () => {
+interface LanguageSwitcherProps {
+    direction?: 'up' | 'down';
+}
+
+export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ direction = 'up' }) => {
     const { i18n } = useTranslation();
     const { user, updateUser } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const languages = [
-        { code: 'ru', label: 'RU' },
-        { code: 'en', label: 'EN' },
-        { code: 'kk', label: 'KZ' },
+        { code: 'ru', label: 'Русский', flag: '🇷🇺', short: 'RU' },
+        { code: 'en', label: 'English', flag: '🇬🇧', short: 'EN' },
+        { code: 'kk', label: 'Қазақша', flag: '🇰🇿', short: 'KZ' },
     ];
 
     const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
-    const otherLanguages = languages.filter(lang => lang.code !== i18n.language);
 
     const handleLanguageChange = async (langCode: string) => {
         // Update i18n
@@ -49,31 +52,79 @@ export const LanguageSwitcher: React.FC = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const dropdownPosition = direction === 'up'
+        ? 'bottom-full mb-2'
+        : 'top-full mt-2';
+
     return (
-        <div className="relative w-full" ref={dropdownRef}>
+        <div className="relative" ref={dropdownRef}>
             {/* Current Language Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between px-3 py-2 bg-background/50 border border-border rounded-md hover:border-cyber-green/50 transition-all text-sm font-medium text-foreground"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-card hover:border-primary/50 transition-all duration-200 group"
+                title="Сменить язык"
             >
-                <span>{currentLanguage.label}</span>
-                <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <Globe className="w-4 h-4 text-primary transition-transform duration-300 group-hover:rotate-12" />
+                <span className="text-sm font-medium hidden sm:inline">{currentLanguage.flag}</span>
             </button>
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute bottom-full mb-1 left-0 w-full bg-card border border-border rounded-md shadow-lg overflow-hidden z-50">
-                    {otherLanguages.map((lang) => (
-                        <button
-                            key={lang.code}
-                            onClick={() => handleLanguageChange(lang.code)}
-                            className="w-full px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-cyber-green/10 transition-colors text-left"
-                        >
-                            {lang.label}
-                        </button>
-                    ))}
+                <div
+                    className={`absolute left-0 ${dropdownPosition} w-44 rounded-xl border border-border bg-card shadow-xl overflow-hidden z-[100]`}
+                    style={{
+                        animation: 'dropdownFadeIn 0.2s ease-out forwards'
+                    }}
+                >
+                    <div className="p-1.5">
+                        {languages.map((lang, index) => {
+                            const isActive = lang.code === i18n.language;
+                            return (
+                                <button
+                                    key={lang.code}
+                                    onClick={() => handleLanguageChange(lang.code)}
+                                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive
+                                            ? 'bg-primary/15 text-primary'
+                                            : 'hover:bg-muted text-foreground'
+                                        }`}
+                                    style={{
+                                        animation: `dropdownItemSlide 0.2s ease-out ${index * 0.05}s forwards`,
+                                        opacity: 0,
+                                        transform: 'translateX(-10px)'
+                                    }}
+                                >
+                                    <span className="text-lg">{lang.flag}</span>
+                                    <span className="text-sm font-medium flex-1 text-left">{lang.label}</span>
+                                    {isActive && (
+                                        <Check className="w-4 h-4 text-primary" />
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
             )}
+
+            {/* Animations */}
+            <style>{`
+                @keyframes dropdownFadeIn {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.95) translateY(${direction === 'up' ? '10px' : '-10px'});
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1) translateY(0);
+                    }
+                }
+                
+                @keyframes dropdownItemSlide {
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+            `}</style>
         </div>
     );
 };

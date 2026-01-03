@@ -58,11 +58,8 @@ export const TrainingPage: React.FC = () => {
             // Calculate unlocked status
             const sortedScenarios = (scenariosData as any[]).sort((a, b) => a.order - b.order);
 
-            const processedScenarios = sortedScenarios.map((scenario, index) => {
-                if (index === 0) return { ...scenario, isUnlocked: true };
-                const prevScenario = sortedScenarios[index - 1];
-                const prevProgress = progressData.find((p: any) => p.scenarioId === prevScenario.id);
-                return { ...scenario, isUnlocked: !!prevProgress?.completed };
+            const processedScenarios = sortedScenarios.map((scenario) => {
+                return { ...scenario, isUnlocked: true }; // All scenarios unlocked
             });
 
             setScenarios(processedScenarios);
@@ -217,12 +214,7 @@ export const TrainingPage: React.FC = () => {
                                             </div>
                                         )}
 
-                                        {/* Next Indicator */}
-                                        {isNext && !isCompleted && (
-                                            <div className="absolute -top-2 -right-2 bg-cyber-green text-background px-3 py-1 rounded-full text-xs font-bold">
-                                                {t('training.next')}
-                                            </div>
-                                        )}
+
 
                                         {/* Header */}
                                         <div className="flex items-start justify-between mb-4">

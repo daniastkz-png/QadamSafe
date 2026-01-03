@@ -17,6 +17,7 @@ import {
     Bot
 } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -101,7 +102,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
 
                 {/* User Info & Language Switcher */}
                 <div className="p-3 border-t border-border space-y-3">
-                    {!sidebarCollapsed && <LanguageSwitcher />}
+                    {!sidebarCollapsed && (
+                        <div className="flex items-center gap-2">
+                            <ThemeSwitcher direction="up" />
+                            <LanguageSwitcher />
+                        </div>
+                    )}
 
                     <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'}`}>
                         {!sidebarCollapsed && (
@@ -194,7 +200,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
 
                             {/* Mobile User Info */}
                             <div className="p-4 border-t border-border space-y-3">
-                                <LanguageSwitcher />
+                                <div className="flex items-center gap-2">
+                                    <ThemeSwitcher direction="up" />
+                                    <LanguageSwitcher />
+                                </div>
                                 <div className="flex items-center justify-between">
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-medium text-foreground truncate">

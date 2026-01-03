@@ -263,10 +263,11 @@
         "requirement1": "Automatically upon registration",
         "requirement2": "Complete 3 scenarios without dangerous decisions",
         "requirement3": "Complete 5+ scenarios with 70%+ safe decisions",
-        "requirement4": "Complete all 7 scenarios without a single error",
+        "requirement4": "Complete all 5 scenarios without a single error",
         "overview": "Ranks Overview",
         "allRanks": "All system ranks",
         "howToEarn": "How to earn",
+        "nextGoal": "Next goal",
         "progress": {
             "toRank2": "Complete 3 scenarios without dangerous decisions",
             "toRank3": "Complete 5+ scenarios with 70%+ safe decisions"
@@ -290,7 +291,16 @@
             "minutesAgo": "{{count}} min ago",
             "hoursAgo": "{{count}} h ago",
             "daysAgo": "{{count}} d ago"
-        }
+        },
+        "welcomeSubtitle": "Ready to continue your security training?",
+        "continueTraining": "Continue Training",
+        "continueTrainingDesc": "New scenarios on phishing and social engineering await you.",
+        "recommended": "Recommended",
+        "dailyTip": "Tip of the Day",
+        "askAI": "Ask Question",
+        "practice": "Practice",
+        "stats": "Statistics",
+        "profile": "Profile"
     },
     "welcome": {
         "title": "Welcome to QadamSafe!",
@@ -421,7 +431,7 @@
         "completedAt": "Earned",
         "noAchievements": "No achievements yet",
         "yourRank": "Your Rank",
-        "noRank": "Complete all 7 scenarios to earn a rank",
+        "noRank": "Complete all 5 scenarios to earn a rank",
         "rankProgress": "Progress to next rank"
     },
     "subscription": {
@@ -503,7 +513,7 @@
         }
     },
     "footer": {
-        "description": "Interactive platform for practical cybersecurity training through real-world scenarios.",
+        "description": "An educational online platform for digital security that uses AI and interactive scenarios to teach fraud recognition based on real cases from Kazakhstan.",
         "contacts": "Contacts",
         "city": "City",
         "location": "Astana, Kazakhstan",
@@ -576,6 +586,28 @@
             "explanation1": "Small amount — on purpose! Scammers expect you won't verify because of just 450₸.\n\nBut on the phishing site, they'll get your card data and can withdraw ALL your money.",
             "explanation2": "Excellent! KazPost's official website is post.kz. You can check the real package status there.\n\nYou didn't fall for the small amount and verified the information.",
             "explanation3": "Correct! Calling the hotline will confirm if there's a package.\n\nOfficial services never send payment links via SMS."
+        }
+    },
+    "tips": {
+        "password": {
+            "title": "Password",
+            "text": "Use a password manager. One password for all sites is a risk."
+        },
+        "phishing": {
+            "title": "Phishing",
+            "text": "Never click on links from unexpected emails, even from a 'bank'."
+        },
+        "2fa": {
+            "title": "2FA",
+            "text": "Enable two-factor authentication wherever possible."
+        },
+        "updates": {
+            "title": "Updates",
+            "text": "Regularly update your operating system and browser."
+        },
+        "wifi": {
+            "title": "Wi-Fi",
+            "text": "Avoid entering personal data when using public Wi-Fi."
         }
     }
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Shield, Mail, Phone, MessageSquare, CheckCircle, ChevronDown, ChevronRight, Eye, AlertTriangle, Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { ThemeSwitcher } from '../components/ThemeSwitcher';
 import { Footer } from '../components/Footer';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 
@@ -119,12 +120,7 @@ export const LandingPage: React.FC = () => {
                         <div className="flex items-center gap-2 md:gap-3">
                             {/* Desktop CTA Buttons */}
                             <div className="hidden md:flex items-center gap-3">
-                                <button
-                                    onClick={() => navigate('/auth')}
-                                    className="px-4 py-2 text-sm font-medium text-foreground hover:text-cyber-green transition-colors"
-                                >
-                                    {t('landing.nav.login')}
-                                </button>
+
                                 <button
                                     onClick={() => navigate('/auth')}
                                     className="px-5 py-2 text-sm font-medium bg-cyber-green text-background rounded-md hover:bg-cyber-green/90 transition-all"
@@ -133,7 +129,8 @@ export const LandingPage: React.FC = () => {
                                 </button>
                             </div>
 
-                            <LanguageSwitcher />
+                            <ThemeSwitcher />
+                            <LanguageSwitcher direction="down" />
 
                             {/* Mobile menu button */}
                             <button
@@ -150,74 +147,91 @@ export const LandingPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Mobile Menu */}
-                    {mobileMenuOpen && (
-                        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-sm">
-                            <div className="px-4 py-3 space-y-1">
-                                <button
-                                    onClick={() => {
-                                        scrollToSection('what-you-learn');
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="block w-full text-left px-4 py-4 rounded-md text-lg font-semibold text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)] active:text-cyber-green active:drop-shadow-[0_0_12px_rgba(0,255,157,0.6)] transition-all duration-300"
-                                >
-                                    {t('landing.nav.whatYouLearn')}
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        scrollToSection('how-it-works');
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="block w-full text-left px-4 py-4 rounded-md text-lg font-semibold text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)] active:text-cyber-green active:drop-shadow-[0_0_12px_rgba(0,255,157,0.6)] transition-all duration-300"
-                                >
-                                    {t('landing.nav.howItWorks')}
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        scrollToSection('access');
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="block w-full text-left px-4 py-4 rounded-md text-lg font-semibold text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)] active:text-cyber-green active:drop-shadow-[0_0_12px_rgba(0,255,157,0.6)] transition-all duration-300"
-                                >
-                                    {t('landing.nav.access')}
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        scrollToSection('faq');
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="block w-full text-left px-4 py-4 rounded-md text-lg font-semibold text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/10 hover:drop-shadow-[0_0_8px_rgba(0,255,157,0.4)] active:text-cyber-green active:drop-shadow-[0_0_12px_rgba(0,255,157,0.6)] transition-all duration-300"
-                                >
-                                    {t('landing.nav.faq')}
-                                </button>
-
-                                {/* Divider */}
-                                <div className="border-t border-border my-2"></div>
-
-                                {/* Mobile CTA Buttons */}
-                                <button
-                                    onClick={() => {
-                                        navigate('/auth');
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-foreground hover:text-cyber-green hover:bg-muted transition-colors"
-                                >
-                                    {t('landing.nav.login')}
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        navigate('/auth');
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="block w-full px-4 py-3 rounded-md text-sm font-medium bg-cyber-green text-background hover:bg-cyber-green/90 transition-all text-center"
-                                >
-                                    {t('landing.nav.startFree')}
-                                </button>
-                            </div>
-                        </div>
-                    )}
                 </div>
             </nav>
+
+            {/* Mobile Menu Overlay - Portal/Fixed position */}
+            {mobileMenuOpen && (
+                <div className="fixed inset-0 z-[100] md:hidden">
+                    {/* Backdrop */}
+                    <div
+                        className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
+                        onClick={() => setMobileMenuOpen(false)}
+                    />
+
+                    {/* Drawer */}
+                    <div className="absolute top-0 right-0 h-full w-[80%] max-w-sm bg-card border-l border-border shadow-2xl flex flex-col p-6 animate-in slide-in-from-right duration-300">
+                        {/* Header with Close Button */}
+                        <div className="flex items-center justify-between mb-8">
+                            <div className="flex items-center gap-2">
+                                <Shield className="w-6 h-6 text-cyber-green" />
+                                <span className="text-lg font-bold text-cyber-green">QadamSafe</span>
+                            </div>
+                            <button
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="p-2 -mr-2 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        {/* Navigation Links */}
+                        <div className="flex-1 space-y-2">
+                            <button
+                                onClick={() => {
+                                    scrollToSection('what-you-learn');
+                                    setMobileMenuOpen(false);
+                                }}
+                                className="block w-full text-left px-4 py-3 rounded-lg text-lg font-medium text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/5 transition-all"
+                            >
+                                {t('landing.nav.whatYouLearn')}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    scrollToSection('how-it-works');
+                                    setMobileMenuOpen(false);
+                                }}
+                                className="block w-full text-left px-4 py-3 rounded-lg text-lg font-medium text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/5 transition-all"
+                            >
+                                {t('landing.nav.howItWorks')}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    scrollToSection('access');
+                                    setMobileMenuOpen(false);
+                                }}
+                                className="block w-full text-left px-4 py-3 rounded-lg text-lg font-medium text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/5 transition-all"
+                            >
+                                {t('landing.nav.access')}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    scrollToSection('faq');
+                                    setMobileMenuOpen(false);
+                                }}
+                                className="block w-full text-left px-4 py-3 rounded-lg text-lg font-medium text-muted-foreground hover:text-cyber-green hover:bg-cyber-green/5 transition-all"
+                            >
+                                {t('landing.nav.faq')}
+                            </button>
+                        </div>
+
+                        {/* Footer Actions */}
+                        <div className="pt-6 mt-6 border-t border-border space-y-4">
+
+                            <button
+                                onClick={() => {
+                                    navigate('/auth');
+                                    setMobileMenuOpen(false);
+                                }}
+                                className="w-full flex items-center justify-center px-4 py-3 text-sm font-medium bg-cyber-green text-background rounded-lg hover:bg-cyber-green/90 transition-all font-bold"
+                            >
+                                {t('landing.nav.startFree')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
             {/* HERO Section */}
             <section id="hero" className="relative min-h-[90vh] flex items-center justify-center px-4 py-20 overflow-hidden">
@@ -622,6 +636,6 @@ export const LandingPage: React.FC = () => {
                     animation: float 3s ease-in-out infinite;
                 }
             `}</style>
-        </div>
+        </div >
     );
 };

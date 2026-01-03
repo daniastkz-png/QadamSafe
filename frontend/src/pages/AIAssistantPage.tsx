@@ -64,10 +64,13 @@ export const AIAssistantPage: React.FC = () => {
 
         try {
             // Prepare history for API
-            const history = messages.map(m => ({
-                role: m.role,
-                parts: m.content
-            }));
+            // Prepare history for API (exclude local welcome message to ensure correct User/Model alternation)
+            const history = messages
+                .filter(m => m.id !== 'welcome')
+                .map(m => ({
+                    role: m.role,
+                    parts: m.content
+                }));
 
             const responseText = await firebaseAssistantAPI.sendMessage(userMessageText, history);
 

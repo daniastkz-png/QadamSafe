@@ -3,7 +3,10 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
+
+    /* Dark (Cyber) Theme - Default */
+    :root,
+    [data-theme="dark"] {
         --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
         --card: 222.2 84% 4.9%;
@@ -24,6 +27,64 @@
         --input: 217.2 32.6% 17.5%;
         --ring: 142 76% 36%;
         --radius: 0.5rem;
+
+        /* Cyber colors */
+        --cyber-green: 142 100% 50%;
+        --cyber-green-dark: 142 100% 40%;
+    }
+
+    /* Light Theme - Clean & Professional */
+    [data-theme="light"] {
+        --background: 210 20% 98%;
+        --foreground: 222 47% 11%;
+        --card: 0 0% 100%;
+        --card-foreground: 222 47% 11%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222 47% 11%;
+        --primary: 152 69% 31%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 220 14% 96%;
+        --secondary-foreground: 222 47% 11%;
+        --muted: 220 14% 96%;
+        --muted-foreground: 220 9% 46%;
+        --accent: 152 69% 95%;
+        --accent-foreground: 152 69% 25%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 220 13% 87%;
+        --input: 220 13% 91%;
+        --ring: 152 69% 31%;
+
+        /* Cyber colors for light theme - deeper green */
+        --cyber-green: 152 69% 31%;
+        --cyber-green-dark: 152 69% 25%;
+    }
+
+    /* Violet Theme - Deep Purple with Magenta accents */
+    [data-theme="violet"] {
+        --background: 270 40% 8%;
+        --foreground: 280 20% 96%;
+        --card: 270 35% 12%;
+        --card-foreground: 280 20% 96%;
+        --popover: 270 35% 12%;
+        --popover-foreground: 280 20% 96%;
+        --primary: 300 90% 60%;
+        --primary-foreground: 270 40% 8%;
+        --secondary: 270 30% 18%;
+        --secondary-foreground: 280 20% 96%;
+        --muted: 270 30% 18%;
+        --muted-foreground: 270 20% 60%;
+        --accent: 320 80% 55%;
+        --accent-foreground: 280 20% 96%;
+        --destructive: 0 75% 55%;
+        --destructive-foreground: 280 20% 96%;
+        --border: 270 30% 22%;
+        --input: 270 30% 18%;
+        --ring: 300 90% 60%;
+
+        /* Magenta accent for violet theme */
+        --cyber-green: 300 90% 60%;
+        --cyber-green-dark: 300 90% 50%;
     }
 }
 
@@ -134,4 +195,47 @@
 
 .animate-slide-in-right {
     animation: slideInRight 0.3s ease-out;
+}
+
+/* Light theme specific enhancements */
+[data-theme="light"] .cyber-card {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="light"] .cyber-card:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="light"] .cyber-glow {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="light"] .cyber-button {
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+[data-theme="light"] .cyber-button:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Violet theme specific enhancements */
+[data-theme="violet"] .cyber-card {
+    border-color: rgba(255, 0, 255, 0.15);
+}
+
+[data-theme="violet"] .cyber-card:hover {
+    border-color: rgba(255, 0, 255, 0.4);
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.15);
+}
+
+[data-theme="violet"] .cyber-glow {
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.3);
+}
+
+[data-theme="violet"] .cyber-button {
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+
+[data-theme="violet"] .cyber-button:hover {
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
 }

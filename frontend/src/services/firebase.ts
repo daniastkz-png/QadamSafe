@@ -244,11 +244,55 @@ export const firebaseScenariosAPI = {
             });
         }
 
-        // Update user score
+        // Update user score and recalculate rank
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
         const userData = userDoc.data();
+
+        // Get all completed progress to calculate rank
+        const allProgressQuery = query(
+            collection(db, 'progress'),
+            where('userId', '==', currentUser.uid),
+            where('completed', '==', true)
+        );
+        const allProgressSnap = await getDocs(allProgressQuery);
+        const allProgress = allProgressSnap.docs.map(d => d.data());
+
+        // Calculate new rank based on performance
+        const completedCount = allProgress.length;
+        const totalMistakes = allProgress.reduce((sum, p: any) => sum + (p.mistakes || 0), 0);
+
+        // Get total scenarios count
+        const scenariosSnap = await getDocs(collection(db, 'scenarios'));
+        const totalScenarios = scenariosSnap.size;
+
+        // Calculate safe decision rate (lower mistakes = better)
+        // Assume each scenario has 3 questions, 0 mistakes = 100% safe, each mistake reduces by ~33%
+        const perfectScenarios = allProgress.filter((p: any) => (p.mistakes || 0) === 0).length;
+        const safeDecisionRate = completedCount > 0
+            ? Math.round((1 - (totalMistakes / (completedCount * 3))) * 100)
+            : 0;
+
+        // Rank calculation:
+        // Rank 1: Default (registration)
+        // Rank 2: Complete 3 scenarios without dangerous decisions
+        // Rank 3: Complete 5+ scenarios with 70%+ safe decisions
+        // Rank 4: Complete all 7 scenarios without a single error
+        let newRank = 1;
+
+        if (completedCount >= totalScenarios && totalMistakes === 0) {
+            // All scenarios completed without any mistakes
+            newRank = 4;
+        } else if (completedCount >= 5 && safeDecisionRate >= 70) {
+            // 5+ scenarios with 70%+ safe decisions
+            newRank = 3;
+        } else if (perfectScenarios >= 3) {
+            // 3+ scenarios completed without dangerous decisions
+            newRank = 2;
+        }
+
         await updateDoc(doc(db, 'users', currentUser.uid), {
             securityScore: (userData?.securityScore || 0) + data.score,
+            rank: newRank,
             updatedAt: now,
         });
 
@@ -370,9 +414,9 @@ export const firebaseAchievementsAPI = {
 
 // ============= AI SCENARIOS API =============
 
-// Gemini API for direct browser access (fallback when Cloud Functions unavailable)
-const GEMINI_API_KEY = 'AIzaSyAl6fqp2zwCdOI8M3Z9vf1i4yCPSDrP23I';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+// Gemini API for direct browser access
+const GEMINI_API_KEY = 'AIzaSyCT9xdBotd36PDqsHBIRdjNYnYqEfTTeTA';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
 const AI_SCENARIO_PROMPT = `Ты эксперт по кибербезопасности. Создай интерактивный обучающий сценарий о мошенничестве.
 
@@ -438,9 +482,9 @@ const AI_SCENARIO_PROMPT = `Ты эксперт по кибербезопасн�
     }
   ],
   "completionBlock": {
-    "title": "🎉 Сценарий пройден!",
-    "titleEn": "🎉 Scenario Complete!",
-    "titleKk": "🎉 Сценарий аяқталды!",
+    "title": "Сценарий пройден!",
+    "titleEn": "Scenario Complete!",
+    "titleKk": "Сценарий аяқталды!",
     "summary": "📌 Итоги и советы по защите",
     "summaryEn": "📌 Summary and protection tips",
     "summaryKk": "📌 Қорытындылар мен қорғау кеңестері"
@@ -448,6 +492,7 @@ const AI_SCENARIO_PROMPT = `Ты эксперт по кибербезопасн�
 }
 
 Создай сценарий с 2-3 шагами (steps). Каждый шаг должен быть реалистичной ситуацией мошенничества в Казахстане.
+ВАЖНО: В каждом шаге (step) должно быть РОВНО 3 варианта ответа (options): один опасный, один безопасный, один рискованный (или другом порядке). НЕ МЕНЬШЕ И НЕ БОЛЬШЕ 3 вариантов.
 Используй местные банки (Kaspi, Halyk, Forte), госуслуги (eGov), местные номера телефонов.
 Объяснения должны быть подробными и образовательными.`;
 
@@ -598,11 +643,14 @@ export const firebaseAIAPI = {
             throw new Error('Not authenticated');
         }
 
-        const docSnap = await getDoc(doc(db, 'users', currentUser.uid, 'aiScenarios', scenarioId));
-        if (!docSnap.exists()) {
-            throw new Error('AI Scenario not found');
+        const docRef = doc(db, 'users', currentUser.uid, 'aiScenarios', scenarioId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            return null;
         }
-        return docSnap.data();
     },
 
     // Complete an AI scenario (save progress)
@@ -672,17 +720,8 @@ export const firebaseAssistantAPI = {
             throw new Error('Not authenticated');
         }
 
-        // Construct the full prompt including history context
-        // Gemini API structure for chat history
+        // Construct the contents using valid message turns
         const contents = [
-            {
-                role: 'user',
-                parts: [{ text: AI_ASSISTANT_SYSTEM_PROMPT }]
-            },
-            {
-                role: 'model',
-                parts: [{ text: "Understood. I am QadamSafe AI, ready to assist with cybersecurity queries." }]
-            },
             ...history.map(msg => ({
                 role: msg.role,
                 parts: [{ text: msg.parts }]
@@ -700,6 +739,9 @@ export const firebaseAssistantAPI = {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    systemInstruction: {
+                        parts: [{ text: AI_ASSISTANT_SYSTEM_PROMPT }]
+                    },
                     contents: contents,
                     generationConfig: {
                         temperature: 0.7,
@@ -712,6 +754,7 @@ export const firebaseAssistantAPI = {
 
             if (!response.ok) {
                 const error = await response.json();
+                console.error('Gemini API Error:', JSON.stringify(error, null, 2));
                 throw new Error(error.error?.message || 'Failed to get AI response');
             }
 

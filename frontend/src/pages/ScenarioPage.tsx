@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { ScenarioPlayer } from '../components/ScenarioPlayer';
 import { firebaseScenariosAPI } from '../services/firebase';
+import { useAuth } from '../contexts/AuthContext';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import type { Scenario } from '../types';
 
@@ -11,6 +12,7 @@ export const ScenarioPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { refreshUser } = useAuth();
     const [scenario, setScenario] = useState<Scenario | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -49,8 +51,10 @@ export const ScenarioPage: React.FC = () => {
                 decisions
             });
 
-            // Navigate back to training page after short delay or show success message there
-            // For now, let's go back to training list
+            // Refresh user data to get updated rank
+            await refreshUser();
+
+            // Navigate back to training page
             navigate('/training');
         } catch (err) {
             console.error('Failed to save progress:', err);

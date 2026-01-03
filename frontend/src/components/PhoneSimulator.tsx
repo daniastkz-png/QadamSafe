@@ -221,7 +221,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                     {/* Chat Area */}
                     <div
-                        className="flex-1 p-4 h-[380px] overflow-hidden"
+                        className="flex-1 p-4 h-[380px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
                         style={{
                             background:
                                 messageType === 'whatsapp'

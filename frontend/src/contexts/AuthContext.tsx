@@ -13,6 +13,7 @@ interface AuthContextType {
     loginWithGoogle: () => Promise<void>;
     logout: () => void;
     updateUser: (user: User) => void;
+    refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -119,8 +120,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUser(updatedUser);
     };
 
+    const refreshUser = async () => {
+        try {
+            const userData = await firebaseAuthAPI.getMe();
+            setUser(userData as User);
+        } catch (error) {
+            console.error('Error refreshing user data:', error);
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, register, loginWithGoogle, logout, updateUser }}>
+        <AuthContext.Provider value={{ user, loading, login, register, loginWithGoogle, logout, updateUser, refreshUser }}>
             {children}
         </AuthContext.Provider>
     );
