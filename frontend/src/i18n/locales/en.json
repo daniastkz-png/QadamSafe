@@ -511,6 +511,7 @@
             "username": "Username",
             "email": "Email",
             "tier": "Subscription Tier",
+            "memberSince": "Member since",
             "save": "Save Changes",
             "saveSuccess": "Changes saved successfully"
         },
@@ -520,9 +521,55 @@
             "theme": "Theme",
             "autoSave": "Settings are saved automatically"
         },
+        "notifications": {
+            "title": "Notifications",
+            "email": "Email notifications",
+            "emailDesc": "Receive important updates via email",
+            "push": "Push notifications",
+            "pushDesc": "Notifications about new scenarios",
+            "weeklyReport": "Weekly report",
+            "weeklyReportDesc": "Progress summary every week",
+            "reminders": "Training reminders",
+            "remindersDesc": "Remind about regular training"
+        },
+        "stats": {
+            "title": "Account Statistics",
+            "scenarios": "Scenarios",
+            "level": "Level",
+            "streak": "Day streak",
+            "daysWithUs": "Days with us"
+        },
+        "export": {
+            "title": "Export Data",
+            "description": "Download your data and statistics",
+            "pdf": "Download PDF",
+            "json": "Export JSON",
+            "certificate": "Certificate",
+            "comingSoon": "This feature will be available soon"
+        },
+        "accounts": {
+            "title": "Connected Accounts",
+            "connected": "Connected",
+            "notConnected": "Not connected",
+            "connect": "Connect"
+        },
+        "sounds": {
+            "title": "Sounds & Haptics",
+            "effects": "Sound effects",
+            "effectsDesc": "Sounds for actions in the app",
+            "haptics": "Haptic feedback",
+            "hapticsDesc": "Vibration on mobile devices"
+        },
+        "shortcuts": {
+            "title": "Keyboard Shortcuts",
+            "nextStep": "Next step",
+            "prevStep": "Previous step",
+            "selectOption": "Select option"
+        },
         "security": {
             "title": "Account Security",
             "changePassword": "Change Password",
+            "changeEmail": "Change Email",
             "logout": "Log Out",
             "passwordChangePlaceholder": "Password change available in full version",
             "infoTitle": "QadamSafe — Digital Threat Simulator",
@@ -541,7 +588,9 @@
         "service": {
             "title": "Service Information",
             "version": "Platform Version",
-            "privacy": "Privacy Policy"
+            "privacy": "Privacy Policy",
+            "terms": "Terms of Use",
+            "disclaimer": "QadamSafe is a cybersecurity training simulator. All scenarios are educational. We don't store real personal data."
         }
     },
     "footer": {
