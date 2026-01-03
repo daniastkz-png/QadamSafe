@@ -425,14 +425,46 @@
     },
     "achievements": {
         "title": "Achievements",
+        "subtitle": "Your rewards and training progress",
         "unlocked": "Unlocked",
         "locked": "Locked",
         "progress": "Progress",
         "completedAt": "Earned",
         "noAchievements": "No achievements yet",
+        "startTraining": "Start training to earn your first rewards",
+        "allAchievements": "All achievements",
+        "new": "New",
         "yourRank": "Your Rank",
         "noRank": "Complete all 5 scenarios to earn a rank",
-        "rankProgress": "Progress to next rank"
+        "rankProgress": "Progress to next rank",
+        "stats": {
+            "total": "Total earned",
+            "completion": "Completed",
+            "streak": "Day streak",
+            "days": "days",
+            "latest": "Latest",
+            "none": "None yet"
+        },
+        "categories": {
+            "all": "All",
+            "training": "Training",
+            "mastery": "Mastery",
+            "activity": "Activity",
+            "social": "Social"
+        },
+        "rarity": {
+            "common": "Common",
+            "rare": "Rare",
+            "epic": "Epic",
+            "legendary": "Legendary"
+        },
+        "closest": {
+            "title": "Almost earned"
+        },
+        "secret": {
+            "title": "Secret achievements",
+            "hint": "Keep training to reveal"
+        }
     },
     "subscription": {
         "title": "Subscription",
