@@ -9,10 +9,38 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 // Initialize Firebase Admin
 admin.initializeApp();
 
-// Initialize Gemini AI
+// Initialize Gemini AI with stable model
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyA6g6kFF-8-7fdlyKOAYfrxIb7kGDt65jI";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const GEMINI_MODEL = "gemini-2.0-flash"; // Stable model for reliability
 const db = admin.firestore();
+
+// Retry helper with exponential backoff
+const MAX_RETRIES = 3;
+const INITIAL_RETRY_DELAY = 1000;
+
+async function retryWithBackoff(fn, retries = MAX_RETRIES, delay = INITIAL_RETRY_DELAY) {
+    try {
+        return await fn();
+    } catch (error) {
+        if (retries > 0) {
+            // Check if error is retryable (rate limit, server error, etc.)
+            const isRetryable =
+                error.message?.includes('429') ||
+                error.message?.includes('500') ||
+                error.message?.includes('503') ||
+                error.message?.includes('timeout') ||
+                error.message?.includes('ECONNRESET');
+
+            if (isRetryable) {
+                console.warn(`Retrying in ${delay}ms... (${retries} retries left)`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                return retryWithBackoff(fn, retries - 1, delay * 2);
+            }
+        }
+        throw error;
+    }
+}
 
 // JWT Secret (set in Firebase Functions config)
 const JWT_SECRET = process.env.JWT_SECRET || "qadamsafe-secret-key-2024";
@@ -428,11 +456,15 @@ app.post("/api/ai/generate-scenario", authMiddleware, async (req, res) => {
         const selectedTopic = topicPrompts[topic] || topicPrompts.sms_phishing;
         const fullPrompt = AI_SCENARIO_PROMPT + "\n\n" + selectedTopic;
 
-        // Call Gemini AI
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const result = await model.generateContent(fullPrompt);
-        const response = await result.response;
-        let text = response.text();
+        // Call Gemini AI with retry logic and stable model
+        const generateScenario = async () => {
+            const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
+            const result = await model.generateContent(fullPrompt);
+            const response = await result.response;
+            return response.text();
+        };
+
+        let text = await retryWithBackoff(generateScenario);
 
         // Clean the response - remove markdown code blocks if present
         text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();

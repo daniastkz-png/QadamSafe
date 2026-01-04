@@ -414,9 +414,105 @@ export const firebaseAchievementsAPI = {
 
 // ============= AI SCENARIOS API =============
 
-// Gemini API for direct browser access
-const GEMINI_API_KEY = 'AIzaSyCT9xdBotd36PDqsHBIRdjNYnYqEfTTeTA';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+// Gemini API configuration with fallback keys for reliability
+const GEMINI_API_KEYS = [
+    'AIzaSyCT9xdBotd36PDqsHBIRdjNYnYqEfTTeTA',
+    'AIzaSyA6g6kFF-8-7fdlyKOAYfrxIb7kGDt65jI', // Backup key from Cloud Functions
+];
+
+// Use stable Gemini 2.0 Flash model (more reliable than "latest")
+const GEMINI_MODEL = 'gemini-2.0-flash';
+const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
+
+// Retry configuration
+const MAX_RETRIES = 3;
+const INITIAL_RETRY_DELAY = 1000; // 1 second
+const REQUEST_TIMEOUT = 30000; // 30 seconds
+
+// Helper function for exponential backoff retry with timeout
+async function fetchWithRetry(
+    url: string,
+    options: RequestInit,
+    retries = MAX_RETRIES,
+    delay = INITIAL_RETRY_DELAY
+): Promise<Response> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        // If rate limited (429) or server error (5xx), retry
+        if (response.status === 429 || response.status >= 500) {
+            if (retries > 0) {
+                console.warn(`API returned ${response.status}, retrying in ${delay}ms... (${retries} retries left)`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                return fetchWithRetry(url, options, retries - 1, delay * 2);
+            }
+        }
+
+        return response;
+    } catch (error: any) {
+        clearTimeout(timeoutId);
+
+        if (error.name === 'AbortError') {
+            if (retries > 0) {
+                console.warn(`Request timed out, retrying in ${delay}ms... (${retries} retries left)`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                return fetchWithRetry(url, options, retries - 1, delay * 2);
+            }
+            throw new Error('Request timed out after multiple attempts');
+        }
+
+        // Network errors - retry
+        if (retries > 0 && (error.message?.includes('fetch') || error.message?.includes('network'))) {
+            console.warn(`Network error, retrying in ${delay}ms... (${retries} retries left)`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return fetchWithRetry(url, options, retries - 1, delay * 2);
+        }
+
+        throw error;
+    }
+}
+
+// Helper to try multiple API keys
+async function callGeminiWithFallback(
+    endpoint: string,
+    body: object
+): Promise<Response> {
+    let lastError: Error | null = null;
+
+    for (let i = 0; i < GEMINI_API_KEYS.length; i++) {
+        const apiKey = GEMINI_API_KEYS[i];
+        const url = `${GEMINI_BASE_URL}/${GEMINI_MODEL}:${endpoint}?key=${apiKey}`;
+
+        try {
+            const response = await fetchWithRetry(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            // If successful or client error (4xx except 429), return
+            if (response.ok || (response.status >= 400 && response.status < 500 && response.status !== 429)) {
+                return response;
+            }
+
+            // If failed, try next key
+            console.warn(`API key ${i + 1} failed with status ${response.status}, trying next key...`);
+            lastError = new Error(`API returned status ${response.status}`);
+        } catch (error: any) {
+            console.warn(`API key ${i + 1} failed:`, error.message);
+            lastError = error;
+        }
+    }
+
+    throw lastError || new Error('All API keys failed');
+}
 
 const AI_SCENARIO_PROMPT = `Ты эксперт по кибербезопасности. Создай интерактивный обучающий сценарий о мошенничестве.
 
@@ -541,30 +637,24 @@ export const firebaseAIAPI = {
         const selectedTopic = topicPrompts[topic] || topicPrompts.sms_phishing;
         const fullPrompt = AI_SCENARIO_PROMPT + "\n\n" + selectedTopic;
 
-        // Call Gemini API directly
-        const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: fullPrompt
-                    }]
-                }],
-                generationConfig: {
-                    temperature: 0.9,
-                    topK: 1,
-                    topP: 1,
-                    maxOutputTokens: 8192,
-                }
-            })
+        // Call Gemini API with retry and fallback keys
+        const response = await callGeminiWithFallback('generateContent', {
+            contents: [{
+                parts: [{
+                    text: fullPrompt
+                }]
+            }],
+            generationConfig: {
+                temperature: 0.9,
+                topK: 1,
+                topP: 1,
+                maxOutputTokens: 8192,
+            }
         });
 
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error?.message || 'Failed to generate AI scenario');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error?.message || 'Failed to generate AI scenario');
         }
 
         const data = await response.json();
@@ -733,29 +823,24 @@ export const firebaseAssistantAPI = {
         ];
 
         try {
-            const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+            // Call Gemini API with retry and fallback keys
+            const response = await callGeminiWithFallback('generateContent', {
+                systemInstruction: {
+                    parts: [{ text: AI_ASSISTANT_SYSTEM_PROMPT }]
                 },
-                body: JSON.stringify({
-                    systemInstruction: {
-                        parts: [{ text: AI_ASSISTANT_SYSTEM_PROMPT }]
-                    },
-                    contents: contents,
-                    generationConfig: {
-                        temperature: 0.7,
-                        topK: 40,
-                        topP: 0.95,
-                        maxOutputTokens: 2048,
-                    }
-                })
+                contents: contents,
+                generationConfig: {
+                    temperature: 0.7,
+                    topK: 40,
+                    topP: 0.95,
+                    maxOutputTokens: 2048,
+                }
             });
 
             if (!response.ok) {
-                const error = await response.json();
-                console.error('Gemini API Error:', JSON.stringify(error, null, 2));
-                throw new Error(error.error?.message || 'Failed to get AI response');
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Gemini API Error:', JSON.stringify(errorData, null, 2));
+                throw new Error(errorData.error?.message || 'Failed to get AI response');
             }
 
             const data = await response.json();
