@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
-import { achievementsAPI } from '../services/api';
+import { firebaseAchievementsAPI } from '../services/firebase';
 import {
     Award, Lock, CheckCircle, Shield, TrendingUp,
     Flame, Target, Star, Users, Calendar, Trophy,
@@ -95,7 +95,7 @@ export const AchievementsPage: React.FC = () => {
 
     const loadAchievements = async () => {
         try {
-            const data = await achievementsAPI.getUserAchievements();
+            const data = await firebaseAchievementsAPI.getUserAchievements() as UserAchievement[];
             setAchievements(data);
         } catch (error) {
             console.error('Failed to load achievements:', error);
