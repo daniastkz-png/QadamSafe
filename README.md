@@ -1,31 +1,37 @@
-# QadamSafe - Cybersecurity Education Platform
+# QadamSafe
 
-Платформа для обучения кибербезопасности через интерактивные сценарии.
+Cybersecurity education platform with interactive training scenarios.
 
-## 🌐 Production
+## Production
 
-**Приложение доступно:** https://qadamsafe.web.app
+Live application: https://qadamsafe.web.app
 
-## 🏗️ Архитектура
+## Architecture
 
-Проект полностью работает на **Firebase**:
+The project is built entirely on Firebase:
 
-- **Frontend**: React + TypeScript + Vite → Firebase Hosting
-- **База данных**: Firestore
-- **Авторизация**: Firebase Authentication
-- **Серверные функции**: Firebase Cloud Functions (ИИ-генерация сценариев)
+- Frontend: React, TypeScript, Vite, deployed to Firebase Hosting
+- Database: Cloud Firestore
+- Authentication: Firebase Authentication
+- Server Functions: Firebase Cloud Functions (AI scenario generation via Gemini)
 
-## 🚀 Быстрый старт
+## Quick Start
 
-### 1. Установка зависимостей
+### Prerequisites
+
+- Node.js 18+
+- npm
+- Firebase CLI (`npm install -g firebase-tools`)
+
+### Installation
 
 ```bash
 npm run install:all
 ```
 
-### 2. Настройка Firebase
+### Environment Configuration
 
-Убедитесь, что файл `frontend/.env` содержит:
+Create `frontend/.env` with your Firebase credentials:
 
 ```env
 VITE_FIREBASE_API_KEY=your-api-key
@@ -36,71 +42,74 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 VITE_FIREBASE_APP_ID=your-app-id
 ```
 
-### 3. Запуск в режиме разработки
+### Development
 
 ```bash
 npm run dev
 ```
 
-Откроется на `http://localhost:5173`
+Opens at http://localhost:5173
 
-## 📦 Команды
+## Commands
 
-| Команда | Описание |
-|---------|----------|
-| `npm run dev` | Запуск dev-сервера |
-| `npm run build` | Сборка production |
-| `npm run deploy` | Деплой на Firebase Hosting |
-| `npm run deploy:functions` | Деплой Cloud Functions |
-| `npm run install:all` | Установка всех зависимостей |
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run deploy` | Deploy to Firebase Hosting |
+| `npm run deploy:functions` | Deploy Cloud Functions |
+| `npm run install:all` | Install all dependencies |
 
-## 📁 Структура проекта
+## Project Structure
 
 ```
 QadamSafe/
-├── frontend/           # React приложение
+├── frontend/               # React application
 │   ├── src/
-│   │   ├── pages/      # Страницы
-│   │   ├── components/ # Компоненты
-│   │   ├── contexts/   # React контексты
-│   │   ├── services/   # Firebase API
-│   │   ├── i18n/       # Локализация (RU, EN, KK)
-│   │   └── types/      # TypeScript типы
-│   └── dist/           # Production сборка
-├── functions/          # Firebase Cloud Functions
-├── firebase.json       # Конфигурация Firebase
-├── firestore.rules     # Правила безопасности Firestore
-└── firestore.indexes.json
+│   │   ├── pages/          # Page components
+│   │   ├── components/     # Reusable components
+│   │   ├── contexts/       # React contexts
+│   │   ├── services/       # Firebase API layer
+│   │   ├── i18n/           # Localization (RU, EN, KK)
+│   │   └── types/          # TypeScript definitions
+│   └── dist/               # Production build
+├── functions/              # Firebase Cloud Functions
+├── firebase.json           # Firebase configuration
+├── firestore.rules         # Firestore security rules
+└── firestore.indexes.json  # Firestore indexes
 ```
 
-## 🌍 Локализация
+## Localization
 
-Поддерживаются 3 языка:
-- 🇷🇺 Русский
-- 🇬🇧 English  
-- 🇰🇿 Қазақша
+Supported languages:
 
-## 🔐 Безопасность
+- Russian (ru)
+- English (en)
+- Kazakh (kk)
 
-- Правила Firestore настроены для защиты данных пользователей
-- Каждый пользователь имеет доступ только к своим данным
-- Сценарии доступны только авторизованным пользователям
+## Firestore Collections
 
-## 📋 Firebase сервисы
+| Collection | Description |
+|------------|-------------|
+| `users` | User profiles and settings |
+| `scenarios` | Training scenarios |
+| `userProgress` | User progress records |
+| `achievements` | Achievement definitions |
+| `userAchievements` | User achievement records |
+| `aiScenarios` | AI-generated scenarios |
 
-### Firestore Collections
+## Cloud Functions
 
-- `users` - профили пользователей
-- `scenarios` - обучающие сценарии
-- `userProgress` - прогресс пользователей
-- `achievements` - достижения
-- `userAchievements` - достижения пользователей
-- `aiScenarios` - ИИ-генерированные сценарии
+| Function | Description |
+|----------|-------------|
+| `generateAIScenario` | Generates unique scenarios using Gemini AI |
 
-### Cloud Functions
+## Security
 
-- `generateAIScenario` - генерация уникальных сценариев через Gemini AI
+- Firestore rules enforce user-level data isolation
+- Each user can only access their own records
+- Scenarios are read-only for authenticated users
 
-## 📚 Дополнительно
+## Additional Documentation
 
-См. [IMPROVEMENTS.md](./IMPROVEMENTS.md) для списка улучшений и рекомендаций.
+See [IMPROVEMENTS.md](./IMPROVEMENTS.md) for improvement recommendations.
