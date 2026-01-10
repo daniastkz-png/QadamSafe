@@ -298,9 +298,6 @@ export const TrainingPage: React.FC = () => {
                                 </p>
 
                                 <div className="flex items-center gap-4 mb-4">
-                                    <span className="px-3 py-1 rounded-md border border-purple-500/30 text-sm font-medium text-purple-400">
-                                        Gemini AI
-                                    </span>
                                     <span className="text-cyan-400 text-sm">
                                         {t('training.unlimited', 'Безлимитно')}
                                     </span>

@@ -10,7 +10,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 admin.initializeApp();
 
 // Initialize Gemini AI with stable model
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyA6g6kFF-8-7fdlyKOAYfrxIb7kGDt65jI";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyClYvOSI5DT8vQGR9Upiq-MQ_FAhEhZ_I8";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const GEMINI_MODEL = "gemini-2.0-flash"; // Stable model for reliability
 const db = admin.firestore();

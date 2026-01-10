@@ -414,10 +414,9 @@ export const firebaseAchievementsAPI = {
 
 // ============= AI SCENARIOS API =============
 
-// Gemini API configuration with fallback keys for reliability
+// Gemini API configuration
 const GEMINI_API_KEYS = [
-    'AIzaSyCT9xdBotd36PDqsHBIRdjNYnYqEfTTeTA',
-    'AIzaSyA6g6kFF-8-7fdlyKOAYfrxIb7kGDt65jI', // Backup key from Cloud Functions
+    'AIzaSyClYvOSI5DT8vQGR9Upiq-MQ_FAhEhZ_I8',
 ];
 
 // Use stable Gemini 2.0 Flash model (more reliable than "latest")

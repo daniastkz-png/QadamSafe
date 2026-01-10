@@ -1,22 +1,14 @@
 {
   "name": "qadamsafe",
   "version": "1.0.0",
-  "description": "QadamSafe - Cybersecurity Education Platform",
+  "description": "QadamSafe - Cybersecurity Education Platform (Firebase)",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && npm run dev",
-    "dev:frontend": "cd frontend && npm run dev",
-    "build": "npm run build:backend && npm run build:frontend",
-    "build:backend": "cd backend && npm run build",
-    "build:frontend": "cd frontend && npm run build",
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "start:backend": "cd backend && npm start",
-    "start:frontend": "cd frontend && npm run preview"
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "deploy:functions": "cd functions && npm run deploy",
+    "install:all": "npm install && cd frontend && npm install && cd ../functions && npm install"
   },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
+  "devDependencies": {}
 }
-
