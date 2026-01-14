@@ -370,6 +370,69 @@
         "title": "Welcome to QadamSafe!",
         "subtitle": "Your journey to digital security starts here",
         "intro": "Interactive platform for learning cybersecurity through practical simulations.",
+        "timeEstimate": "First scenario takes 3-5 minutes",
+        "quiz": {
+            "title": "Quick Check",
+            "question": "Your card is blocked. To unblock, follow the link: kaspi-unlock.kz",
+            "prompt": "What will you do?",
+            "option1": "Click the link — need to unblock my card",
+            "option2": "Call the bank at the official number",
+            "correct": "Excellent! You didn't fall for the trick",
+            "wrong": "Careful! That was a trap",
+            "explanation": "Banks never send links to unblock cards. Always call the official number on your card.",
+            "continue": "Continue Training"
+        },
+        "quizDone": {
+            "title": "Great Start!",
+            "subtitle": "You've shown you can recognize threats. Keep learning!"
+        },
+        "progress": {
+            "title": "Your Progress",
+            "scenarios": "Scenarios Completed",
+            "xpToNext": "To rank",
+            "completed": "Completed",
+            "accuracy": "Accuracy"
+        },
+        "testimonials": {
+            "title": "User Reviews",
+            "quote1": "Thanks to QadamSafe, I recognized a fraudulent email and didn't lose money. Very realistic scenarios!",
+            "author1": "Aigul M.",
+            "role1": "Accountant, 34 years old",
+            "quote2": "I use it in computer science classes. Students love it — they learn by practice, not boring lectures.",
+            "author2": "Asan K.",
+            "role2": "Teacher, NIS Astana",
+            "quote3": "Now my children know how to check links and not share SMS codes. Thank you for this platform!",
+            "author3": "Yerlan B.",
+            "role3": "Father of two"
+        },
+        "timeline": {
+            "step1Title": "Choose Scenario",
+            "step1Desc": "Phishing, calls, SMS — various threats",
+            "step2Title": "Make Decision",
+            "step2Desc": "What would you do in reality?",
+            "step3Title": "Get Analysis",
+            "step3Desc": "Breakdown of mistakes and correct actions",
+            "step4Title": "Earn Rewards",
+            "step4Desc": "Points, achievements and ranks"
+        },
+        "skills": {
+            "phishing": {
+                "title": "Phishing Emails",
+                "desc": "Recognizing fake emails from banks and services"
+            },
+            "sms": {
+                "title": "SMS Fraud",
+                "desc": "Identifying fake messages about winnings and blocks"
+            },
+            "social": {
+                "title": "Social Engineering",
+                "desc": "Protection from manipulation and psychological pressure"
+            },
+            "data": {
+                "title": "Data Protection",
+                "desc": "Safe storage of passwords and personal information"
+            }
+        },
         "whyNow": {
             "title": "Why do you need this training right now?",
             "mainStat": "Every third resident of Kazakhstan faced fraud in 2025",
@@ -753,6 +816,32 @@
         "wifi": {
             "title": "Wi-Fi",
             "text": "Avoid entering personal data when using public Wi-Fi."
+        }
+    },
+    "security": {
+        "stats": {
+            "affected": "Kazakhstan residents affected in 2025",
+            "cases": "Fraud cases recorded",
+            "increase": "Fraud growth per year",
+            "preventable": "Can be prevented with training",
+            "growing": "Growing every year",
+            "distribution": "Fraud types distribution",
+            "phishing": "Phishing (fake links)",
+            "phishingDesc": "Most common threat",
+            "sms": "SMS fraud",
+            "smsDesc": "Fake messages from banks",
+            "phone": "Phone calls",
+            "phoneDesc": "Social engineering",
+            "social": "Social networks",
+            "socialDesc": "Fraud through messengers"
+        },
+        "insights": {
+            "awareness": "Awareness",
+            "awarenessDesc": "Most users don't know about modern fraud schemes",
+            "prevention": "Prevention",
+            "preventionDesc": "Training reduces the risk of becoming a victim by 87%",
+            "trend": "Trend",
+            "trendDesc": "Scammers constantly develop new deception methods"
         }
     }
 }
