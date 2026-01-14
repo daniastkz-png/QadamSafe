@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, updateDoc, limit, onSnapshot } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import type { UserProgress } from '../types';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,6 +19,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+
+// Scenario cache for optimizing real-time listeners
+const scenarioCache = new Map<string, any>();
 
 // Types
 interface User {
@@ -174,10 +178,17 @@ export const firebaseScenariosAPI = {
             throw new Error('Not authenticated');
         }
 
-        // Get all scenarios without ordering first to debug
+        // Get all scenarios
         const scenariosQuery = query(collection(db, 'scenarios'));
         const scenariosSnap = await getDocs(scenariosQuery);
-        const scenarios = scenariosSnap.docs.map(d => d.data());
+        const scenarios = scenariosSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Fill scenario cache
+        scenarios.forEach(scenario => {
+            if (scenario.id) {
+                scenarioCache.set(scenario.id, scenario);
+            }
+        });
 
         // Get user progress
         const progressQuery = query(collection(db, 'progress'), where('userId', '==', currentUser.uid));
@@ -317,14 +328,14 @@ export const firebaseProgressAPI = {
         return progressSnap.docs.map(d => ({ id: d.id, ...d.data() }));
     },
 
-    // Real-time listener for progress updates
-    subscribeToProgress: (callback: (progress: any[]) => void) => {
+    // Real-time listener for progress updates (optimized with scenario caching)
+    subscribeToProgress: (callback: (progress: UserProgress[]) => void) => {
         const currentUser = auth.currentUser;
         if (!currentUser) {
             return () => { };
         }
 
-        // Query with completed filter first
+        // Query with completed filter
         const progressQuery = query(
             collection(db, 'progress'),
             where('userId', '==', currentUser.uid),
@@ -335,33 +346,47 @@ export const firebaseProgressAPI = {
         const unsubscribe = onSnapshot(progressQuery, async (snapshot) => {
             let progress = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
 
-            // Sort by completedAt in memory (in case Firestore index is not available)
+            // Sort by completedAt in memory
             progress = progress.sort((a: any, b: any) => {
                 const dateA = a.completedAt?.toDate ? a.completedAt.toDate() : new Date(a.completedAt || 0);
                 const dateB = b.completedAt?.toDate ? b.completedAt.toDate() : new Date(b.completedAt || 0);
                 return dateB.getTime() - dateA.getTime();
             }).slice(0, 10);
 
-            // Load scenario data for each progress item
-            const progressWithScenarios = await Promise.all(
-                progress.map(async (p: any) => {
-                    if (p.scenarioId) {
-                        try {
-                            const scenarioDoc = await getDoc(doc(db, 'scenarios', p.scenarioId));
-                            if (scenarioDoc.exists()) {
-                                p.scenario = { id: scenarioDoc.id, ...scenarioDoc.data() };
-                            }
-                        } catch (error) {
-                            console.error('Error loading scenario:', error);
-                        }
+            // Get unique scenario IDs that need to be loaded
+            const scenarioIdsToLoad = new Set<string>();
+            progress.forEach((p: any) => {
+                if (p.scenarioId && !scenarioCache.has(p.scenarioId)) {
+                    scenarioIdsToLoad.add(p.scenarioId);
+                }
+            });
+
+            // Load missing scenarios
+            const loadPromises = Array.from(scenarioIdsToLoad).map(async (scenarioId) => {
+                try {
+                    const scenarioDoc = await getDoc(doc(db, 'scenarios', scenarioId));
+                    if (scenarioDoc.exists()) {
+                        const scenarioData = { id: scenarioDoc.id, ...scenarioDoc.data() };
+                        scenarioCache.set(scenarioId, scenarioData);
                     }
-                    return p;
-                })
-            );
+                } catch {
+                    // Error loading scenario - will use cache or skip
+                }
+            });
+
+            await Promise.all(loadPromises);
+
+            // Attach cached scenario data to progress items
+            const progressWithScenarios = progress.map((p: any) => {
+                if (p.scenarioId && scenarioCache.has(p.scenarioId)) {
+                    p.scenario = scenarioCache.get(p.scenarioId);
+                }
+                return p;
+            });
 
             callback(progressWithScenarios);
-        }, (error) => {
-            console.error('Error subscribing to progress:', error);
+        }, () => {
+            // Error handler - errors are handled silently
         });
 
         return unsubscribe;
@@ -415,6 +440,9 @@ export const firebaseAchievementsAPI = {
 // ============= AI SCENARIOS API =============
 
 // Gemini API configuration
+// SECURITY WARNING: API keys are exposed in client-side code
+// TODO: Move API keys to Firebase Cloud Functions for production
+// Current keys should be rotated and moved to server-side only
 const GEMINI_API_KEYS = [
     'AIzaSyClYvOSI5DT8vQGR9Upiq-MQ_FAhEhZ_I8',
 ];

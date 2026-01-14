@@ -1,23 +1,36 @@
-
+import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { LandingPage } from './pages/LandingPage';
-import { AuthPage } from './pages/AuthPage';
-import { PartnersPage } from './pages/PartnersPage';
-import { WelcomePage } from './pages/WelcomePage';
-import { TrainingPage } from './pages/TrainingPage';
-import { ScenarioPage } from './pages/ScenarioPage';
-import { AIScenarioPage } from './pages/AIScenarioPage';
-import { AIAssistantPage } from './pages/AIAssistantPage';
-import { ProgressPage } from './pages/ProgressPage';
-import { AchievementsPage } from './pages/AchievementsPage';
-import { SubscriptionPage } from './pages/SubscriptionPage';
-import { SettingsPage } from './pages/SettingsPage';
+import { Skeleton } from './components/Skeleton';
 import './i18n/i18n';
+
+// Lazy load pages for code splitting
+const LandingPage = React.lazy(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })));
+const AuthPage = React.lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
+const PartnersPage = React.lazy(() => import('./pages/PartnersPage').then(m => ({ default: m.PartnersPage })));
+const WelcomePage = React.lazy(() => import('./pages/WelcomePage').then(m => ({ default: m.WelcomePage })));
+const TrainingPage = React.lazy(() => import('./pages/TrainingPage').then(m => ({ default: m.TrainingPage })));
+const ScenarioPage = React.lazy(() => import('./pages/ScenarioPage').then(m => ({ default: m.ScenarioPage })));
+const AIScenarioPage = React.lazy(() => import('./pages/AIScenarioPage').then(m => ({ default: m.AIScenarioPage })));
+const AIAssistantPage = React.lazy(() => import('./pages/AIAssistantPage').then(m => ({ default: m.AIAssistantPage })));
+const ProgressPage = React.lazy(() => import('./pages/ProgressPage').then(m => ({ default: m.ProgressPage })));
+const AchievementsPage = React.lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
+const SubscriptionPage = React.lazy(() => import('./pages/SubscriptionPage').then(m => ({ default: m.SubscriptionPage })));
+const SettingsPage = React.lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
+
+// Loading fallback component
+const PageLoader = () => (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+            <Skeleton variant="circular" width={64} height={64} className="mx-auto" />
+            <Skeleton variant="text" width={200} className="mx-auto" />
+        </div>
+    </div>
+);
 
 function App() {
     return (
@@ -26,7 +39,8 @@ function App() {
                 <BrowserRouter>
                     <ToastProvider>
                         <AuthProvider>
-                            <Routes>
+                            <Suspense fallback={<PageLoader />}>
+                                <Routes>
                                 {/* Public Routes */}
                                 <Route path="/" element={<LandingPage />} />
                                 <Route path="/auth" element={<AuthPage />} />
@@ -117,7 +131,8 @@ function App() {
 
                                 {/* Catch all - redirect to landing */}
                                 <Route path="*" element={<Navigate to="/" replace />} />
-                            </Routes>
+                                </Routes>
+                            </Suspense>
                         </AuthProvider>
                     </ToastProvider>
                 </BrowserRouter>
