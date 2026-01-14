@@ -20,7 +20,7 @@
         "nav": {
             "whatYouLearn": "What You'll Learn",
             "howItWorks": "How It Works",
-            "access": "Access",
+            "access": "Pricing",
             "faq": "FAQ",
             "login": "Login",
             "startFree": "Start Free"
@@ -39,6 +39,66 @@
             "ctaButton": "Try Free Simulation",
             "timeIndicator": "Takes 1 minute",
             "stat": "78% of users make mistakes in similar situations"
+        },
+        "urgency": "🔥 Every day 300+ Kazakhstanis become victims of scammers",
+        "socialProof": {
+            "users": "users trained",
+            "schools": "schools and organizations",
+            "satisfaction": "satisfied users",
+            "scenarios": "scenarios completed",
+            "trustedBy": "Trusted by educational institutions in Kazakhstan"
+        },
+        "whoItsFor": {
+            "title": "Who QadamSafe is For",
+            "subtitle": "The platform is made for those who want to protect themselves and loved ones",
+            "popular": "Popular",
+            "students": {
+                "title": "Students",
+                "desc": "Ages 7-25 — the most vulnerable age group for online fraud",
+                "benefit1": "Learn to recognize phishing",
+                "benefit2": "Protect personal data",
+                "benefit3": "Avoid losing money"
+            },
+            "parents": {
+                "title": "Parents",
+                "desc": "Want to protect children from scammers and learn cybersecurity themselves",
+                "benefit1": "Teach children safety",
+                "benefit2": "Protect family budget",
+                "benefit3": "Be calm about loved ones"
+            },
+            "schools": {
+                "title": "Schools and Organizations",
+                "desc": "Modern digital literacy program for students",
+                "benefit1": "Ready-made learning materials",
+                "benefit2": "Progress statistics",
+                "benefit3": "Certificates for students"
+            }
+        },
+        "results": {
+            "before": "Before Training",
+            "after": "After Training",
+            "before1": "Click on suspicious links",
+            "before2": "Share SMS codes",
+            "before3": "Trust 'bank security service'",
+            "after1": "Recognize 95% of fraud schemes",
+            "after2": "Verify information sources",
+            "after3": "Protect personal data"
+        },
+        "pricing": {
+            "subtitle": "Choose the right plan for your training",
+            "popular": "Popular",
+            "compare": "Compare Plans",
+            "feature": "Feature",
+            "basicScenarios": "Basic scenarios",
+            "allScenarios": "All scenarios",
+            "aiScenarios": "AI scenarios",
+            "teamManagement": "Team management",
+            "certificates": "Certificates"
+        },
+        "finalCta": {
+            "title": "Ready to protect yourself from scammers?",
+            "subtitle": "Start free training right now. Registration takes 1 minute.",
+            "noCard": "No credit card required • Cancel anytime"
         },
         "whatYouLearn": {
             "title": "What You'll Learn",
@@ -93,7 +153,11 @@
             "q4": "Is this theory or practice?",
             "a4": "Only practice. No lectures — just real situations and your decisions.",
             "q5": "Is it safe?",
-            "a5": "Absolutely. All scenarios are educational, we don't use real data and don't create real threats."
+            "a5": "Absolutely. All scenarios are educational, we don't use real data and don't create real threats.",
+            "q6": "Is it safe for children?",
+            "a6": "Yes, the platform is completely safe for children aged 7+. All scenarios are age-appropriate and contain no shocking content. Parents can track their child's progress.",
+            "q7": "Can it be used in schools?",
+            "a7": "Absolutely! QadamSafe is perfect for computer science classes and class hours. The Business plan includes class management, statistics, and certificates for students."
         },
         "footer": {
             "copyright": "© 2026 QadamSafe. Cybersecurity Training."
