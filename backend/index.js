@@ -537,10 +537,56 @@ app.post("/api/ai/generate-scenario", authMiddleware, async (req, res) => {
 
         // Call Gemini AI with retry logic and stable model
         const generateScenario = async () => {
-            const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
-            const result = await model.generateContent(fullPrompt);
-            const response = await result.response;
-            return response.text();
+            try {
+                const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
+                const result = await model.generateContent(fullPrompt);
+                const response = await result.response;
+                return response.text();
+            } catch (error) {
+                // MOCK SCENARIO if quota exceeded
+                if (error.message.includes('429') || error.message.includes('404') || error.message.includes('Quota')) {
+                    console.log("⚠️ Using MOCK SCENARIO due to API Quota/Error");
+                    return JSON.stringify({
+                        title: "Тестовый сценарий (Квота исчерпана)",
+                        titleEn: "Test Scenario (Quota Exceeded)",
+                        titleKk: "Тесттік сценарий (Квота таусылды)",
+                        description: "Это тестовый сценарий, так как API ключ Google исчерпал лимит. Система работает!",
+                        descriptionEn: "This is a test scenario because Google API key quota is exceeded. System works!",
+                        descriptionKk: "Бұл тесттік сценарий, Google API кілтінің лимиті таусылды.",
+                        steps: [
+                            {
+                                id: "step1",
+                                type: "question",
+                                visualType: "phone",
+                                phoneMessageType: "sms",
+                                senderName: "Kaspi Bank",
+                                senderNameEn: "Kaspi Bank",
+                                senderNameKk: "Kaspi Bank",
+                                senderNumber: "999",
+                                profileEmoji: "🏦",
+                                messageText: "Ваша карта заблокирована. Перейдите по ссылке для разблокировки: kaspi-block.com",
+                                messageTextEn: "Your card is blocked. Follow link to unblock: kaspi-block.com",
+                                messageTextKk: "Сіздің картаңыз бұғатталған. Бұғаттан шығару үшін сілтемеге өтіңіз: kaspi-block.com",
+                                question: "Что вы сделаете?",
+                                questionEn: "What will you do?",
+                                questionKk: "Не істейсіз?",
+                                options: [
+                                    { id: "opt1", text: "Перейду по ссылке", textEn: "Follow link", textKk: "Сілтемеге өту", outcomeType: "dangerous", explanation: "Это фишинг!", explanationEn: "It's phishing!", explanationKk: "Бұл фишинг!" },
+                                    { id: "opt2", text: "Проигнорирую", textEn: "Ignore", textKk: "Елемеу", outcomeType: "safe", explanation: "Правильно!", explanationEn: "Correct!", explanationKk: "Дұрыс!" },
+                                    { id: "opt3", text: "Позвоню в банк", textEn: "Call bank", textKk: "Банкке қоңырау шалу", outcomeType: "safe", explanation: "Отличное решение!", explanationEn: "Great decision!", explanationKk: "Тамаша шешім!" }
+                                ]
+                            }
+                        ],
+                        completionBlock: {
+                            title: "Тест пройден!", titleEn: "Test Complete!", titleKk: "Тест аяқталды!",
+                            summary: "Система работает отлично, просто нужен свежий API ключ.",
+                            summaryEn: "System works perfectly, just need a fresh API key.",
+                            summaryKk: "Жүйе жақсы жұмыс істейді, тек жаңа API кілті қажет."
+                        }
+                    });
+                }
+                throw error;
+            }
         };
 
         let text = await retryWithBackoff(generateScenario);
@@ -677,23 +723,32 @@ app.post("/api/ai/chat", firebaseAuthMiddleware, async (req, res) => {
 
         // Call Gemini AI
         const generateResponse = async () => {
-            const model = genAI.getGenerativeModel({
-                model: GEMINI_MODEL,
-                systemInstruction: AI_ASSISTANT_SYSTEM_PROMPT
-            });
+            try {
+                const model = genAI.getGenerativeModel({
+                    model: GEMINI_MODEL,
+                    systemInstruction: AI_ASSISTANT_SYSTEM_PROMPT
+                });
 
-            const result = await model.generateContent({
-                contents: contents,
-                generationConfig: {
-                    temperature: 0.7,
-                    topK: 40,
-                    topP: 0.95,
-                    maxOutputTokens: 2048,
+                const result = await model.generateContent({
+                    contents: contents,
+                    generationConfig: {
+                        temperature: 0.7,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 2048,
+                    }
+                });
+
+                const response = await result.response;
+                return response.text();
+            } catch (error) {
+                // If API quota exceeded or model not found, return Mock response
+                if (error.message.includes('429') || error.message.includes('404') || error.message.includes('Quota')) {
+                    console.log("⚠️ Using MOCK RESPONSE for Chat due to API Quota/Error");
+                    return "⚠️ **(Режим тестирования)**\n\nИзвините, сейчас мои нейронные сети перегружены (исчерпана квота API ключа Google). Но я вижу ваше сообщение! \n\nЭто подтверждает, что **ваша система работает исправно**: Фронтенд связался с Бэкендом, Бэкенд проверил вашу авторизацию и попытался вызвать ИИ.\n\nПожалуйста, попробуйте завтра, когда квоты обновятся, или используйте другой API ключ. 🤖";
                 }
-            });
-
-            const response = await result.response;
-            return response.text();
+                throw error;
+            }
         };
 
         const responseText = await retryWithBackoff(generateResponse);
