@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+
 
 // Initialize Firebase Admin with service account
 let serviceAccount;
