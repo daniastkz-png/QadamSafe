@@ -576,6 +576,84 @@ app.get("/api/ai/topics", authMiddleware, async (req, res) => {
     res.status(200).json(topics);
 });
 
+// ============= AI CHAT ASSISTANT =============
+const AI_ASSISTANT_SYSTEM_PROMPT = `You are QadamSafe AI, an advanced cybersecurity assistant.
+Your goal is to educate users about digital safety, analyze potential threats, and provide actionable advice.
+
+Tone: Professional, vigilant, encouraging, yet serious about threats.
+Style: Concise, clear, easy to understand. Avoid jargon where possible, or explain it.
+
+Capabilities:
+1. Threat Analysis: If a user pastes a message/email, analyze it for phishing indicators.
+2. Password Advice: Explain how to create strong passwords.
+3. Education: Explain terms like 2FA, VPN, Phishing, Malware.
+4. Roleplay: If requested, act as a scammer to train the user (but make it clear it's a simulation).
+
+Safety Rules:
+- NEVER ask for real passwords, credit card numbers, or personal info.
+- If a user shares real sensitive data, tell them to delete it immediately.
+- Do not provide instructions on how to hack or exploit systems.
+- If asked about non-cybersecurity topics, politely redirect.
+
+Format: Keep answers relatively short (under 200 words) unless asked for details. Use formatting for readability.`;
+
+app.post("/api/ai/chat", authMiddleware, async (req, res) => {
+    try {
+        const { message, history } = req.body;
+
+        if (!message) {
+            return res.status(400).json({ error: "Message is required" });
+        }
+
+        // Build contents for Gemini
+        const contents = [];
+
+        // Add history if provided
+        if (history && Array.isArray(history)) {
+            history.forEach(msg => {
+                contents.push({
+                    role: msg.role,
+                    parts: [{ text: msg.parts }]
+                });
+            });
+        }
+
+        // Add current user message
+        contents.push({
+            role: "user",
+            parts: [{ text: message }]
+        });
+
+        // Call Gemini AI
+        const generateResponse = async () => {
+            const model = genAI.getGenerativeModel({
+                model: GEMINI_MODEL,
+                systemInstruction: AI_ASSISTANT_SYSTEM_PROMPT
+            });
+
+            const result = await model.generateContent({
+                contents: contents,
+                generationConfig: {
+                    temperature: 0.7,
+                    topK: 40,
+                    topP: 0.95,
+                    maxOutputTokens: 2048,
+                }
+            });
+
+            const response = await result.response;
+            return response.text();
+        };
+
+        const responseText = await retryWithBackoff(generateResponse);
+
+        res.status(200).json({ response: responseText });
+    } catch (error) {
+        console.error("AI Chat error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // ============= HEALTH CHECK (for Uptime Robot) =============
 app.get("/health", (req, res) => {
     res.status(200).json({
