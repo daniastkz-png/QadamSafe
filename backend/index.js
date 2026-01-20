@@ -21,7 +21,7 @@ if (Object.keys(serviceAccount).length > 0) {
 // Initialize Gemini AI
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const GEMINI_MODEL = "gemini-pro";
+const GEMINI_MODEL = "gemini-2.0-flash";
 const db = admin.firestore();
 
 // Retry helper with exponential backoff
