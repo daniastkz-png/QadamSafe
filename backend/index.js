@@ -31,8 +31,15 @@ if (Object.keys(serviceAccount).length > 0) {
 
 // Initialize Gemini AI
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+// Log masked API key for debugging
+if (GEMINI_API_KEY.length > 10) {
+    console.log(`Using Gemini API Key: ${GEMINI_API_KEY.substring(0, 5)}...${GEMINI_API_KEY.substring(GEMINI_API_KEY.length - 5)}`);
+} else {
+    console.error("Warning: Invalid Gemini API Key length!");
+}
+
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const GEMINI_MODEL = "gemini-1.5-flash"; // Use 1.5 Flash for best compatibility
+const GEMINI_MODEL = "gemini-2.0-flash"; // Reverting to 2.0-flash as 1.5 gives 404
 const db = admin.firestore();
 
 // Retry helper with exponential backoff
