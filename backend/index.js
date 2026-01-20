@@ -514,7 +514,7 @@ const AI_SCENARIO_PROMPT = `Ты эксперт по кибербезопасн�
 Используй местные банки (Kaspi, Halyk, Forte), госуслуги (eGov), местные номера телефонов.
 Объяснения должны быть подробными и образовательными.`;
 
-app.post("/api/ai/generate-scenario", authMiddleware, async (req, res) => {
+app.post("/api/ai/generate-scenario", firebaseAuthMiddleware, async (req, res) => {
     try {
         const { topic, language } = req.body;
 
@@ -601,7 +601,7 @@ app.post("/api/ai/generate-scenario", authMiddleware, async (req, res) => {
 });
 
 // Get user's AI-generated scenarios
-app.get("/api/ai/scenarios", authMiddleware, async (req, res) => {
+app.get("/api/ai/scenarios", firebaseAuthMiddleware, async (req, res) => {
     try {
         const userId = req.user.userId;
         const snapshot = await db.collection("users").doc(userId).collection("aiScenarios")
@@ -617,7 +617,7 @@ app.get("/api/ai/scenarios", authMiddleware, async (req, res) => {
 });
 
 // Get available AI topics
-app.get("/api/ai/topics", authMiddleware, async (req, res) => {
+app.get("/api/ai/topics", firebaseAuthMiddleware, async (req, res) => {
     const topics = [
         { id: "sms_phishing", name: "SMS-фишинг", nameEn: "SMS Phishing", nameKk: "SMS-фишинг", icon: "📱", color: "cyber-green" },
         { id: "phone_scam", name: "Телефонные мошенники", nameEn: "Phone Scams", nameKk: "Телефон алаяқтары", icon: "📞", color: "cyber-yellow" },
