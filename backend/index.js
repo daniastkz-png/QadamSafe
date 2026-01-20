@@ -29,17 +29,15 @@ if (Object.keys(serviceAccount).length > 0) {
     admin.initializeApp();
 }
 
-// Initialize Gemini AI
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-// Log masked API key for debugging
-if (GEMINI_API_KEY.length > 10) {
-    console.log(`Using Gemini API Key: ${GEMINI_API_KEY.substring(0, 5)}...${GEMINI_API_KEY.substring(GEMINI_API_KEY.length - 5)}`);
-} else {
-    console.error("Warning: Invalid Gemini API Key length!");
+// Initialize Groq SDK
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+if (!GROQ_API_KEY) {
+    console.error("❌ ERROR: GROQ_API_KEY is missing!");
 }
+const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: GROQ_API_KEY });
+const AI_MODEL = "llama-3.1-8b-instant"; // Fast and free-tier friendly
 
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const GEMINI_MODEL = "gemini-2.0-flash"; // Reverting to 2.0-flash as 1.5 gives 404
 const db = admin.firestore();
 
 // Retry helper with exponential backoff
@@ -533,60 +531,20 @@ app.post("/api/ai/generate-scenario", authMiddleware, async (req, res) => {
         };
 
         const selectedTopic = topicPrompts[topic] || topicPrompts.sms_phishing;
-        const fullPrompt = AI_SCENARIO_PROMPT + "\n\n" + selectedTopic;
+        const fullPrompt = selectedTopic; // System prompt handles the rest
 
-        // Call Gemini AI with retry logic and stable model
+        // Call Groq AI
         const generateScenario = async () => {
-            try {
-                const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
-                const result = await model.generateContent(fullPrompt);
-                const response = await result.response;
-                return response.text();
-            } catch (error) {
-                // MOCK SCENARIO if quota exceeded
-                if (error.message.includes('429') || error.message.includes('404') || error.message.includes('Quota')) {
-                    console.log("⚠️ Using MOCK SCENARIO due to API Quota/Error");
-                    return JSON.stringify({
-                        title: "Тестовый сценарий (Квота исчерпана)",
-                        titleEn: "Test Scenario (Quota Exceeded)",
-                        titleKk: "Тесттік сценарий (Квота таусылды)",
-                        description: "Это тестовый сценарий, так как API ключ Google исчерпал лимит. Система работает!",
-                        descriptionEn: "This is a test scenario because Google API key quota is exceeded. System works!",
-                        descriptionKk: "Бұл тесттік сценарий, Google API кілтінің лимиті таусылды.",
-                        steps: [
-                            {
-                                id: "step1",
-                                type: "question",
-                                visualType: "phone",
-                                phoneMessageType: "sms",
-                                senderName: "Kaspi Bank",
-                                senderNameEn: "Kaspi Bank",
-                                senderNameKk: "Kaspi Bank",
-                                senderNumber: "999",
-                                profileEmoji: "🏦",
-                                messageText: "Ваша карта заблокирована. Перейдите по ссылке для разблокировки: kaspi-block.com",
-                                messageTextEn: "Your card is blocked. Follow link to unblock: kaspi-block.com",
-                                messageTextKk: "Сіздің картаңыз бұғатталған. Бұғаттан шығару үшін сілтемеге өтіңіз: kaspi-block.com",
-                                question: "Что вы сделаете?",
-                                questionEn: "What will you do?",
-                                questionKk: "Не істейсіз?",
-                                options: [
-                                    { id: "opt1", text: "Перейду по ссылке", textEn: "Follow link", textKk: "Сілтемеге өту", outcomeType: "dangerous", explanation: "Это фишинг!", explanationEn: "It's phishing!", explanationKk: "Бұл фишинг!" },
-                                    { id: "opt2", text: "Проигнорирую", textEn: "Ignore", textKk: "Елемеу", outcomeType: "safe", explanation: "Правильно!", explanationEn: "Correct!", explanationKk: "Дұрыс!" },
-                                    { id: "opt3", text: "Позвоню в банк", textEn: "Call bank", textKk: "Банкке қоңырау шалу", outcomeType: "safe", explanation: "Отличное решение!", explanationEn: "Great decision!", explanationKk: "Тамаша шешім!" }
-                                ]
-                            }
-                        ],
-                        completionBlock: {
-                            title: "Тест пройден!", titleEn: "Test Complete!", titleKk: "Тест аяқталды!",
-                            summary: "Система работает отлично, просто нужен свежий API ключ.",
-                            summaryEn: "System works perfectly, just need a fresh API key.",
-                            summaryKk: "Жүйе жақсы жұмыс істейді, тек жаңа API кілті қажет."
-                        }
-                    });
-                }
-                throw error;
-            }
+            const completion = await groq.chat.completions.create({
+                messages: [
+                    { role: "system", content: AI_SCENARIO_PROMPT },
+                    { role: "user", content: fullPrompt }
+                ],
+                model: AI_MODEL,
+                temperature: 0.7,
+                response_format: { type: "json_object" }
+            });
+            return completion.choices[0]?.message?.content || "{}";
         };
 
         let text = await retryWithBackoff(generateScenario);
@@ -702,53 +660,45 @@ app.post("/api/ai/chat", firebaseAuthMiddleware, async (req, res) => {
             return res.status(400).json({ error: "Message is required" });
         }
 
-        // Build contents for Gemini
-        const contents = [];
+        // Build messages for Groq (OpenAI format)
+        const messages = [
+            { role: "system", content: AI_ASSISTANT_SYSTEM_PROMPT }
+        ];
 
         // Add history if provided
         if (history && Array.isArray(history)) {
             history.forEach(msg => {
-                contents.push({
-                    role: msg.role,
-                    parts: [{ text: msg.parts }]
-                });
+                // Map roles: 'model' -> 'assistant', 'user' -> 'user'
+                const role = (msg.role === 'model' || msg.role === 'assistant') ? 'assistant' : 'user';
+                // Handle different content structures (Gemini 'parts' vs plain string)
+                let content = "";
+                if (typeof msg.parts === 'string') {
+                    content = msg.parts;
+                } else if (Array.isArray(msg.parts)) {
+                    content = msg.parts.map(p => p.text).join(" ");
+                } else if (msg.message) { // Frontend legacy format support
+                    content = msg.message;
+                }
+
+                if (content) {
+                    messages.push({ role, content });
+                }
             });
         }
 
         // Add current user message
-        contents.push({
-            role: "user",
-            parts: [{ text: message }]
-        });
+        messages.push({ role: "user", content: message });
 
-        // Call Gemini AI
+        // Call Groq AI
         const generateResponse = async () => {
-            try {
-                const model = genAI.getGenerativeModel({
-                    model: GEMINI_MODEL,
-                    systemInstruction: AI_ASSISTANT_SYSTEM_PROMPT
-                });
-
-                const result = await model.generateContent({
-                    contents: contents,
-                    generationConfig: {
-                        temperature: 0.7,
-                        topK: 40,
-                        topP: 0.95,
-                        maxOutputTokens: 2048,
-                    }
-                });
-
-                const response = await result.response;
-                return response.text();
-            } catch (error) {
-                // If API quota exceeded or model not found, return Mock response
-                if (error.message.includes('429') || error.message.includes('404') || error.message.includes('Quota')) {
-                    console.log("⚠️ Using MOCK RESPONSE for Chat due to API Quota/Error");
-                    return "⚠️ **(Режим тестирования)**\n\nИзвините, сейчас мои нейронные сети перегружены (исчерпана квота API ключа Google). Но я вижу ваше сообщение! \n\nЭто подтверждает, что **ваша система работает исправно**: Фронтенд связался с Бэкендом, Бэкенд проверил вашу авторизацию и попытался вызвать ИИ.\n\nПожалуйста, попробуйте завтра, когда квоты обновятся, или используйте другой API ключ. 🤖";
-                }
-                throw error;
-            }
+            const completion = await groq.chat.completions.create({
+                messages: messages,
+                model: AI_MODEL,
+                temperature: 0.7,
+                max_tokens: 1024,
+                top_p: 1,
+            });
+            return completion.choices[0]?.message?.content || "";
         };
 
         const responseText = await retryWithBackoff(generateResponse);
