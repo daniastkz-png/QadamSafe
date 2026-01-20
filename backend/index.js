@@ -7,21 +7,32 @@ const jwt = require("jsonwebtoken");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Initialize Firebase Admin with service account
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || "{}");
+let serviceAccount;
+try {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || "{}");
+} catch (e) {
+    console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT JSON:", e.message);
+    serviceAccount = {};
+}
 
 if (Object.keys(serviceAccount).length > 0) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
-    });
+    try {
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
+        console.log("Firebase Admin initialized with Service Account");
+    } catch (e) {
+        console.error("Error initializing Firebase Admin:", e);
+    }
 } else {
-    console.warn("Warning: FIREBASE_SERVICE_ACCOUNT not set. Using default credentials.");
+    console.warn("Warning: FIREBASE_SERVICE_ACCOUNT is empty or invalid. Auth will fail.");
     admin.initializeApp();
 }
 
 // Initialize Gemini AI
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const GEMINI_MODEL = "gemini-2.0-flash";
+const GEMINI_MODEL = "gemini-1.5-flash"; // Use 1.5 Flash for best compatibility
 const db = admin.firestore();
 
 // Retry helper with exponential backoff
@@ -112,13 +123,15 @@ const firebaseAuthMiddleware = async (req, res, next) => {
             req.user = { userId: decodedToken.uid, email: decodedToken.email };
             return next();
         } catch (firebaseError) {
+            console.warn("Firebase Auth failed:", firebaseError.message);
             // If Firebase fails, try JWT
             try {
                 const decoded = jwt.verify(token, JWT_SECRET);
                 req.user = decoded;
                 return next();
             } catch (jwtError) {
-                return res.status(401).json({ error: "Invalid token" });
+                console.warn("JWT Auth failed:", jwtError.message);
+                return res.status(401).json({ error: "Invalid token", details: "Both Firebase and JWT auth failed" });
             }
         }
     } catch (error) {
