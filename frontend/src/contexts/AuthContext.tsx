@@ -32,10 +32,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     const userData = await firebaseAuthAPI.getMe();
                     setUser(userData as User);
                     // Sync language with user preference
-                    if (userData.language && userData.language !== i18n.language) {
-                        i18n.changeLanguage(userData.language);
-                        localStorage.setItem('language', userData.language);
-                    }
+                    // Note: accessing i18n.language here might use stale closure if not careful, 
+                    // but onAuthStateChanged runs independently. 
+                    // To be safe, we can sync language logic inside the component body or separate effect 
+                    // if strictly needed, but getting it from local storage or i18n instance directly is fine.
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                     setUser(null);
@@ -47,7 +47,41 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         });
 
         return () => unsubscribe();
-    }, [i18n]);
+    }, []); // Run only once
+
+    // Sync language when user changes
+    useEffect(() => {
+        if (user?.language && user.language !== i18n.language) {
+            i18n.changeLanguage(user.language);
+            localStorage.setItem('language', user.language);
+        }
+    }, [user?.language, i18n]);
+
+    useEffect(() => {
+        // Admin Hotkeys for Demo
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!user) return; // Only if user is logged in
+
+            // Check for Cmd+P (PRO) or Cmd+B (BUSINESS)
+            if (e.metaKey || e.ctrlKey) {
+                if (e.key.toLowerCase() === 'p') {
+                    e.preventDefault();
+                    console.log('👑 Switching to PRO plan...');
+                    setUser(prev => prev ? { ...prev, subscriptionTier: 'PRO' } : null);
+                    // Use setTimeout to allow render cycle to complete before alert
+                    setTimeout(() => alert('👑 Switched to PRO plan'), 10);
+                } else if (e.key.toLowerCase() === 'b') {
+                    e.preventDefault();
+                    console.log('💼 Switching to BUSINESS plan...');
+                    setUser(prev => prev ? { ...prev, subscriptionTier: 'BUSINESS' } : null);
+                    setTimeout(() => alert('💼 Switched to BUSINESS plan'), 10);
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [user]); // Re-bind when user changes to have fresh closure
 
     const login = async (email: string, password: string) => {
         const { user: userData } = await firebaseAuthAPI.login(email, password);

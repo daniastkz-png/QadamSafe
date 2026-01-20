@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Scenario, ScenarioStep, ScenarioOption } from '../types';
-import { ArrowRight, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle, AlertTriangle, XCircle, Volume2, VolumeX } from 'lucide-react';
 import { PhoneSimulator } from './PhoneSimulator';
+import { useScenarioSounds } from '../services/soundService';
 
 interface ScenarioPlayerProps {
     scenario: Scenario;
@@ -26,14 +27,35 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
     const [showExplanation, setShowExplanation] = useState(false);
     const [showCompletionBlock, setShowCompletionBlock] = useState(false);
     const [decisions, setDecisions] = useState<any[]>([]);
+    const [soundEnabled, setSoundEnabled] = useState(true);
+
+    // Sound hooks
+    const { playScenarioSound, playOptionFeedback, resetSounds } = useScenarioSounds();
 
     const currentStep = scenario.content.steps[currentStepIndex];
+
+    // Play sound when step changes (for phone visualizations)
+    useEffect(() => {
+        if (soundEnabled && currentStep?.visualType === 'phone' && currentStep?.phoneMessageType) {
+            // Small delay to make the sound more natural (like receiving a message)
+            const timer = setTimeout(() => {
+                playScenarioSound(currentStep.id, currentStep.phoneMessageType);
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [currentStepIndex, currentStep, soundEnabled, playScenarioSound]);
+
+    // Reset sounds when scenario changes
+    useEffect(() => {
+        resetSounds();
+    }, [scenario.id, resetSounds]);
 
     // Shuffle options once when step changes
     const shuffledOptions = useMemo(() => {
         if (!currentStep?.options) return [];
         return shuffleArray(currentStep.options);
     }, [currentStep]);
+
 
     const getLocalizedContent = (step: ScenarioStep) => {
         if (i18n.language === 'en' && step.contentEn) return step.contentEn;
@@ -121,6 +143,11 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
         setSelectedOption(option.id);
         setShowExplanation(true);
 
+        // Play feedback sound
+        if (soundEnabled) {
+            playOptionFeedback(option.outcomeType);
+        }
+
         // Record decision
         const decision = {
             stepId: currentStep.id,
@@ -201,9 +228,26 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                     <span className="text-sm text-muted-foreground">
                         {t('scenario.step')} {currentStepIndex + 1} / {scenario.content.steps.length}
                     </span>
-                    <span className="text-sm text-cyber-green">
-                        {scenario.isLegitimate ? t('scenario.legitimate') : t('scenario.potential_threat')}
-                    </span>
+                    <div className="flex items-center gap-3">
+                        {/* Sound Toggle Button */}
+                        <button
+                            onClick={() => setSoundEnabled(!soundEnabled)}
+                            className={`p-1.5 rounded-lg transition-all ${soundEnabled
+                                    ? 'text-cyber-green hover:bg-cyber-green/10'
+                                    : 'text-muted-foreground hover:bg-muted'
+                                }`}
+                            title={soundEnabled ? t('scenario.soundOn', 'Звук включен') : t('scenario.soundOff', 'Звук выключен')}
+                        >
+                            {soundEnabled ? (
+                                <Volume2 className="w-4 h-4" />
+                            ) : (
+                                <VolumeX className="w-4 h-4" />
+                            )}
+                        </button>
+                        <span className="text-sm text-cyber-green">
+                            {scenario.isLegitimate ? t('scenario.legitimate') : t('scenario.potential_threat')}
+                        </span>
+                    </div>
                 </div>
                 <div className="w-full bg-muted rounded-full h-2">
                     <div

@@ -53,6 +53,8 @@ export const SubscriptionPage: React.FC = () => {
                 t('subscription.businessFeature1'),
                 t('subscription.businessFeature2'),
                 t('subscription.businessFeature3'),
+                t('subscription.businessFeature4'),
+                t('subscription.businessFeatureFamily'),
                 t('subscription.businessFeature5'),
             ],
         },

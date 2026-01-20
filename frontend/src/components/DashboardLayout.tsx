@@ -14,10 +14,18 @@ import {
     X,
     ChevronLeft,
     ChevronRight,
-    Bot
+    Bot,
+    MessageSquare,
+    Phone,
+    Gamepad2,
+    Target,
+    Trophy,
+    FileCheck,
+    GraduationCap
 } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeSwitcher } from './ThemeSwitcher';
+import { CyberMate } from './CyberMate';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -32,12 +40,26 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     const navItems = [
         { to: '/welcome', icon: Shield, label: t('sidebar.welcome') },
         { to: '/training', icon: BookOpen, label: t('sidebar.training') },
-        { to: '/assistant', icon: Bot, label: t('sidebar.assistant') },
+        { to: '/sms-analyzer', icon: MessageSquare, label: t('sidebar.smsAnalyzer', 'Проверка SMS'), tier: 'PRO' },
+        { to: '/call-simulator', icon: Phone, label: t('sidebar.callSimulator', 'Симулятор звонков'), tier: 'PRO' },
+        { to: '/cyber-defense', icon: Gamepad2, label: t('sidebar.cyberDefense', 'Cyber Defense'), tier: 'PRO' },
+        { to: '/team-challenges', icon: Target, label: t('sidebar.teamChallenges', 'Челленджи'), tier: 'BUSINESS' },
         { to: '/progress', icon: TrendingUp, label: t('sidebar.progress') },
+        { to: '/leaderboard', icon: Trophy, label: t('sidebar.leaderboard', 'Лидеры') },
         { to: '/achievements', icon: Award, label: t('sidebar.achievements') },
+        { to: '/certificates', icon: FileCheck, label: t('sidebar.certificates', 'Сертификаты'), tier: 'BUSINESS' },
+        { to: '/teacher', icon: GraduationCap, label: t('sidebar.teacher', 'Учителям'), tier: 'BUSINESS' },
+        { to: '/assistant', icon: Bot, label: t('sidebar.assistant'), tier: 'PRO' },
         { to: '/subscription', icon: CreditCard, label: t('sidebar.subscription') },
         { to: '/settings', icon: Settings, label: t('sidebar.settings') },
     ];
+
+    const hasAccess = (requiredTier?: string) => {
+        if (!requiredTier) return true;
+        if (user?.subscriptionTier === 'BUSINESS') return true;
+        if (requiredTier === 'PRO' && user?.subscriptionTier === 'PRO') return true;
+        return false;
+    };
 
     return (
         <div className="min-h-screen bg-background flex">
@@ -73,7 +95,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
 
                 {/* Navigation */}
                 <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
-                    {navItems.map((item) => (
+                    {navItems.filter(item => hasAccess(item.tier)).map((item) => (
                         <NavLink
                             key={item.to}
                             to={item.to}
@@ -180,7 +202,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
 
                             {/* Navigation */}
                             <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-                                {navItems.map((item) => (
+                                {navItems.filter(item => hasAccess(item.tier)).map((item) => (
                                     <NavLink
                                         key={item.to}
                                         to={item.to}
@@ -237,6 +259,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             >
                 {children}
             </main>
+
+            {/* AI Assistant - Floating Widget */}
+            <CyberMate />
         </div>
     );
 };

@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { SecurityStatistics } from '../components/SecurityStatistics';
+import { DailyChallengeWidget } from '../components/DailyChallengeWidget';
 import { useAuth } from '../contexts/AuthContext';
 import { firebaseAuthAPI } from '../services/firebase';
 import {
     Shield, CheckCircle, Target, TrendingUp, Award, Clock,
     ChevronRight, Play, Quote, Zap, Trophy, ArrowRight,
-    MessageSquare, Mail, AlertTriangle, X
+    MessageSquare, Mail, AlertTriangle, X, Phone, Gamepad2
 } from 'lucide-react';
 
 // Mini Quiz Component
@@ -398,6 +399,78 @@ export const WelcomePage: React.FC = () => {
                             <ProgressCard {...userProgress} />
                         </div>
                     )}
+
+                    {/* Daily Challenges */}
+                    {user && (
+                        <div className="mb-8">
+                            <DailyChallengeWidget />
+                        </div>
+                    )}
+
+                    {/* New Features Quick Access */}
+                    <div className="mb-8">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Zap className="w-6 h-6 text-cyber-yellow" />
+                            <h2 className="text-2xl font-semibold text-foreground">
+                                {t('welcome.newFeatures', 'Новые возможности')}
+                            </h2>
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-4">
+                            {/* SMS Analyzer */}
+                            <div
+                                onClick={() => navigate('/sms-analyzer')}
+                                className="group p-5 bg-card border border-border rounded-xl hover:border-cyber-green transition-all cursor-pointer relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <MessageSquare className="w-24 h-24 text-cyber-green" />
+                                </div>
+                                <div className="relative z-10">
+                                    <div className="w-12 h-12 bg-cyber-green/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-cyber-green/20 transition-colors">
+                                        <MessageSquare className="w-6 h-6 text-cyber-green" />
+                                    </div>
+                                    <h3 className="font-bold text-lg mb-1 group-hover:text-cyber-green transition-colors">{t('sidebar.smsAnalyzer', 'Проверка SMS')}</h3>
+                                    <p className="text-sm text-muted-foreground">{t('welcome.features.smsDesc', 'Проверьте подозрительные сообщения на мошенничество')}</p>
+                                </div>
+                            </div>
+
+                            {/* Call Simulator */}
+                            <div
+                                onClick={() => navigate('/call-simulator')}
+                                className="group p-5 bg-card border border-border rounded-xl hover:border-cyber-blue transition-all cursor-pointer relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <Phone className="w-24 h-24 text-cyber-blue" />
+                                </div>
+                                <div className="relative z-10">
+                                    <div className="w-12 h-12 bg-cyber-blue/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-cyber-blue/20 transition-colors">
+                                        <Phone className="w-6 h-6 text-cyber-blue" />
+                                    </div>
+                                    <h3 className="font-bold text-lg mb-1 group-hover:text-cyber-blue transition-colors">{t('sidebar.callSimulator', 'Симулятор звонков')}</h3>
+                                    <p className="text-sm text-muted-foreground">{t('welcome.features.callDesc', 'Потренируйтесь отвечать телефонным мошенникам')}</p>
+                                </div>
+                            </div>
+
+                            {/* Cyber Defense */}
+                            <div
+                                onClick={() => navigate('/cyber-defense')}
+                                className="group p-5 bg-card border border-border rounded-xl hover:border-purple-500 transition-all cursor-pointer relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <Gamepad2 className="w-24 h-24 text-purple-500" />
+                                </div>
+                                <div className="relative z-10">
+                                    <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
+                                        <Gamepad2 className="w-6 h-6 text-purple-500" />
+                                    </div>
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <h3 className="font-bold text-lg group-hover:text-purple-500 transition-colors">Cyber Defense</h3>
+                                        <span className="px-1.5 py-0.5 rounded text-[10px] bg-purple-500 text-white font-bold">GAME</span>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">{t('welcome.features.gameDesc', 'Защитите систему от потока киберугроз')}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Two Column Layout */}
                     <div className="grid lg:grid-cols-2 gap-8 mb-8">

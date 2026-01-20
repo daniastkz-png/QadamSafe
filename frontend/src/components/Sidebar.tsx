@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { BookOpen, TrendingUp, Award, CreditCard, LogOut, Shield, Settings } from 'lucide-react';
+import { BookOpen, TrendingUp, Award, CreditCard, LogOut, Shield, Settings, Trophy, FileCheck, GraduationCap, MessageSquare, Phone, Gamepad2, Target } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Sidebar: React.FC = () => {
@@ -12,11 +12,25 @@ export const Sidebar: React.FC = () => {
     const navItems = [
         { to: '/welcome', icon: Shield, label: t('sidebar.welcome') },
         { to: '/training', icon: BookOpen, label: t('sidebar.training') },
+        { to: '/sms-analyzer', icon: MessageSquare, label: t('sidebar.smsAnalyzer', 'Проверка SMS'), tier: 'PRO' },
+        { to: '/call-simulator', icon: Phone, label: t('sidebar.callSimulator', 'Симулятор звонков'), tier: 'PRO' },
+        { to: '/cyber-defense', icon: Gamepad2, label: t('sidebar.cyberDefense', 'Cyber Defense'), tier: 'PRO' },
+        { to: '/team-challenges', icon: Target, label: t('sidebar.teamChallenges', 'Челленджи'), tier: 'BUSINESS' },
         { to: '/progress', icon: TrendingUp, label: t('sidebar.progress') },
+        { to: '/leaderboard', icon: Trophy, label: t('sidebar.leaderboard', 'Лидеры') },
         { to: '/achievements', icon: Award, label: t('sidebar.achievements') },
+        { to: '/certificates', icon: FileCheck, label: t('sidebar.certificates', 'Сертификаты'), tier: 'BUSINESS' },
+        { to: '/teacher', icon: GraduationCap, label: t('sidebar.teacher', 'Учителям'), tier: 'BUSINESS' },
         { to: '/subscription', icon: CreditCard, label: t('sidebar.subscription') },
         { to: '/settings', icon: Settings, label: t('sidebar.settings') },
     ];
+
+    const hasAccess = (requiredTier?: string) => {
+        if (!requiredTier) return true;
+        if (user?.subscriptionTier === 'BUSINESS') return true;
+        if (requiredTier === 'PRO' && user?.subscriptionTier === 'PRO') return true;
+        return false;
+    };
 
     return (
         <div className="w-64 h-screen bg-card border-r border-border flex flex-col fixed left-0 top-0 overflow-y-auto">
@@ -30,21 +44,23 @@ export const Sidebar: React.FC = () => {
 
             {/* Navigation */}
             <nav className="flex-1 p-4 space-y-2">
-                {navItems.map((item) => (
-                    <NavLink
-                        key={item.to}
-                        to={item.to}
-                        className={({ isActive }) =>
-                            `flex items-center gap-3 px-4 py-3 rounded-md transition-all ${isActive
-                                ? 'bg-cyber-green/10 text-cyber-green border border-cyber-green/30'
-                                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                            }`
-                        }
-                    >
-                        <item.icon className="w-5 h-5" />
-                        <span className="font-medium">{item.label}</span>
-                    </NavLink>
-                ))}
+                {navItems
+                    .filter((item) => hasAccess(item.tier))
+                    .map((item) => (
+                        <NavLink
+                            key={item.to}
+                            to={item.to}
+                            className={({ isActive }) =>
+                                `flex items-center gap-3 px-4 py-3 rounded-md transition-all ${isActive
+                                    ? 'bg-cyber-green/10 text-cyber-green border border-cyber-green/30'
+                                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                }`
+                            }
+                        >
+                            <item.icon className="w-5 h-5" />
+                            <span className="font-medium flex-1">{item.label}</span>
+                        </NavLink>
+                    ))}
             </nav>
 
             {/* User Info & Language Switcher */}

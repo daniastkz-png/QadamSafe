@@ -18,107 +18,63 @@
     },
     "landing": {
         "nav": {
-            "whatYouLearn": "What You'll Learn",
+            "features": "Features",
             "howItWorks": "How It Works",
-            "access": "Pricing",
             "faq": "FAQ",
-            "login": "Login",
             "startFree": "Start Free"
         },
         "hero": {
-            "title": "Learn to recognize scammers before they deceive you",
-            "subtitle": "Practice, not theory. Real threats, safe environment.",
+            "title": "Learn to protect yourself",
+            "titleHighlight": "from digital fraud",
+            "subtitle": "Interactive platform for cybersecurity training through realistic fraud simulations",
             "cta": "Start Training",
-            "ctaSecondary": "Learn More",
-            "tagline": "Cybersecurity Training Through Real-World Simulations",
-            "valuePoint1": "Practical scenarios of real threats",
-            "valuePoint2": "Safe learning environment",
-            "valuePoint3": "Personal error analysis",
-            "valuePoint4": "No risk to your data",
-            "trustElement": "All scenarios are educational. We don't use real data.",
-            "ctaButton": "Try Free Simulation",
-            "timeIndicator": "Takes 1 minute",
-            "stat": "78% of users make mistakes in similar situations"
+            "trustIndicator": "Free access • No credit card required"
         },
-        "urgency": "🔥 Every day 300+ Kazakhstanis become victims of scammers",
-        "socialProof": {
-            "users": "users trained",
-            "schools": "schools and organizations",
-            "satisfaction": "satisfied users",
-            "scenarios": "scenarios completed",
-            "trustedBy": "Trusted by educational institutions in Kazakhstan"
+        "mission": {
+            "text": "Designed to help people in Kazakhstan",
+            "highlight1": "recognize scammers",
+            "highlight2": "protect their data",
+            "free": "Free",
+            "ai": "AI-powered",
+            "allAges": "For all ages"
         },
-        "whoItsFor": {
-            "title": "Who QadamSafe is For",
-            "subtitle": "The platform is made for those who want to protect themselves and loved ones",
-            "popular": "Popular",
-            "students": {
-                "title": "Students",
-                "desc": "Ages 7-25 — the most vulnerable age group for online fraud",
-                "benefit1": "Learn to recognize phishing",
-                "benefit2": "Protect personal data",
-                "benefit3": "Avoid losing money"
+        "features": {
+            "title": "What You'll Get",
+            "threat": {
+                "title": "Threat Recognition",
+                "desc": "Learn to identify phishing, fraudulent calls, and fake websites"
             },
-            "parents": {
-                "title": "Parents",
-                "desc": "Want to protect children from scammers and learn cybersecurity themselves",
-                "benefit1": "Teach children safety",
-                "benefit2": "Protect family budget",
-                "benefit3": "Be calm about loved ones"
+            "simulation": {
+                "title": "Practical Simulations",
+                "desc": "Safe training on realistic fraud scenarios"
             },
-            "schools": {
-                "title": "Schools and Organizations",
-                "desc": "Modern digital literacy program for students",
-                "benefit1": "Ready-made learning materials",
-                "benefit2": "Progress statistics",
-                "benefit3": "Certificates for students"
+            "ai": {
+                "title": "AI Assistant",
+                "desc": "Personal cybersecurity helper powered by artificial intelligence"
             }
-        },
-        "results": {
-            "before": "Before Training",
-            "after": "After Training",
-            "before1": "Click on suspicious links",
-            "before2": "Share SMS codes",
-            "before3": "Trust 'bank security service'",
-            "after1": "Recognize 95% of fraud schemes",
-            "after2": "Verify information sources",
-            "after3": "Protect personal data"
-        },
-        "pricing": {
-            "subtitle": "Choose the right plan for your training",
-            "popular": "Popular",
-            "compare": "Compare Plans",
-            "feature": "Feature",
-            "basicScenarios": "Basic scenarios",
-            "allScenarios": "All scenarios",
-            "aiScenarios": "AI scenarios",
-            "teamManagement": "Team management",
-            "certificates": "Certificates"
-        },
-        "finalCta": {
-            "title": "Ready to protect yourself from scammers?",
-            "subtitle": "Start free training right now. Registration takes 1 minute.",
-            "noCard": "No credit card required • Cancel anytime"
-        },
-        "whatYouLearn": {
-            "title": "What You'll Learn",
-            "card1Title": "Scammers will message you",
-            "card1Desc": "SMS and messages look real: bank alerts, prizes, urgent notifications",
-            "card2Title": "They will call you under pressure",
-            "card2Desc": "Urgency, confident voice, and attempts to make you act immediately",
-            "card3Title": "You will make choices",
-            "card3Desc": "Every situation requires a decision — just like in real life",
-            "card4Title": "You will learn from mistakes",
-            "card4Desc": "After each choice — an explanation of what went wrong or what you did right"
         },
         "howItWorks": {
             "title": "How It Works",
-            "step1Title": "Get a Scenario",
-            "step1Desc": "Real-life situation: a message, call or email",
-            "step2Title": "Choose Actions",
-            "step2Desc": "Make a decision as you would in real life",
-            "step3Title": "Get Analysis",
-            "step3Desc": "Learn whether you acted correctly and why"
+            "step1": "Choose a topic",
+            "step2": "Complete simulation",
+            "step3": "Gain skills",
+            "imageCaption": "Realistic scenarios will help you learn to recognize scammers"
+        },
+        "cta": {
+            "title": "Ready to protect yourself from scammers?",
+            "subtitle": "Start free training right now",
+            "button": "Start Free"
+        },
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "q1": "Who is this platform for?",
+            "a1": "For everyone who uses the internet: students, parents, company employees. No special knowledge required.",
+            "q2": "Do I need special knowledge?",
+            "a2": "No. The platform is built on practice, not theory. You learn from real situations.",
+            "q3": "Are these real situations?",
+            "a3": "Yes. All scenarios are based on real cases of fraud and phishing that people encounter every day.",
+            "q4": "Is it safe?",
+            "a4": "Absolutely. All scenarios are educational, we don't use real data and don't create real threats."
         },
         "access": {
             "title": "Access",
@@ -141,23 +97,6 @@
             "businessFeature4": "Priority support",
             "proCta": "Learn More",
             "businessCta": "Learn More"
-        },
-        "faq": {
-            "title": "Frequently Asked Questions",
-            "q1": "Who is this platform for?",
-            "a1": "For everyone who uses the internet: students, parents, company employees. No special knowledge required.",
-            "q2": "Do I need special knowledge?",
-            "a2": "No. The platform is built on practice, not theory. You learn from real situations.",
-            "q3": "Are these real situations?",
-            "a3": "Yes. All scenarios are based on real cases of fraud and phishing that people encounter every day.",
-            "q4": "Is this theory or practice?",
-            "a4": "Only practice. No lectures — just real situations and your decisions.",
-            "q5": "Is it safe?",
-            "a5": "Absolutely. All scenarios are educational, we don't use real data and don't create real threats.",
-            "q6": "Is it safe for children?",
-            "a6": "Yes, the platform is completely safe for children aged 7+. All scenarios are age-appropriate and contain no shocking content. Parents can track their child's progress.",
-            "q7": "Can it be used in schools?",
-            "a7": "Absolutely! QadamSafe is perfect for computer science classes and class hours. The Business plan includes class management, statistics, and certificates for students."
         },
         "footer": {
             "copyright": "© 2026 QadamSafe. Cybersecurity Training."
@@ -459,7 +398,8 @@
         "dontShowAgain": "Don't show again"
     },
     "training": {
-        "title": "Training",
+        "title": "Training Scenarios",
+        "subtitle": "Learn to recognize common fraud schemes",
         "allScenarios": "All Scenarios",
         "difficulty": "Difficulty",
         "beginner": "Beginner",
@@ -476,8 +416,12 @@
         "completedWithErrors": "Completed with errors",
         "scenarioLocked": "Scenario locked",
         "next": "Next",
+        "done": "Done",
+        "progress": "Progress",
+        "score": "Score",
+        "recommended": "Recommended",
         "upgradeRequired": "Subscription required",
-        "startScenario": "Start Scenario",
+        "startScenario": "Start",
         "continueScenario": "Continue",
         "retryScenario": "Retry",
         "points": "points",
@@ -488,7 +432,12 @@
         "aiScenarios": "AI Scenarios",
         "aiScenariosDesc": "Unique scenarios created by AI specially for you",
         "unlimited": "Unlimited",
-        "tryAI": "Try AI"
+        "tryAI": "Try AI",
+        "filter": {
+            "all": "All",
+            "pending": "Pending",
+            "completed": "Completed"
+        }
     },
     "ai": {
         "title": "AI Scenarios",
@@ -533,10 +482,13 @@
             "safe": "Great decision!",
             "risky": "Be more careful",
             "dangerous": "This could have been risky"
-        }
+        },
+        "soundOn": "Sound on",
+        "soundOff": "Sound off"
     },
     "progress": {
         "title": "Your Progress",
+        "subtitle": "Track your journey to cybersecurity",
         "statistics": "Statistics",
         "totalCompleted": "Total Completed",
         "totalScore": "Total Score",
@@ -548,7 +500,29 @@
         "score": "Score",
         "mistakes": "Mistakes",
         "completedAt": "Completed",
-        "noProgress": "No progress yet. Start training!"
+        "noProgress": "No progress yet. Start training!",
+        "startFirst": "Complete first scenario",
+        "outOf": "of",
+        "perfect": "Perfect!",
+        "errorsCount": "errors",
+        "scenariosTotal": "scenarios total",
+        "viewAll": "All",
+        "currentRank": "Current Rank",
+        "nextRank": "Next",
+        "weeklyActivity": "Weekly Activity",
+        "skillsRadar": "Defense Skills",
+        "achievementsTitle": "Achievements",
+        "streak": {
+            "start": "Start your streak!",
+            "current": "{{count}} days in a row!",
+            "best": "Best streak: {{count}} days"
+        },
+        "achievements": {
+            "firstScenario": "First Step",
+            "streak3": "3 days in a row",
+            "noMistakes": "No Mistakes",
+            "allScenarios": "All Scenarios"
+        }
     },
     "achievements": {
         "title": "Achievements",

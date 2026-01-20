@@ -439,196 +439,7 @@ export const firebaseAchievementsAPI = {
 
 // ============= AI SCENARIOS API =============
 
-// Gemini API configuration
-// SECURITY WARNING: API keys are exposed in client-side code
-// TODO: Move API keys to Firebase Cloud Functions for production
-// Current keys should be rotated and moved to server-side only
-const GEMINI_API_KEYS = [
-    'AIzaSyClYvOSI5DT8vQGR9Upiq-MQ_FAhEhZ_I8',
-];
 
-// Use stable Gemini 2.0 Flash model (more reliable than "latest")
-const GEMINI_MODEL = 'gemini-2.0-flash';
-const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
-
-// Retry configuration
-const MAX_RETRIES = 3;
-const INITIAL_RETRY_DELAY = 1000; // 1 second
-const REQUEST_TIMEOUT = 30000; // 30 seconds
-
-// Helper function for exponential backoff retry with timeout
-async function fetchWithRetry(
-    url: string,
-    options: RequestInit,
-    retries = MAX_RETRIES,
-    delay = INITIAL_RETRY_DELAY
-): Promise<Response> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
-
-    try {
-        const response = await fetch(url, {
-            ...options,
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-
-        // If rate limited (429) or server error (5xx), retry
-        if (response.status === 429 || response.status >= 500) {
-            if (retries > 0) {
-                console.warn(`API returned ${response.status}, retrying in ${delay}ms... (${retries} retries left)`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-                return fetchWithRetry(url, options, retries - 1, delay * 2);
-            }
-        }
-
-        return response;
-    } catch (error: any) {
-        clearTimeout(timeoutId);
-
-        if (error.name === 'AbortError') {
-            if (retries > 0) {
-                console.warn(`Request timed out, retrying in ${delay}ms... (${retries} retries left)`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-                return fetchWithRetry(url, options, retries - 1, delay * 2);
-            }
-            throw new Error('Request timed out after multiple attempts');
-        }
-
-        // Network errors - retry
-        if (retries > 0 && (error.message?.includes('fetch') || error.message?.includes('network'))) {
-            console.warn(`Network error, retrying in ${delay}ms... (${retries} retries left)`);
-            await new Promise(resolve => setTimeout(resolve, delay));
-            return fetchWithRetry(url, options, retries - 1, delay * 2);
-        }
-
-        throw error;
-    }
-}
-
-// Helper to try multiple API keys
-async function callGeminiWithFallback(
-    endpoint: string,
-    body: object
-): Promise<Response> {
-    let lastError: Error | null = null;
-
-    for (let i = 0; i < GEMINI_API_KEYS.length; i++) {
-        const apiKey = GEMINI_API_KEYS[i];
-        const url = `${GEMINI_BASE_URL}/${GEMINI_MODEL}:${endpoint}?key=${apiKey}`;
-
-        try {
-            const response = await fetchWithRetry(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-
-            // If successful or client error (4xx except 429), return
-            if (response.ok || (response.status >= 400 && response.status < 500 && response.status !== 429)) {
-                return response;
-            }
-
-            // If failed, try next key
-            console.warn(`API key ${i + 1} failed with status ${response.status}, trying next key...`);
-            lastError = new Error(`API returned status ${response.status}`);
-        } catch (error: any) {
-            console.warn(`API key ${i + 1} failed:`, error.message);
-            lastError = error;
-        }
-    }
-
-    throw lastError || new Error('All API keys failed');
-}
-
-const AI_SCENARIO_PROMPT = `Ты эксперт по кибербезопасности. Создай интерактивный обучающий сценарий о мошенничестве.
-
-ВАЖНО: Верни ТОЛЬКО валидный JSON без markdown, без \`\`\`json, просто чистый JSON объект.
-
-Формат ответа (строго следуй этой структуре):
-{
-  "title": "Название сценария на русском",
-  "titleEn": "Title in English",
-  "titleKk": "Қазақша атауы",
-  "description": "Краткое описание на русском",
-  "descriptionEn": "Brief description in English",
-  "descriptionKk": "Қысқаша сипаттама қазақша",
-  "steps": [
-    {
-      "id": "step1",
-      "type": "question",
-      "visualType": "phone",
-      "phoneMessageType": "sms или whatsapp или telegram или call",
-      "senderName": "Имя отправителя",
-      "senderNameEn": "Sender name",
-      "senderNameKk": "Жіберуші аты",
-      "senderNumber": "+7 7XX XXX XX XX",
-      "profileEmoji": "подходящий emoji",
-      "messageText": "Текст сообщения мошенника на русском с emoji",
-      "messageTextEn": "Message text in English",
-      "messageTextKk": "Хабарлама мәтіні қазақша",
-      "question": "Вопрос для пользователя",
-      "questionEn": "Question in English",
-      "questionKk": "Сұрақ қазақша",
-      "options": [
-        {
-          "id": "opt1",
-          "text": "Опасный выбор (попасться на уловку)",
-          "textEn": "Dangerous choice",
-          "textKk": "Қауіпті таңдау",
-          "outcomeType": "dangerous",
-          "explanation": "Подробное объяснение почему это опасно, с советом 💡",
-          "explanationEn": "Detailed explanation in English",
-          "explanationKk": "Толық түсіндірме қазақша"
-        },
-        {
-          "id": "opt2", 
-          "text": "Безопасный выбор",
-          "textEn": "Safe choice",
-          "textKk": "Қауіпсіз таңдау",
-          "outcomeType": "safe",
-          "explanation": "Объяснение почему это правильно 💡",
-          "explanationEn": "Explanation in English",
-          "explanationKk": "Түсіндірме қазақша"
-        },
-        {
-          "id": "opt3",
-          "text": "Рискованный выбор",
-          "textEn": "Risky choice", 
-          "textKk": "Тәуекелді таңдау",
-          "outcomeType": "risky",
-          "explanation": "Объяснение почему это рискованно 💡",
-          "explanationEn": "Explanation in English",
-          "explanationKk": "Түсіндірме қазақша"
-        }
-      ]
-    }
-  ],
-  "completionBlock": {
-    "title": "Сценарий пройден!",
-    "titleEn": "Scenario Complete!",
-    "titleKk": "Сценарий аяқталды!",
-    "summary": "📌 Итоги и советы по защите",
-    "summaryEn": "📌 Summary and protection tips",
-    "summaryKk": "📌 Қорытындылар мен қорғау кеңестері"
-  }
-}
-
-Создай сценарий с 2-3 шагами (steps). Каждый шаг должен быть реалистичной ситуацией мошенничества в Казахстане.
-ВАЖНО: В каждом шаге (step) должно быть РОВНО 3 варианта ответа (options): один опасный, один безопасный, один рискованный (или другом порядке). НЕ МЕНЬШЕ И НЕ БОЛЬШЕ 3 вариантов.
-Используй местные банки (Kaspi, Halyk, Forte), госуслуги (eGov), местные номера телефонов.
-Объяснения должны быть подробными и образовательными.`;
-
-const topicPrompts: Record<string, string> = {
-    sms_phishing: "Тема: SMS-фишинг от банка или лотереи. Мошенник присылает SMS о блокировке карты или выигрыше.",
-    phone_scam: "Тема: Телефонный звонок от 'службы безопасности банка'. Мошенник звонит и пугает подозрительной операцией.",
-    social_engineering: "Тема: Сообщение от 'родственника' или 'друга' с просьбой о деньгах с нового номера.",
-    fake_government: "Тема: Фейковые госуслуги. Мошенник обещает выплату от государства через поддельный сайт.",
-    investment_scam: "Тема: Инвестиционное мошенничество. Обещание гарантированного высокого дохода.",
-    online_shopping: "Тема: Мошенничество при онлайн-покупках. Фейковый продавец на OLX или Kaspi Объявлениях.",
-    romance_scam: "Тема: Романтическое мошенничество в соцсетях. Знакомство онлайн с последующей просьбой о деньгах.",
-    job_scam: "Тема: Мошенничество с вакансиями. Предложение работы с предоплатой или сбором данных."
-};
 
 export interface AITopic {
     id: string;
@@ -654,87 +465,39 @@ export const firebaseAIAPI = {
         ];
     },
 
-    // Generate a new AI scenario using Gemini API directly
-    generateScenario: async (topic: string, _language: string = 'ru') => {
+    // Generate a new AI scenario using backend API
+    generateScenario: async (topic: string, language: string = 'ru') => {
         const currentUser = auth.currentUser;
         if (!currentUser) {
             throw new Error('Not authenticated');
         }
 
-        const selectedTopic = topicPrompts[topic] || topicPrompts.sms_phishing;
-        const fullPrompt = AI_SCENARIO_PROMPT + "\n\n" + selectedTopic;
-
-        // Call Gemini API with retry and fallback keys
-        const response = await callGeminiWithFallback('generateContent', {
-            contents: [{
-                parts: [{
-                    text: fullPrompt
-                }]
-            }],
-            generationConfig: {
-                temperature: 0.9,
-                topK: 1,
-                topP: 1,
-                maxOutputTokens: 8192,
-            }
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error?.message || 'Failed to generate AI scenario');
-        }
-
-        const data = await response.json();
-        let text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (!text) {
-            throw new Error('Empty response from AI');
-        }
-
-        // Clean the response - remove markdown code blocks if present
-        text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-
-        // Parse the JSON response
-        let scenarioData;
         try {
-            scenarioData = JSON.parse(text);
-        } catch (parseError) {
-            console.error("Failed to parse AI response:", text);
-            throw new Error('Failed to parse AI response');
+            const token = await currentUser.getIdToken();
+
+            const response = await fetch(`${API_URL}/api/ai/generate-scenario`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    topic,
+                    language
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Failed to generate AI scenario');
+            }
+
+            const data = await response.json();
+            return data.scenario;
+        } catch (error) {
+            console.error("AI Scenario Gen Error:", error);
+            throw error;
         }
-
-        // Create a complete scenario object
-        const now = new Date().toISOString();
-        const scenarioId = `ai_scenario_${Date.now()}`;
-
-        const scenario = {
-            id: scenarioId,
-            title: scenarioData.title,
-            titleEn: scenarioData.titleEn,
-            titleKk: scenarioData.titleKk,
-            description: scenarioData.description,
-            descriptionEn: scenarioData.descriptionEn,
-            descriptionKk: scenarioData.descriptionKk,
-            type: topic?.toUpperCase() || "AI_GENERATED",
-            difficulty: "INTERMEDIATE",
-            requiredTier: "FREE",
-            pointsReward: 15,
-            order: 100,
-            isLegitimate: false,
-            isAIGenerated: true,
-            generatedAt: now,
-            content: {
-                steps: scenarioData.steps
-            },
-            completionBlock: scenarioData.completionBlock,
-            createdAt: now,
-            updatedAt: now
-        };
-
-        // Save to user's subcollection
-        await setDoc(doc(db, 'users', currentUser.uid, 'aiScenarios', scenarioId), scenario);
-
-        return scenario;
     },
 
     // Get user's previously generated AI scenarios
@@ -808,27 +571,8 @@ export const firebaseAIAPI = {
 
 // ============= AI ASSISTANT API =============
 
-const AI_ASSISTANT_SYSTEM_PROMPT = `
-You are QadamSafe AI, an advanced cybersecurity assistant.
-Your goal is to educate users about digital safety, analyze potential threats, and provide actionable advice.
-
-Tone: Professional, vigilant, encouraging, yet serious about threats. "Cyberpunk" flavor is allowed but keep it professional.
-Style: Concise, clear, easy to understand. Avoid jargon where possible, or explain it.
-
-Capabilities:
-1. Threat Analysis: If a user pastes a message/email, analyze it for phishing indicators (urgency, suspicious links, emotional manipulation).
-2. Password Advice: Explain how to create strong passwords.
-3. Education: Explain terms like 2FA, VPN, Phishing, Malware.
-4. Roleplay: If requested, act as a scammer to train the user (but make it clear it's a simulation).
-
-Safety Rules:
-- NEVER ask for real passwords, credit card numbers, or personal info.
-- If a user shares real sensitive data, tell them to delete it immediately.
-- Do not provide instructions on how to hack or exploit systems (defensive only).
-- If asked about non-cybersecurity topics, politely redirect to cybersecurity.
-
-Format: Keep answers relatively short (under 200 words) unless asked for details. Use formatting (bold, lists) for readability.
-`;
+// API URL for backend
+const API_URL = import.meta.env.VITE_API_URL || 'https://qadamsafe.onrender.com';
 
 export const firebaseAssistantAPI = {
     sendMessage: async (message: string, history: { role: 'user' | 'model'; parts: string }[]) => {
@@ -837,47 +581,36 @@ export const firebaseAssistantAPI = {
             throw new Error('Not authenticated');
         }
 
-        // Construct the contents using valid message turns
-        const contents = [
-            ...history.map(msg => ({
-                role: msg.role,
-                parts: [{ text: msg.parts }]
-            })),
-            {
-                role: 'user',
-                parts: [{ text: message }]
-            }
-        ];
-
         try {
-            // Call Gemini API with retry and fallback keys
-            const response = await callGeminiWithFallback('generateContent', {
-                systemInstruction: {
-                    parts: [{ text: AI_ASSISTANT_SYSTEM_PROMPT }]
+            // Get Firebase auth token
+            const token = await currentUser.getIdToken();
+
+            // Call Render backend API instead of Gemini directly
+            const response = await fetch(`${API_URL}/api/ai/chat`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                contents: contents,
-                generationConfig: {
-                    temperature: 0.7,
-                    topK: 40,
-                    topP: 0.95,
-                    maxOutputTokens: 2048,
-                }
+                body: JSON.stringify({
+                    message,
+                    history
+                })
             });
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                console.error('Gemini API Error:', JSON.stringify(errorData, null, 2));
-                throw new Error(errorData.error?.message || 'Failed to get AI response');
+                console.error('AI Chat API Error:', JSON.stringify(errorData, null, 2));
+                throw new Error(errorData.error || 'Failed to get AI response');
             }
 
             const data = await response.json();
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
-            if (!text) {
+            if (!data.response) {
                 throw new Error('Empty response from AI');
             }
 
-            return text;
+            return data.response;
         } catch (error) {
             console.error("AI Assistant Error:", error);
             throw error;

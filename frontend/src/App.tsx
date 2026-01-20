@@ -21,6 +21,13 @@ const ProgressPage = React.lazy(() => import('./pages/ProgressPage').then(m => (
 const AchievementsPage = React.lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
 const SubscriptionPage = React.lazy(() => import('./pages/SubscriptionPage').then(m => ({ default: m.SubscriptionPage })));
 const SettingsPage = React.lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
+const LeaderboardPage = React.lazy(() => import('./pages/LeaderboardPage').then(m => ({ default: m.LeaderboardPage })));
+const CertificatePage = React.lazy(() => import('./pages/CertificatePage').then(m => ({ default: m.CertificatePage })));
+const TeacherDashboard = React.lazy(() => import('./pages/TeacherDashboard').then(m => ({ default: m.TeacherDashboard })));
+const SMSAnalyzerPage = React.lazy(() => import('./pages/SMSAnalyzerPage').then(m => ({ default: m.SMSAnalyzerPage })));
+const CallSimulatorPage = React.lazy(() => import('./pages/CallSimulatorPage').then(m => ({ default: m.CallSimulatorPage })));
+const CyberDefensePage = React.lazy(() => import('./pages/CyberDefensePage').then(m => ({ default: m.CyberDefensePage })));
+const TeamChallengesPage = React.lazy(() => import('./pages/TeamChallengesPage').then(m => ({ default: m.TeamChallengesPage })));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -41,96 +48,152 @@ function App() {
                         <AuthProvider>
                             <Suspense fallback={<PageLoader />}>
                                 <Routes>
-                                {/* Public Routes */}
-                                <Route path="/" element={<LandingPage />} />
-                                <Route path="/auth" element={<AuthPage />} />
-                                <Route path="/partners" element={<PartnersPage />} />
+                                    {/* Public Routes */}
+                                    <Route path="/" element={<LandingPage />} />
+                                    <Route path="/auth" element={<AuthPage />} />
+                                    <Route path="/partners" element={<PartnersPage />} />
 
-                                {/* Redirect dashboard to progress */}
-                                <Route path="/dashboard" element={<Navigate to="/progress" replace />} />
-                                <Route
-                                    path="/welcome"
-                                    element={
-                                        <ProtectedRoute>
-                                            <WelcomePage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/training"
-                                    element={
-                                        <ProtectedRoute>
-                                            <TrainingPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/training/:id"
-                                    element={
-                                        <ProtectedRoute>
-                                            <ScenarioPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/ai-scenarios"
-                                    element={
-                                        <ProtectedRoute>
-                                            <AIScenarioPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/ai-scenarios/:scenarioId"
-                                    element={
-                                        <ProtectedRoute>
-                                            <AIScenarioPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/assistant"
-                                    element={
-                                        <ProtectedRoute>
-                                            <AIAssistantPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/progress"
-                                    element={
-                                        <ProtectedRoute>
-                                            <ProgressPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/achievements"
-                                    element={
-                                        <ProtectedRoute>
-                                            <AchievementsPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/subscription"
-                                    element={
-                                        <ProtectedRoute>
-                                            <SubscriptionPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/settings"
-                                    element={
-                                        <ProtectedRoute>
-                                            <SettingsPage />
-                                        </ProtectedRoute>
-                                    }
-                                />
+                                    {/* Redirect dashboard to progress */}
+                                    <Route path="/dashboard" element={<Navigate to="/progress" replace />} />
+                                    <Route
+                                        path="/welcome"
+                                        element={
+                                            <ProtectedRoute>
+                                                <WelcomePage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/training"
+                                        element={
+                                            <ProtectedRoute>
+                                                <TrainingPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/training/:id"
+                                        element={
+                                            <ProtectedRoute>
+                                                <ScenarioPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/ai-scenarios"
+                                        element={
+                                            <ProtectedRoute>
+                                                <AIScenarioPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/ai-scenarios/:scenarioId"
+                                        element={
+                                            <ProtectedRoute>
+                                                <AIScenarioPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/assistant"
+                                        element={
+                                            <ProtectedRoute>
+                                                <AIAssistantPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/progress"
+                                        element={
+                                            <ProtectedRoute>
+                                                <ProgressPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/achievements"
+                                        element={
+                                            <ProtectedRoute>
+                                                <AchievementsPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/subscription"
+                                        element={
+                                            <ProtectedRoute>
+                                                <SubscriptionPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/settings"
+                                        element={
+                                            <ProtectedRoute>
+                                                <SettingsPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/leaderboard"
+                                        element={
+                                            <ProtectedRoute>
+                                                <LeaderboardPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/certificates"
+                                        element={
+                                            <ProtectedRoute>
+                                                <CertificatePage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/teacher"
+                                        element={
+                                            <ProtectedRoute>
+                                                <TeacherDashboard />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/sms-analyzer"
+                                        element={
+                                            <ProtectedRoute>
+                                                <SMSAnalyzerPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/call-simulator"
+                                        element={
+                                            <ProtectedRoute>
+                                                <CallSimulatorPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/cyber-defense"
+                                        element={
+                                            <ProtectedRoute>
+                                                <CyberDefensePage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/team-challenges"
+                                        element={
+                                            <ProtectedRoute>
+                                                <TeamChallengesPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
 
-                                {/* Catch all - redirect to landing */}
-                                <Route path="*" element={<Navigate to="/" replace />} />
+                                    {/* Catch all - redirect to landing */}
+                                    <Route path="*" element={<Navigate to="/" replace />} />
                                 </Routes>
                             </Suspense>
                         </AuthProvider>
