@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { Shield, Mail, Lock, User, X, Check, Key, Database, Fingerprint, Globe, Server, Scan } from 'lucide-react';
+import { Shield, Mail, Lock, User, X, Check } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Footer } from '../components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
@@ -150,27 +150,20 @@ export const AuthPage: React.FC = () => {
 
                 {/* Left Column - Welcome Section (Hidden on mobile) */}
                 <div className="hidden lg:flex lg:w-[45%] bg-gradient-to-br from-background via-background to-cyber-green/5 relative overflow-hidden">
-                    {/* Animated Background Icons */}
-                    <div className="absolute inset-0 overflow-hidden opacity-30 pointer-events-none">
-                        <div className="absolute top-10 left-10 w-24 h-24 bg-cyber-green/20 rounded-full blur-3xl animate-pulse" />
+                    {/* Subtle gradient background only */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-cyber-green/3" />
 
-                        <Shield className="absolute top-[15%] left-[10%] w-16 h-16 text-cyber-green animate-float" style={{ animationDelay: '0s', animationDuration: '8s' }} />
-                        <Lock className="absolute top-[25%] right-[15%] w-12 h-12 text-cyber-green animate-float-delayed" style={{ animationDelay: '1s', animationDuration: '10s' }} />
-                        <Key className="absolute bottom-[30%] left-[20%] w-10 h-10 text-cyber-green animate-float" style={{ animationDelay: '2s', animationDuration: '9s' }} />
-                        <Database className="absolute bottom-[15%] right-[25%] w-14 h-14 text-cyber-green animate-float-delayed" style={{ animationDelay: '3s', animationDuration: '11s' }} />
-                        <Fingerprint className="absolute top-[40%] right-[35%] w-20 h-20 text-cyber-green/50 animate-pulse-slow" />
-                        <Globe className="absolute top-[10%] left-[40%] w-8 h-8 text-cyber-green animate-float" style={{ animationDelay: '4s', animationDuration: '12s' }} />
-                        <Server className="absolute bottom-[40%] left-[5%] w-12 h-12 text-cyber-green animate-float-delayed" style={{ animationDelay: '1.5s', animationDuration: '13s' }} />
-                        <Scan className="absolute top-[50%] left-[50%] w-32 h-32 text-cyber-green/10 -translate-x-1/2 -translate-y-1/2 animate-spin-slow" />
+                    {/* Minimal grid pattern (like landing page) */}
+                    <div className="absolute inset-0 opacity-[0.02]" style={{
+                        backgroundImage: `linear-gradient(rgba(0,255,65,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,0.1) 1px, transparent 1px)`,
+                        backgroundSize: '50px 50px'
+                    }} />
 
-                        {/* Moving lines */}
-                        <div className="absolute top-[20%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyber-green/20 to-transparent animate-slide-left-right" />
-                        <div className="absolute bottom-[20%] right-0 w-full h-[1px] bg-gradient-to-l from-transparent via-cyber-green/20 to-transparent animate-slide-right-left" />
+                    {/* Floating decorative icons - positioned in empty corners */}
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                        <Lock className="absolute top-8 right-8 w-10 h-10 text-cyber-green/15 animate-float" />
+                        <Shield className="absolute bottom-12 right-12 w-14 h-14 text-cyber-green/10 animate-float-delayed" />
                     </div>
-
-                    {/* Glow Effects */}
-                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyber-green/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
-                    <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyber-green/5 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s' }} />
 
                     {/* Content */}
                     <div className="relative z-10 flex flex-col justify-start pt-20 px-12 xl:px-16 w-full">
@@ -185,7 +178,8 @@ export const AuthPage: React.FC = () => {
 
                             {/* Main Heading */}
                             <h1 className="text-4xl xl:text-5xl font-bold text-foreground leading-tight">
-                                {t('auth.welcomeTitle', 'Добро пожаловать в QadamSafe')}
+                                {t('auth.heroTitle', 'Научитесь защищаться')}{' '}
+                                <span className="text-cyber-green">{t('auth.heroTitleHighlight', 'от цифрового мошенничества')}</span>
                             </h1>
 
                             {/* Subheading */}
@@ -200,17 +194,46 @@ export const AuthPage: React.FC = () => {
 
                             {/* Feature Points */}
                             <div className="flex flex-col gap-4 pt-2">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
-                                    <span className="text-sm text-foreground">{t('auth.valuePoint1')}</span>
+                                <div className="flex items-start gap-3">
+                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0 mt-2" />
+                                    <div>
+                                        <span className="text-sm font-medium text-foreground">{t('landing.features.threat.title')}</span>
+                                        <p className="text-xs text-muted-foreground mt-0.5">{t('landing.features.threat.desc')}</p>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
-                                    <span className="text-sm text-foreground">{t('auth.valuePoint2')}</span>
+                                <div className="flex items-start gap-3">
+                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0 mt-2" />
+                                    <div>
+                                        <span className="text-sm font-medium text-foreground">{t('landing.features.simulation.title')}</span>
+                                        <p className="text-xs text-muted-foreground mt-0.5">{t('landing.features.simulation.desc')}</p>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
-                                    <span className="text-sm text-foreground">{t('auth.valuePoint3')}</span>
+                                <div className="flex items-start gap-3">
+                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0 mt-2" />
+                                    <div>
+                                        <span className="text-sm font-medium text-foreground">{t('landing.features.ai.title')}</span>
+                                        <p className="text-xs text-muted-foreground mt-0.5">{t('landing.features.ai.desc')}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Trust Badges */}
+                            <div className="grid grid-cols-2 gap-4 pt-6 border-t border-cyber-green/10">
+                                <div className="flex items-center gap-2">
+                                    <Lock className="w-4 h-4 text-cyber-green" />
+                                    <span className="text-xs text-muted-foreground">{t('auth.trustDataProtected', 'Данные защищены')}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Check className="w-4 h-4 text-cyber-green" />
+                                    <span className="text-xs text-muted-foreground">{t('auth.trustFreeStart', 'Бесплатный старт')}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm">🇰🇿</span>
+                                    <span className="text-xs text-muted-foreground">{t('auth.trustMadeInKZ', 'Сделано в Казахстане')}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Shield className="w-4 h-4 text-cyber-green" />
+                                    <span className="text-xs text-muted-foreground">{t('auth.trustEducational', 'Для обучения')}</span>
                                 </div>
                             </div>
                         </div>
@@ -220,46 +243,20 @@ export const AuthPage: React.FC = () => {
                 {/* Right Column - Auth Form */}
                 <div className="w-full lg:w-[55%] flex items-center justify-center px-4 py-8 lg:px-8">
                     <div className="w-full max-w-md">
-                        {/* Mobile Welcome Block (Only visible on mobile) */}
-                        <div className="lg:hidden mb-8">
-                            {/* Logo */}
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-3 bg-cyber-green/10 border border-cyber-green/30 rounded-lg">
-                                    <Shield className="w-10 h-10 text-cyber-green" />
+                        {/* Mobile Welcome Block - Minimal (Only visible on mobile) */}
+                        <div className="lg:hidden mb-6">
+                            {/* Logo + Title in one line */}
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="p-2 bg-cyber-green/10 border border-cyber-green/30 rounded-lg">
+                                    <Shield className="w-8 h-8 text-cyber-green" />
                                 </div>
-                                <span className="text-2xl font-bold text-cyber-green">QadamSafe</span>
+                                <span className="text-xl font-bold text-cyber-green">QadamSafe</span>
                             </div>
 
-                            {/* Main Heading */}
-                            <h1 className="text-3xl font-bold text-foreground mb-4 leading-tight">
-                                {t('auth.welcomeTitle', 'Добро пожаловать в QadamSafe')}
-                            </h1>
-
-                            {/* Subheading */}
-                            <p className="text-lg text-cyber-green font-medium mb-4 leading-relaxed">
-                                {t('auth.welcomeSubtitleNew', 'Платформа для практического обучения кибербезопасности')}
+                            {/* Short tagline */}
+                            <p className="text-sm text-muted-foreground">
+                                {t('auth.mobileTagline', 'Защита от цифрового мошенничества')}
                             </p>
-
-                            {/* Description */}
-                            <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                                {t('auth.welcomeDescriptionNew', 'Изучайте цифровые угрозы через реальные сценарии. Принимайте решения, анализируйте ошибки и формируйте навыки, которые действительно защищают.')}
-                            </p>
-
-                            {/* Feature Points */}
-                            <div className="flex flex-col gap-3">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
-                                    <span className="text-sm text-foreground">{t('auth.valuePoint1')}</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
-                                    <span className="text-sm text-foreground">{t('auth.valuePoint2')}</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-1.5 h-1.5 bg-cyber-green rounded-full flex-shrink-0" />
-                                    <span className="text-sm text-foreground">{t('auth.valuePoint3')}</span>
-                                </div>
-                            </div>
                         </div>
 
                         {/* Top Switch Panel - Show above Quick Login */}
@@ -662,6 +659,18 @@ export const AuthPage: React.FC = () => {
                                 </>
                             )}
 
+                            {/* Security Notice */}
+                            <div className="mt-6 p-4 bg-cyber-green/5 border border-cyber-green/10 rounded-lg">
+                                <div className="flex items-start gap-3">
+                                    <Shield className="w-5 h-5 text-cyber-green flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="text-xs text-muted-foreground leading-relaxed">
+                                            {t('auth.securityNotice', 'Мы не храним реальные персональные данные — все сценарии исключительно учебные. Ваши данные защищены и не передаются третьим лицам.')}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* B2B Link */}
                             <div className="mt-6 pt-6 border-t border-cyber-green/10">
                                 <Link
@@ -677,15 +686,6 @@ export const AuthPage: React.FC = () => {
 
                 {/* Animation Styles */}
                 <style>{`
-                @keyframes float {
-                    0%, 100% {
-                        transform: translateY(0px) rotate(0deg);
-                    }
-                    50% {
-                        transform: translateY(-20px) rotate(5deg);
-                    }
-                }
-                
                 @keyframes fade-in-up {
                     from {
                         opacity: 0;
@@ -709,46 +709,30 @@ export const AuthPage: React.FC = () => {
                     }
                 }
                 
-                @keyframes float-delayed {
-                    0%, 100% { transform: translateY(0px) rotate(0deg); }
-                    50% { transform: translateY(20px) rotate(-5deg); }
-                }
-
-                @keyframes pulse-slow {
-                    0%, 100% { opacity: 0.3; transform: scale(1); }
-                    50% { opacity: 0.6; transform: scale(1.1); }
-                }
-
-                @keyframes spin-slow {
-                    from { transform: translate(-50%, -50%) rotate(0deg); }
-                    to { transform: translate(-50%, -50%) rotate(360deg); }
-                }
-
-                @keyframes slide-left-right {
-                    0% { transform: translateX(-100%); opacity: 0; }
-                    50% { opacity: 1; }
-                    100% { transform: translateX(100%); opacity: 0; }
-                }
-
-                @keyframes slide-right-left {
-                    0% { transform: translateX(100%); opacity: 0; }
-                    50% { opacity: 1; }
-                    100% { transform: translateX(-100%); opacity: 0; }
-                }
-
-                .animate-float { animation: float 6s ease-in-out infinite; }
-                .animate-float-delayed { animation: float-delayed 7s ease-in-out infinite; }
-                .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
-                .animate-spin-slow { animation: spin-slow 20s linear infinite; }
-                .animate-slide-left-right { animation: slide-left-right 8s linear infinite; }
-                .animate-slide-right-left { animation: slide-right-left 8s linear infinite; }
-                
                 .animate-fade-in-up {
                     animation: fade-in-up 0.8s ease-out forwards;
                 }
                 
                 .animate-gradient-shift {
                     animation: gradient-shift 3s ease infinite;
+                }
+
+                @keyframes float {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(-15px) rotate(5deg); }
+                }
+
+                @keyframes float-delayed {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(15px) rotate(-5deg); }
+                }
+
+                .animate-float {
+                    animation: float 6s ease-in-out infinite;
+                }
+
+                .animate-float-delayed {
+                    animation: float-delayed 7s ease-in-out infinite;
                 }
             `}</style>
             </div>

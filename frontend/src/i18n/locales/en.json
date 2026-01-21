@@ -149,6 +149,9 @@
         }
     },
     "auth": {
+        "heroTitle": "Learn to protect yourself",
+        "heroTitleHighlight": "from digital fraud",
+        "heroSubtitle": "Interactive cybersecurity training platform",
         "login": "Login",
         "register": "Register",
         "email": "Email",
@@ -209,7 +212,14 @@
         "acceptMarketing": "I want to receive educational materials and notifications",
         "termsOfUse": "Terms of Use",
         "privacyPolicy": "Privacy Policy",
-        "forOrganizations": "For organizations and partners"
+        "forOrganizations": "For organizations and partners",
+        "trustDataProtected": "Data protected",
+        "trustFreeStart": "Free to start",
+        "trustMadeInKZ": "Made in Kazakhstan",
+        "trustMadeInKZShort": "Kazakhstan",
+        "trustEducational": "For education",
+        "securityNotice": "We do not store real personal data — all scenarios are purely educational. Your data is protected and not shared with third parties.",
+        "mobileTagline": "Protection from digital fraud"
     },
     "partners": {
         "title": "For Organizations and Partners",

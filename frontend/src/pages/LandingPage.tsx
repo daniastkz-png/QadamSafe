@@ -408,7 +408,6 @@ export const LandingPage: React.FC = () => {
                         {t('landing.faq.title')}
                     </h2>
 
-
                     <div className="space-y-4">
                         {[1, 2, 3, 4].map((index) => (
                             <div
@@ -421,8 +420,7 @@ export const LandingPage: React.FC = () => {
                                         {t(`landing.faq.q${index}`)}
                                     </h3>
                                     <ChevronDown
-                                        className={`w-5 h-5 text-cyber-green flex-shrink-0 transition-transform ${openFaq === index ? 'rotate-180' : ''
-                                            }`}
+                                        className={`w-5 h-5 text-cyber-green flex-shrink-0 transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
                                     />
                                 </div>
                                 {openFaq === index && (
@@ -433,14 +431,14 @@ export const LandingPage: React.FC = () => {
                             </div>
                         ))}
                     </div>
-                </div >
-            </section >
+                </div>
+            </section>
 
             {/* Footer */}
-            < Footer />
+            <Footer />
 
             {/* CSS Animations */}
-            < style > {`
+            <style>{`
                 @keyframes float {
                     0%, 100% { transform: translateY(0px); }
                     50% { transform: translateY(-20px); }
@@ -455,7 +453,7 @@ export const LandingPage: React.FC = () => {
                 .animate-fadeIn {
                     animation: fadeIn 0.3s ease-out forwards;
                 }
-            `}</style >
-        </div >
+            `}</style>
+        </div>
     );
 };
