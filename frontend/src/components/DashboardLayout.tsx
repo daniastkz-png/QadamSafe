@@ -23,7 +23,6 @@ import {
     GraduationCap
 } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { ThemeSwitcher } from './ThemeSwitcher';
 import { CyberMate } from './CyberMate';
 
 interface DashboardLayoutProps {
@@ -124,7 +123,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 <div className="p-3 border-t border-border space-y-3">
                     {!sidebarCollapsed && (
                         <div className="flex items-center gap-2">
-                            <ThemeSwitcher direction="up" />
                             <LanguageSwitcher />
                         </div>
                     )}
@@ -221,7 +219,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                             {/* Mobile User Info */}
                             <div className="p-4 border-t border-border space-y-3">
                                 <div className="flex items-center gap-2">
-                                    <ThemeSwitcher direction="up" />
                                     <LanguageSwitcher />
                                 </div>
                                 <div className="flex items-center justify-between">

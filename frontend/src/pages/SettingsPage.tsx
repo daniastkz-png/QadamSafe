@@ -36,7 +36,6 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
-import { ThemeSwitcher } from '../components/ThemeSwitcher';
 import { firebaseProgressAPI } from '../services/firebase';
 
 // Avatar options as emojis
@@ -360,20 +359,11 @@ export const SettingsPage: React.FC = () => {
                                     </h2>
                                 </div>
 
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-3">
-                                            {t('settings.personalization.language')}
-                                        </label>
-                                        <LanguageSwitcher />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-3">
-                                            {t('settings.personalization.theme')}
-                                        </label>
-                                        <ThemeSwitcher />
-                                    </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-3">
+                                        {t('settings.personalization.language')}
+                                    </label>
+                                    <LanguageSwitcher />
                                 </div>
 
                                 <p className="text-xs text-muted-foreground mt-4 flex items-center gap-2">
