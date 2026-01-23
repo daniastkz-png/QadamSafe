@@ -4,7 +4,6 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const jwt = require("jsonwebtoken");
 
 // Inline Context to avoid module resolution issues on Render
 const assistantContext = `
