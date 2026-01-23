@@ -411,9 +411,12 @@ export const WelcomePage: React.FC = () => {
                     <div className="mb-8">
                         <div className="flex items-center gap-2 mb-4">
                             <Zap className="w-6 h-6 text-cyber-green" />
-                            <h2 className="text-2xl font-semibold text-foreground">
-                                {t('welcome.newFeatures', 'Новые возможности')}
-                            </h2>
+                            <div>
+                                <h2 className="text-2xl font-semibold text-foreground">
+                                    {t('welcome.newFeatures', 'Практика и игры')}
+                                </h2>
+                                <p className="text-sm text-muted-foreground">{t('welcome.newFeaturesDesc', 'Сценарии, симуляторы и игры для тренировки')}</p>
+                            </div>
                         </div>
                         <div className="grid md:grid-cols-2 gap-4">
                             {/* Call Simulator */}

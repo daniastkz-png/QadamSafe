@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { BookOpen, TrendingUp, Award, CreditCard, LogOut, Shield, Settings, Trophy, FileCheck, GraduationCap, Phone, Gamepad2, Target } from 'lucide-react';
+import { BookOpen, TrendingUp, Award, CreditCard, LogOut, Shield, Settings, FileCheck, GraduationCap, Phone, Gamepad2, Target } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Sidebar: React.FC = () => {
@@ -16,7 +16,6 @@ export const Sidebar: React.FC = () => {
         { to: '/cyber-defense', icon: Gamepad2, label: t('sidebar.cyberDefense', 'Cyber Defense'), tier: 'PRO' },
         { to: '/team-challenges', icon: Target, label: t('sidebar.teamChallenges', 'Челленджи'), tier: 'BUSINESS' },
         { to: '/progress', icon: TrendingUp, label: t('sidebar.progress') },
-        { to: '/leaderboard', icon: Trophy, label: t('sidebar.leaderboard', 'Лидеры') },
         { to: '/achievements', icon: Award, label: t('sidebar.achievements') },
         { to: '/certificates', icon: FileCheck, label: t('sidebar.certificates', 'Сертификаты'), tier: 'BUSINESS' },
         { to: '/teacher', icon: GraduationCap, label: t('sidebar.teacher', 'Учителям'), tier: 'BUSINESS' },

@@ -19,7 +19,6 @@ const ProgressPage = React.lazy(() => import('./pages/ProgressPage').then(m => (
 const AchievementsPage = React.lazy(() => import('./pages/AchievementsPage').then(m => ({ default: m.AchievementsPage })));
 const SubscriptionPage = React.lazy(() => import('./pages/SubscriptionPage').then(m => ({ default: m.SubscriptionPage })));
 const SettingsPage = React.lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
-const LeaderboardPage = React.lazy(() => import('./pages/LeaderboardPage').then(m => ({ default: m.LeaderboardPage })));
 const CertificatePage = React.lazy(() => import('./pages/CertificatePage').then(m => ({ default: m.CertificatePage })));
 const TeacherDashboard = React.lazy(() => import('./pages/TeacherDashboard').then(m => ({ default: m.TeacherDashboard })));
 const CallSimulatorPage = React.lazy(() => import('./pages/CallSimulatorPage').then(m => ({ default: m.CallSimulatorPage })));
@@ -114,14 +113,6 @@ function App() {
                                         element={
                                             <ProtectedRoute>
                                                 <SettingsPage />
-                                            </ProtectedRoute>
-                                        }
-                                    />
-                                    <Route
-                                        path="/leaderboard"
-                                        element={
-                                            <ProtectedRoute>
-                                                <LeaderboardPage />
                                             </ProtectedRoute>
                                         }
                                     />

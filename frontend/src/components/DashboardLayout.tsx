@@ -19,7 +19,6 @@ import {
     Mic,
     Gamepad2,
     Target,
-    Trophy,
     FileCheck,
     GraduationCap
 } from 'lucide-react';
@@ -45,7 +44,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         { to: '/cyber-defense', icon: Gamepad2, label: t('sidebar.cyberDefense', 'Cyber Defense'), tier: 'PRO' },
         { to: '/team-challenges', icon: Target, label: t('sidebar.teamChallenges', 'Челленджи'), tier: 'BUSINESS' },
         { to: '/progress', icon: TrendingUp, label: t('sidebar.progress') },
-        { to: '/leaderboard', icon: Trophy, label: t('sidebar.leaderboard', 'Лидеры') },
         { to: '/achievements', icon: Award, label: t('sidebar.achievements') },
         { to: '/certificates', icon: FileCheck, label: t('sidebar.certificates', 'Сертификаты'), tier: 'BUSINESS' },
         { to: '/teacher', icon: GraduationCap, label: t('sidebar.teacher', 'Учителям'), tier: 'BUSINESS' },

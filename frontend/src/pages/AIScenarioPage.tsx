@@ -5,7 +5,7 @@ import { DashboardLayout } from '../components/DashboardLayout';
 import { ScenarioPlayer } from '../components/ScenarioPlayer';
 import { firebaseAIAPI, AITopic } from '../services/firebase';
 import { CyberTerminal } from '../components/CyberTerminal';
-import { Sparkles, ArrowLeft, Loader2, Zap, History, Play, RefreshCw } from 'lucide-react';
+import { Sparkles, ArrowLeft, Loader2, Zap, History, Play, RefreshCw, Trophy, CheckCircle } from 'lucide-react';
 import type { Scenario } from '../types';
 
 
@@ -22,6 +22,7 @@ export const AIScenarioPage: React.FC = () => {
     const [loadingHistory, setLoadingHistory] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showHistory, setShowHistory] = useState(false);
+    const [postResults, setPostResults] = useState<{ score: number; mistakes: number } | null>(null);
 
     // Hardcoded topics (fallback if API fails) - Kazakhstan-specific
     const defaultTopics: AITopic[] = [
@@ -99,6 +100,7 @@ export const AIScenarioPage: React.FC = () => {
 
         setGenerating(true);
         setError(null);
+        setPostResults(null);
 
         try {
             const scenario = await firebaseAIAPI.generateScenario(selectedTopic, i18n.language);
@@ -131,6 +133,7 @@ export const AIScenarioPage: React.FC = () => {
 
             setCurrentScenario(null);
             setSelectedTopic(null);
+            setPostResults({ score, mistakes });
             navigate('/training');
         } catch (err) {
             console.error('Failed to save progress:', err);
@@ -229,6 +232,45 @@ export const AIScenarioPage: React.FC = () => {
                         </div>
                     )}
 
+                    {/* Results banner after completing a scenario */}
+                    {postResults && (
+                        <div className="mb-6 p-6 rounded-xl border-2 border-cyber-green/40 bg-gradient-to-br from-cyber-green/10 to-emerald-500/5">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-14 h-14 rounded-xl bg-cyber-green/20 flex items-center justify-center">
+                                        <Trophy className="w-7 h-7 text-cyber-green" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-cyber-green">{t('scenario.resultsTitle', 'Результаты')}</h3>
+                                        <p className="text-foreground">
+                                            <span className="font-semibold">{postResults.score}</span> {t('training.points', 'очков')}
+                                            <span className="mx-2 text-muted-foreground">·</span>
+                                            <span>{postResults.mistakes} {t('progress.errorsCount', 'ошибок')}</span>
+                                        </p>
+                                        {postResults.mistakes === 0 && (
+                                            <p className="text-cyber-green font-medium mt-1">{t('scenario.perfectRun', 'Идеально! Без единой ошибки 🎉')}</p>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => setPostResults(null)}
+                                        className="px-4 py-2 rounded-lg bg-cyber-green/20 text-cyber-green font-medium hover:bg-cyber-green/30 transition-colors"
+                                    >
+                                        {t('scenario.anotherScenario', 'Ещё сценарий')}
+                                    </button>
+                                    <button
+                                        onClick={() => { setPostResults(null); navigate('/progress'); }}
+                                        className="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
+                                    >
+                                        <CheckCircle className="w-4 h-4" />
+                                        {t('scenario.viewProgress', 'Смотреть прогресс')}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* History Section */}
                     {showHistory && (
                         <div className="mb-8">
@@ -278,7 +320,7 @@ export const AIScenarioPage: React.FC = () => {
                     <div className="mb-8">
                         <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
                             <Zap className="w-5 h-5 text-cyber-green" />
-                            {t('ai.selectTopic', 'Выберите тему')}
+                            {t('ai.chooseChallenge', 'Выберите челлендж')}
                         </h2>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -318,8 +360,8 @@ export const AIScenarioPage: React.FC = () => {
                                 </>
                             ) : (
                                 <>
-                                    <Sparkles className="w-6 h-6" />
-                                    {t('ai.generate', 'Сгенерировать сценарий')}
+                                    <Play className="w-6 h-6" />
+                                    {selectedTopic ? t('ai.playCta', 'Играть') : t('ai.generate', 'Сгенерировать сценарий')}
                                 </>
                             )}
                         </button>

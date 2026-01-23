@@ -26,7 +26,7 @@
         "hero": {
             "title": "Learn to protect yourself",
             "titleHighlight": "from digital fraud",
-            "subtitle": "Interactive platform for cybersecurity training through realistic fraud simulations",
+            "subtitle": "Practice and interactive games — learn to spot fraud in realistic scenarios",
             "cta": "Start Training",
             "trustIndicator": "Free access • No credit card required"
         },
@@ -56,9 +56,9 @@
         "howItWorks": {
             "title": "How It Works",
             "step1": "Choose a topic",
-            "step2": "Complete simulation",
+            "step2": "Play through a scenario",
             "step3": "Gain skills",
-            "imageCaption": "Realistic scenarios will help you learn to recognize scammers"
+            "imageCaption": "Realistic scenarios and games help you recognize scammers"
         },
         "cta": {
             "title": "Ready to protect yourself from scammers?",
@@ -315,9 +315,26 @@
         "stats": "Statistics",
         "profile": "Profile"
     },
+    "daily": {
+        "title": "Daily Challenges",
+        "earned": "earned",
+        "start": "Play",
+        "bonus": "Complete all for +30 XP bonus!",
+        "challenge1Title": "Quick Start",
+        "challenge1Desc": "Complete any scenario today",
+        "challenge2Title": "Perfect Run",
+        "challenge2Desc": "Finish a scenario with no mistakes",
+        "challenge3Title": "Streak Keeper",
+        "challenge3Desc": "Keep your learning streak alive",
+        "difficultyEasy": "Easy",
+        "difficultyMedium": "Medium",
+        "difficultyHard": "Hard"
+    },
     "welcome": {
         "title": "Welcome to QadamSafe!",
-        "subtitle": "Your journey to digital security starts here",
+        "subtitle": "Learn by practice and interactive games — no boring theory",
+        "newFeatures": "Practice & Games",
+        "newFeaturesDesc": "Scenarios, simulators and games to train with",
         "intro": "Interactive platform for learning cybersecurity through practical simulations.",
         "timeEstimate": "First scenario takes 3-5 minutes",
         "quiz": {
@@ -455,7 +472,9 @@
         "subtitle": "Unique scenarios created by neural network",
         "generated": "AI Generated",
         "selectTopic": "Select Topic",
+        "chooseChallenge": "Choose a challenge",
         "generate": "Generate Scenario",
+        "playCta": "Play",
         "generating": "Generating...",
         "generatingHint": "AI is creating a unique scenario specially for you...",
         "showHistory": "History",
@@ -490,10 +509,15 @@
         "outcome_dangerous": "Dangerous",
         "chooseAction": "What will you do?",
         "feedback": {
-            "safe": "Great decision!",
+            "safe": "Correct!",
             "risky": "Be more careful",
             "dangerous": "This could have been risky"
         },
+        "pointsEarned": "pts",
+        "anotherScenario": "Another scenario",
+        "resultsTitle": "Results",
+        "perfectRun": "Perfect! No mistakes 🎉",
+        "viewProgress": "View progress",
         "soundOn": "Sound on",
         "soundOff": "Sound off",
         "verdict": {

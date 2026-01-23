@@ -23,38 +23,11 @@ const generateDailyChallenges = (): DailyChallenge[] => {
     const today = new Date();
     const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
 
-    // Pseudo-random based on date
-    const challenges: DailyChallenge[] = [
-        {
-            id: `daily-${seed}-1`,
-            title: 'Быстрый старт',
-            description: 'Пройдите любой сценарий за сегодня',
-            type: 'scenario',
-            xpReward: 25,
-            completed: false,
-            expiresAt: new Date(today.setHours(23, 59, 59, 999)),
-            difficulty: 'easy',
-        },
-        {
-            id: `daily-${seed}-2`,
-            title: 'Идеальное прохождение',
-            description: 'Завершите сценарий без ошибок',
-            type: 'scenario',
-            xpReward: 50,
-            completed: false,
-            expiresAt: new Date(today.setHours(23, 59, 59, 999)),
-            difficulty: 'medium',
-        },
-        {
-            id: `daily-${seed}-3`,
-            title: 'Серия продолжается',
-            description: 'Сохраните свою серию обучения',
-            type: 'streak',
-            xpReward: 15,
-            completed: false,
-            expiresAt: new Date(today.setHours(23, 59, 59, 999)),
-            difficulty: 'easy',
-        },
+    // Pseudo-random based on date; titleKey/descKey for i18n
+    const challenges: (DailyChallenge & { titleKey: string; descKey: string })[] = [
+        { id: `daily-${seed}-1`, titleKey: 'challenge1Title', descKey: 'challenge1Desc', title: '', description: '', type: 'scenario', xpReward: 25, completed: false, expiresAt: new Date(today.setHours(23, 59, 59, 999)), difficulty: 'easy' },
+        { id: `daily-${seed}-2`, titleKey: 'challenge2Title', descKey: 'challenge2Desc', title: '', description: '', type: 'scenario', xpReward: 50, completed: false, expiresAt: new Date(today.setHours(23, 59, 59, 999)), difficulty: 'medium' },
+        { id: `daily-${seed}-3`, titleKey: 'challenge3Title', descKey: 'challenge3Desc', title: '', description: '', type: 'streak', xpReward: 15, completed: false, expiresAt: new Date(today.setHours(23, 59, 59, 999)), difficulty: 'easy' },
     ];
 
     return challenges;
@@ -95,25 +68,26 @@ const TimeRemaining: React.FC<{ expiresAt: Date }> = ({ expiresAt }) => {
 
 // Single challenge card
 const ChallengeCard: React.FC<{
-    challenge: DailyChallenge;
+    challenge: DailyChallenge & { titleKey?: string; descKey?: string };
     onStart: () => void;
 }> = ({ challenge, onStart }) => {
     const { t } = useTranslation();
 
     const difficultyConfig = {
-        easy: { color: 'text-cyber-green', bg: 'bg-cyber-green/10', label: 'Легко' },
-        medium: { color: 'text-cyber-yellow', bg: 'bg-cyber-yellow/10', label: 'Средне' },
-        hard: { color: 'text-cyber-red', bg: 'bg-cyber-red/10', label: 'Сложно' },
+        easy: { color: 'text-cyber-green', bg: 'bg-cyber-green/10', labelKey: 'difficultyEasy' as const },
+        medium: { color: 'text-cyber-yellow', bg: 'bg-cyber-yellow/10', labelKey: 'difficultyMedium' as const },
+        hard: { color: 'text-cyber-red', bg: 'bg-cyber-red/10', labelKey: 'difficultyHard' as const },
     };
 
     const config = difficultyConfig[challenge.difficulty];
+    const title = (challenge as any).titleKey ? t(`daily.${(challenge as any).titleKey}`) : challenge.title;
+    const description = (challenge as any).descKey ? t(`daily.${(challenge as any).descKey}`) : challenge.description;
 
     return (
         <div className={`relative p-4 rounded-xl border transition-all ${challenge.completed
             ? 'bg-cyber-green/5 border-cyber-green/30'
             : 'bg-card border-border hover:border-cyber-green/50 hover:shadow-lg'
             }`}>
-            {/* Completed overlay */}
             {challenge.completed && (
                 <div className="absolute top-3 right-3">
                     <div className="w-8 h-8 rounded-full bg-cyber-green flex items-center justify-center">
@@ -123,22 +97,20 @@ const ChallengeCard: React.FC<{
             )}
 
             <div className="flex items-start gap-4">
-                {/* Icon */}
                 <div className={`w-12 h-12 rounded-xl ${config.bg} flex items-center justify-center flex-shrink-0`}>
                     {challenge.type === 'scenario' && <Play className={`w-6 h-6 ${config.color}`} />}
                     {challenge.type === 'quiz' && <Star className={`w-6 h-6 ${config.color}`} />}
                     {challenge.type === 'streak' && <Flame className={`w-6 h-6 ${config.color}`} />}
                 </div>
 
-                {/* Content */}
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold text-foreground">{challenge.title}</h4>
+                        <h4 className="font-semibold text-foreground">{title}</h4>
                         <span className={`px-2 py-0.5 rounded text-xs font-medium ${config.bg} ${config.color}`}>
-                            {config.label}
+                            {t(`daily.${config.labelKey}`)}
                         </span>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-2">{challenge.description}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{description}</p>
 
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -154,7 +126,7 @@ const ChallengeCard: React.FC<{
                                 onClick={onStart}
                                 className="flex items-center gap-1 px-3 py-1.5 bg-cyber-green/10 text-cyber-green rounded-lg text-sm font-medium hover:bg-cyber-green hover:text-background transition-all"
                             >
-                                {t('daily.start', 'Начать')}
+                                {t('daily.start', 'Играть')}
                                 <ArrowRight className="w-3 h-3" />
                             </button>
                         )}

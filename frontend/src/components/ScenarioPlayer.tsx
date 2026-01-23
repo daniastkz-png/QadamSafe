@@ -34,6 +34,12 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
 
     const currentStep = scenario.content.steps[currentStepIndex];
 
+    // Очки за шаг для мгновенной обратной связи при правильном ответе
+    const stepsWithOptions = scenario.content.steps.filter(s => s.options?.length);
+    const pointsPerStep = stepsWithOptions.length > 0 && scenario.pointsReward
+        ? Math.max(1, Math.ceil(scenario.pointsReward / stepsWithOptions.length))
+        : 10;
+
     // Play sound when step changes (for phone visualizations)
     useEffect(() => {
         if (soundEnabled && currentStep?.visualType === 'phone' && currentStep?.phoneMessageType) {
@@ -431,6 +437,11 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                                             ? t('scenario.feedback.risky')
                                             : t('scenario.feedback.dangerous')
                                     }
+                                    {selectedOptionData.outcomeType === 'safe' && (
+                                        <span className="ml-2 inline-flex items-center gap-1 text-cyber-green animate-in zoom-in-95 duration-300">
+                                            +{pointsPerStep} {t('scenario.pointsEarned', 'очков')}
+                                        </span>
+                                    )}
                                 </h4>
                                 <p className="text-foreground leading-relaxed whitespace-pre-line">
                                     {getLocalizedExplanation(selectedOptionData)}
