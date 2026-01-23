@@ -28,10 +28,10 @@ const MiniQuiz: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
     const isCorrect = selected === correctAnswer;
 
     return (
-        <div className="cyber-card border-2 border-cyber-yellow/30 bg-gradient-to-br from-cyber-yellow/5 to-background">
+        <div className="cyber-card border-2 border-cyber-green/30 bg-gradient-to-br from-cyber-green/5 to-background">
             <div className="flex items-center gap-2 mb-4">
-                <Zap className="w-6 h-6 text-cyber-yellow" />
-                <h3 className="text-xl font-bold text-cyber-yellow">
+                <Zap className="w-6 h-6 text-cyber-green" />
+                <h3 className="text-xl font-bold text-cyber-green">
                     {t('welcome.quiz.title', 'Быстрая проверка')}
                 </h3>
             </div>
@@ -199,7 +199,7 @@ const ProgressCard: React.FC<{
                 </div>
                 <div className="h-2 bg-muted rounded-full overflow-hidden">
                     <div
-                        className="h-full bg-gradient-to-r from-cyber-yellow to-orange-500 rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-cyan-500 to-cyber-green rounded-full transition-all duration-500"
                         style={{ width: `${xpProgress}%` }}
                     />
                 </div>
@@ -212,7 +212,7 @@ const ProgressCard: React.FC<{
                     <p className="text-xs text-muted-foreground">{t('welcome.progress.completed', 'Пройдено')}</p>
                 </div>
                 <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
-                    <p className="text-2xl font-bold text-cyber-yellow">{xp}</p>
+                    <p className="text-2xl font-bold text-cyan-400">{xp}</p>
                     <p className="text-xs text-muted-foreground">XP</p>
                 </div>
                 <div className="text-center p-3 bg-background/50 rounded-lg border border-border">
@@ -410,7 +410,7 @@ export const WelcomePage: React.FC = () => {
                     {/* New Features Quick Access */}
                     <div className="mb-8">
                         <div className="flex items-center gap-2 mb-4">
-                            <Zap className="w-6 h-6 text-cyber-yellow" />
+                            <Zap className="w-6 h-6 text-cyber-green" />
                             <h2 className="text-2xl font-semibold text-foreground">
                                 {t('welcome.newFeatures', 'Новые возможности')}
                             </h2>
@@ -499,14 +499,14 @@ export const WelcomePage: React.FC = () => {
                         </div>
 
                         {/* Right: Threat Protection Visual */}
-                        <div className="cyber-card border-2 border-cyber-yellow/30 bg-cyber-yellow/5">
+                        <div className="cyber-card border-2 border-cyber-green/30 bg-cyber-green/5">
                             <div className="flex items-center gap-2 mb-4">
-                                <Shield className="w-6 h-6 text-cyber-yellow" />
-                                <h3 className="text-xl font-bold text-cyber-yellow">
+                                <Shield className="w-6 h-6 text-cyber-green" />
+                                <h3 className="text-xl font-bold text-cyber-green">
                                     {t('welcome.whyNow.title')}
                                 </h3>
                             </div>
-                            <p className="text-cyber-red font-semibold mb-2">
+                            <p className="text-cyber-green font-semibold mb-2">
                                 {t('welcome.whyNow.mainStat')}
                             </p>
                             <p className="text-sm text-muted-foreground mb-4">

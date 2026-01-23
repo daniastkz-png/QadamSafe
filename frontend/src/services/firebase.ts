@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, updateDoc, limit, onSnapshot } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import type { UserProgress } from '../types';
 
 // Firebase configuration
@@ -18,7 +19,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const functions = getFunctions(app);
 const googleProvider = new GoogleAuthProvider();
+
+// Connect to local emulator in development
+if (window.location.hostname === 'localhost') {
+    connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+    console.log('🔧 Connected to Firebase Functions Emulator');
+}
 
 // Scenario cache for optimizing real-time listeners
 const scenarioCache = new Map<string, any>();
@@ -454,14 +462,39 @@ export const firebaseAIAPI = {
     // Get available topics for AI scenario generation
     getTopics: async (): Promise<AITopic[]> => {
         return [
-            { id: "sms_phishing", name: "SMS-фишинг", nameEn: "SMS Phishing", nameKk: "SMS-фишинг", icon: "📱", color: "cyber-green" },
-            { id: "phone_scam", name: "Телефонные мошенники", nameEn: "Phone Scams", nameKk: "Телефон алаяқтары", icon: "📞", color: "cyber-yellow" },
-            { id: "social_engineering", name: "Социальная инженерия", nameEn: "Social Engineering", nameKk: "Әлеуметтік инженерия", icon: "👤", color: "cyber-blue" },
-            { id: "fake_government", name: "Фейковые госуслуги", nameEn: "Fake Government", nameKk: "Жалған мемлекеттік қызметтер", icon: "🏛️", color: "cyber-red" },
-            { id: "investment_scam", name: "Инвестиционное мошенничество", nameEn: "Investment Scams", nameKk: "Инвестициялық алаяқтық", icon: "💰", color: "cyber-yellow" },
-            { id: "online_shopping", name: "Онлайн-покупки", nameEn: "Online Shopping", nameKk: "Онлайн-сатып алу", icon: "🛒", color: "cyber-green" },
-            { id: "romance_scam", name: "Романтические мошенники", nameEn: "Romance Scams", nameKk: "Романтикалық алаяқтық", icon: "💕", color: "cyber-red" },
-            { id: "job_scam", name: "Мошенничество с работой", nameEn: "Job Scams", nameKk: "Жұмыс алаяқтығы", icon: "💼", color: "cyber-blue" }
+            // KASPI BANK
+            { id: "kaspi_sms", name: "Kaspi фишинг SMS", nameEn: "Kaspi SMS Phishing", nameKk: "Kaspi SMS алаяқтығы", icon: "💳", color: "cyber-green" },
+            { id: "kaspi_call", name: "Звонки от 'Kaspi'", nameEn: "Fake Kaspi Calls", nameKk: "Жалған Kaspi қоңыраулары", icon: "📞", color: "cyber-red" },
+
+            // eGOV
+            { id: "egov_scam", name: "Фейковый eGov", nameEn: "Fake eGov", nameKk: "Жалған eGov", icon: "🏛️", color: "cyber-blue" },
+
+            // МАРКЕТПЛЕЙСЫ  
+            { id: "olx_scam", name: "Мошенники на OLX", nameEn: "OLX Scammers", nameKk: "OLX алаяқтары", icon: "🛒", color: "cyber-yellow" },
+            { id: "kolesa_scam", name: "Обман на Kolesa.kz", nameEn: "Kolesa.kz Fraud", nameKk: "Kolesa.kz алаяқтығы", icon: "🚗", color: "cyber-green" },
+
+            // МЕССЕНДЖЕРЫ
+            { id: "telegram_scam", name: "Взлом Telegram", nameEn: "Telegram Hacking", nameKk: "Telegram бұзу", icon: "✈️", color: "cyber-blue" },
+            { id: "whatsapp_relative", name: "'Мама' просит деньги", nameEn: "Fake Relative", nameKk: "Жалған туыс", icon: "👨‍👩‍👧", color: "cyber-red" },
+
+            // РАБОТА
+            { id: "job_enbek", name: "Фейковые вакансии", nameEn: "Fake Jobs", nameKk: "Жалған вакансиялар", icon: "💼", color: "cyber-yellow" },
+            { id: "crypto_work", name: "Крипто-заработок", nameEn: "Crypto Earnings", nameKk: "Крипто табыс", icon: "₿", color: "cyber-green" },
+
+            // УСЛУГИ
+            { id: "utility_scam", name: "Фейковые долги ЖКХ", nameEn: "Fake Utility Bills", nameKk: "Жалған коммуналдық төлемдер", icon: "💡", color: "cyber-blue" },
+
+            // ДОСТАВКА
+            { id: "delivery_kazpost", name: "Фейковый Kazpost", nameEn: "Fake Kazpost", nameKk: "Жалған Kazpost", icon: "📦", color: "cyber-yellow" },
+            { id: "glovo_scam", name: "Мошенники Glovo", nameEn: "Glovo Scammers", nameKk: "Glovo алаяқтары", icon: "🛵", color: "cyber-red" },
+
+            // ФИНАНСЫ
+            { id: "investment_pyramid", name: "Финансовые пирамиды", nameEn: "Financial Pyramids", nameKk: "Қаржылық пирамидалар", icon: "📈", color: "cyber-green" },
+
+            // РАЗНОЕ
+            { id: "lottery", name: "Фейковые розыгрыши", nameEn: "Fake Lotteries", nameKk: "Жалған ұтыс ойындары", icon: "🎰", color: "cyber-yellow" },
+            { id: "charity", name: "Фейковые сборы", nameEn: "Fake Charity", nameKk: "Жалған қайырымдылық", icon: "🎗️", color: "cyber-blue" },
+            { id: "taxi_scam", name: "Обман в такси", nameEn: "Taxi Scams", nameKk: "Такси алаяқтығы", icon: "🚕", color: "cyber-red" }
         ];
     },
 
@@ -618,4 +651,4 @@ export const firebaseAssistantAPI = {
     }
 };
 
-export { auth, db };
+export { auth, db, functions };

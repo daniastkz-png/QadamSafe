@@ -6,9 +6,10 @@ import { Globe, Check } from 'lucide-react';
 
 interface LanguageSwitcherProps {
     direction?: 'up' | 'down';
+    align?: 'left' | 'right';
 }
 
-export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ direction = 'up' }) => {
+export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ direction = 'up', align = 'left' }) => {
     const { i18n } = useTranslation();
     const { user, updateUser } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
@@ -56,6 +57,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ direction = 
         ? 'bottom-full mb-2'
         : 'top-full mt-2';
 
+    const dropdownAlign = align === 'right' ? 'right-0' : 'left-0';
+
     return (
         <div className="relative" ref={dropdownRef}>
             {/* Current Language Button */}
@@ -71,7 +74,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ direction = 
             {/* Dropdown Menu */}
             {isOpen && (
                 <div
-                    className={`absolute left-0 ${dropdownPosition} w-44 rounded-xl border border-border bg-card shadow-xl overflow-hidden z-[100]`}
+                    className={`absolute ${dropdownAlign} ${dropdownPosition} w-44 rounded-xl border border-border bg-card shadow-xl overflow-hidden z-[100]`}
                     style={{
                         animation: 'dropdownFadeIn 0.2s ease-out forwards'
                     }}
@@ -84,8 +87,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ direction = 
                                     key={lang.code}
                                     onClick={() => handleLanguageChange(lang.code)}
                                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive
-                                            ? 'bg-primary/15 text-primary'
-                                            : 'hover:bg-muted text-foreground'
+                                        ? 'bg-primary/15 text-primary'
+                                        : 'hover:bg-muted text-foreground'
                                         }`}
                                     style={{
                                         animation: `dropdownItemSlide 0.2s ease-out ${index * 0.05}s forwards`,

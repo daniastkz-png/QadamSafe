@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { FeatureGate } from '../components/FeatureGate';
@@ -6,8 +6,10 @@ import { useAuth } from '../contexts/AuthContext';
 import {
     GraduationCap, Users, BookOpen, Download, Plus, Trash2,
     Shield, TrendingUp, CheckCircle, AlertTriangle, ChevronRight,
-    Search, Flame, Eye, Target, Zap
+    Search, Flame, Eye, Target, Zap, RefreshCw
 } from 'lucide-react';
+import { classroomService } from '../services/classroomService';
+import type { Classroom } from '../services/classroomService';
 
 // Types
 interface Student {
@@ -24,13 +26,8 @@ interface Student {
     status: 'active' | 'inactive' | 'at-risk';
 }
 
-interface ClassRoom {
-    id: string;
-    name: string;
-    grade: string;
+interface ClassRoom extends Classroom {
     students: Student[];
-    createdAt: Date;
-    code: string;
 }
 
 // Create Class Modal
@@ -463,49 +460,69 @@ export const TeacherDashboard: React.FC = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [selectedClass, setSelectedClass] = useState<ClassRoom | null>(null);
 
-    // Mock classes data
-    const [classes, setClasses] = useState<ClassRoom[]>([
-        {
-            id: '1',
-            name: 'Кибербезопасность 7А',
-            grade: '7',
-            code: 'QS7A2024',
-            createdAt: new Date(),
-            students: [
-                { id: '1', name: 'Алина Сейтова', email: 'alina@school.kz', avatar: '👧', securityScore: 185, completedScenarios: 8, totalScenarios: 12, streak: 12, lastActive: new Date(), grade: '7', status: 'active' },
-                { id: '2', name: 'Арман Жумабеков', email: 'arman@school.kz', avatar: '👦', securityScore: 142, completedScenarios: 6, totalScenarios: 12, streak: 5, lastActive: new Date(), grade: '7', status: 'active' },
-                { id: '3', name: 'Дарья Ким', email: 'darya@school.kz', avatar: '👩', securityScore: 98, completedScenarios: 4, totalScenarios: 12, streak: 0, lastActive: new Date(Date.now() - 86400000 * 5), grade: '7', status: 'at-risk' },
-                { id: '4', name: 'Тимур Касымов', email: 'timur@school.kz', avatar: '👨', securityScore: 156, completedScenarios: 7, totalScenarios: 12, streak: 8, lastActive: new Date(), grade: '7', status: 'active' },
-                { id: '5', name: 'Айгерим Абдрахманова', email: 'aigerim@school.kz', avatar: '👧', securityScore: 72, completedScenarios: 3, totalScenarios: 12, streak: 0, lastActive: new Date(Date.now() - 86400000 * 10), grade: '7', status: 'inactive' },
-            ],
-        },
-        {
-            id: '2',
-            name: 'Информатика 8Б',
-            grade: '8',
-            code: 'QS8B2024',
-            createdAt: new Date(),
-            students: [
-                { id: '6', name: 'Нурсултан Ахметов', email: 'nursultan@school.kz', avatar: '👦', securityScore: 210, completedScenarios: 10, totalScenarios: 12, streak: 15, lastActive: new Date(), grade: '8', status: 'active' },
-                { id: '7', name: 'Камила Назарбаева', email: 'kamila@school.kz', avatar: '👧', securityScore: 178, completedScenarios: 8, totalScenarios: 12, streak: 9, lastActive: new Date(), grade: '8', status: 'active' },
-            ],
-        },
-    ]);
+    const [classes, setClasses] = useState<ClassRoom[]>([]);
+    const [loading, setLoading] = useState(true);
+    const { user } = useAuth(); // Moved up
 
-    const handleCreateClass = (name: string, grade: string) => {
-        const newClass: ClassRoom = {
-            id: Date.now().toString(),
-            name,
-            grade,
-            code: `QS${grade}${String.fromCharCode(65 + classes.length)}${new Date().getFullYear()}`,
-            createdAt: new Date(),
-            students: [],
-        };
-        setClasses([...classes, newClass]);
+    useEffect(() => {
+        if (user) {
+            loadClasses();
+        }
+    }, [user]);
+
+    const loadClasses = async () => {
+        if (!user) return;
+        setLoading(true);
+        try {
+            const fetchedClasses = await classroomService.getTeacherClassrooms(user.id);
+
+            // Enrich with students
+            const classesWithStudents = await Promise.all(fetchedClasses.map(async (cls) => {
+                const students = await classroomService.getClassroomStudents(cls.id);
+                // Map Firestore students to UI Student interface
+                const mappedStudents: Student[] = students.map((s: any) => ({
+                    id: s.id,
+                    name: s.name || 'Unknown',
+                    email: s.email || '',
+                    avatar: s.avatar || '👤',
+                    securityScore: s.securityScore || 0,
+                    completedScenarios: s.completedScenarios || 0,
+                    totalScenarios: s.totalScenarios || 12, // Default/Mock total
+                    streak: s.streak || 0,
+                    lastActive: s.updatedAt?.toDate ? s.updatedAt.toDate() : new Date(),
+                    grade: cls.grade,
+                    status: s.status || 'active'
+                }));
+                return { ...cls, students: mappedStudents };
+            }));
+
+            setClasses(classesWithStudents as ClassRoom[]);
+        } catch (error) {
+            console.error("Failed to load classes", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleDeleteClass = (id: string) => {
-        setClasses(classes.filter(c => c.id !== id));
+    const handleCreateClass = async (name: string, grade: string) => {
+        if (!user) return;
+        try {
+            await classroomService.createClassroom(name, grade, user.id);
+            await loadClasses(); // Reload to see new class
+        } catch (error) {
+            console.error("Failed to create class", error);
+            alert("Ошибка при создании класса");
+        }
+    };
+
+    const handleDeleteClass = async (id: string) => {
+        if (!confirm("Вы уверены, что хотите удалить этот класс?")) return;
+        try {
+            await classroomService.deleteClassroom(id);
+            await loadClasses();
+        } catch (error) {
+            console.error("Failed to delete class", error);
+        }
     };
 
     // Total stats across all classes
@@ -521,7 +538,7 @@ export const TeacherDashboard: React.FC = () => {
         };
     }, [classes]);
 
-    const { user } = useAuth();
+
 
     // Feature Gate: BUSINESS only
     if (user && user.subscriptionTier !== 'BUSINESS') {
@@ -630,8 +647,19 @@ export const TeacherDashboard: React.FC = () => {
                         <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
                             <GraduationCap className="w-5 h-5 text-purple-400" />
                             {t('teacher.myClasses', 'Мои классы')}
+                            <button
+                                onClick={loadClasses}
+                                className="ml-auto p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                                title="Обновить"
+                            >
+                                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                            </button>
                         </h2>
-                        {classes.length === 0 ? (
+                        {loading && classes.length === 0 ? (
+                            <div className="flex items-center justify-center py-20">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+                            </div>
+                        ) : classes.length === 0 ? (
                             <div className="cyber-card text-center py-12">
                                 <GraduationCap className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                                 <h3 className="text-xl font-semibold text-foreground mb-2">

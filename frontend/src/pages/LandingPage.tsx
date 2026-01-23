@@ -110,7 +110,7 @@ export const LandingPage: React.FC = () => {
                                 </button>
                             </div>
 
-                            <LanguageSwitcher direction="down" />
+                            <LanguageSwitcher direction="down" align="right" />
 
                             {/* Mobile menu button */}
                             <button

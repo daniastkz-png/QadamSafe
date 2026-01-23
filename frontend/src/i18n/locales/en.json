@@ -804,12 +804,14 @@
     },
     "security": {
         "stats": {
-            "affected": "Kazakhstan residents affected in 2025",
-            "cases": "Fraud cases recorded",
+            "affected": "Fraud Growth",
+            "cases": "Cases in 2024",
+            "casesDesc": "Recorded attacks",
             "increase": "Fraud growth per year",
-            "preventable": "Can be prevented with training",
-            "growing": "Growing every year",
-            "distribution": "Fraud types distribution",
+            "preventable": "Preventable",
+            "preventableDesc": "With training and practice",
+            "growing": "Annually in Kazakhstan",
+            "distribution": "Threat Type Distribution",
             "phishing": "Phishing (fake links)",
             "phishingDesc": "Most common threat",
             "sms": "SMS fraud",
@@ -820,11 +822,11 @@
             "socialDesc": "Fraud through messengers"
         },
         "insights": {
-            "awareness": "Awareness",
+            "awareness": "Raising Awareness",
             "awarenessDesc": "Most users don't know about modern fraud schemes",
-            "prevention": "Prevention",
+            "prevention": "Reducing Risks",
             "preventionDesc": "Training reduces the risk of becoming a victim by 87%",
-            "trend": "Trend",
+            "trend": "Current Threats",
             "trendDesc": "Scammers constantly develop new deception methods"
         }
     }

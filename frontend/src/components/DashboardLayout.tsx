@@ -49,7 +49,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         { to: '/achievements', icon: Award, label: t('sidebar.achievements') },
         { to: '/certificates', icon: FileCheck, label: t('sidebar.certificates', 'Сертификаты'), tier: 'BUSINESS' },
         { to: '/teacher', icon: GraduationCap, label: t('sidebar.teacher', 'Учителям'), tier: 'BUSINESS' },
-        { to: '/assistant', icon: Bot, label: t('sidebar.assistant'), tier: 'PRO' },
+        { to: '/assistant', icon: Bot, label: t('sidebar.assistant') },
         { to: '/subscription', icon: CreditCard, label: t('sidebar.subscription') },
         { to: '/settings', icon: Settings, label: t('sidebar.settings') },
     ];

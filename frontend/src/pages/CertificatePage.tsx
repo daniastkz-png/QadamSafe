@@ -118,7 +118,7 @@ const CertificatePreview: React.FC<{
     );
 };
 
-// Generate PDF Certificate (simplified - creates downloadable HTML)
+// Generate PDF Certificate (opens print dialog for Save as PDF)
 const generateCertificatePDF = (certificate: CertificateData, userName: string) => {
     const currentDate = new Date().toLocaleDateString('ru-RU', {
         day: 'numeric',
@@ -128,247 +128,217 @@ const generateCertificatePDF = (certificate: CertificateData, userName: string) 
 
     const certificateId = `QS-${Date.now().toString(36).toUpperCase()}`;
 
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Сертификат - ${certificate.title}</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-        }
-        
-        .certificate {
-            width: 800px;
-            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-            border-radius: 20px;
-            padding: 60px;
-            box-shadow: 0 25px 80px rgba(0, 255, 65, 0.15), 0 0 0 4px #00ff41;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .certificate::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 8px;
-            background: linear-gradient(90deg, #00ff41, #00d4ff, #00ff41);
-        }
-        
-        .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 200px;
-            font-weight: 700;
-            color: rgba(0, 255, 65, 0.03);
-            pointer-events: none;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #00ff41 0%, #00d4ff 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
-        }
-        
-        .title {
-            font-size: 14px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 10px;
-        }
-        
-        .main-title {
-            font-size: 36px;
-            font-weight: 700;
-            color: #1a1a2e;
-            margin-bottom: 10px;
-        }
-        
-        .body {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .certifies {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 15px;
-        }
-        
-        .name {
-            font-size: 42px;
-            font-weight: 700;
-            color: #00cc33;
-            margin-bottom: 20px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .name::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #00ff41, transparent);
-        }
-        
-        .achievement {
-            font-size: 18px;
-            color: #444;
-            margin-bottom: 10px;
-        }
-        
-        .course-name {
-            font-size: 24px;
-            font-weight: 600;
-            color: #1a1a2e;
-            background: linear-gradient(90deg, #00ff41, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 60px;
-            padding-top: 30px;
-            border-top: 2px dashed #eee;
-        }
-        
-        .date-section, .id-section {
-            text-align: center;
-        }
-        
-        .label {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 5px;
-        }
-        
-        .value {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .qr-section {
-            text-align: center;
-        }
-        
-        .qr-placeholder {
-            width: 80px;
-            height: 80px;
-            background: #f0f0f0;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: #888;
-            margin: 0 auto 5px;
-        }
-        
-        .verify-text {
-            font-size: 10px;
-            color: #888;
-        }
-        
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .certificate {
-                box-shadow: none;
-                border: 2px solid #00ff41;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="certificate">
-        <div class="watermark">QS</div>
-        
-        <div class="header">
-            <div class="logo">🛡️</div>
-            <div class="title">Сертификат об обучении</div>
-            <div class="main-title">QadamSafe</div>
-        </div>
-        
-        <div class="body">
-            <div class="certifies">Настоящим подтверждается, что</div>
-            <div class="name">${userName}</div>
-            <div class="achievement">успешно завершил(а) курс</div>
-            <div class="course-name">${certificate.title}</div>
-        </div>
-        
-        <div class="footer">
-            <div class="date-section">
-                <div class="label">Дата выдачи</div>
-                <div class="value">${currentDate}</div>
-            </div>
-            
-            <div class="qr-section">
-                <div class="qr-placeholder">QR</div>
-                <div class="verify-text">Проверить на qadamsafe.web.app</div>
-            </div>
-            
-            <div class="id-section">
-                <div class="label">ID сертификата</div>
-                <div class="value">${certificateId}</div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
-    `;
+    // Create a new window for printing
+    const win = window.open('', '', 'height=800,width=1100');
+    if (!win) return;
 
-    // Create blob and download
-    const blob = new Blob([html], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `QadamSafe_Certificate_${certificate.title.replace(/\s+/g, '_')}.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    win.document.write('<html><head><title>Certificate - ' + certificate.title + '</title>');
+    win.document.write(`
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,400;1,700&display=swap');
+            
+            body { 
+                margin: 0; 
+                padding: 0; 
+                background: #f0fdf4;
+                font-family: 'Inter', sans-serif;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+            }
+            
+            .certificate {
+                width: 1000px;
+                height: 700px;
+                background: white;
+                position: relative;
+                padding: 40px;
+                box-shadow: 0 0 50px rgba(0,0,0,0.1);
+                overflow: hidden;
+                border: 20px solid #ecfdf5;
+                outline: 2px solid #059669;
+                outline-offset: -10px;
+            }
+
+            .corner-deco {
+                position: absolute;
+                width: 150px;
+                height: 150px;
+                border: 2px solid #059669;
+                z-index: 1;
+            }
+            .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+            .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+            .bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+            .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+
+            .content {
+                height: 100%;
+                border: 1px solid #d1fae5;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                position: relative;
+                z-index: 2;
+                background-image: radial-gradient(#059669 0.5px, transparent 0.5px);
+                background-size: 20px 20px;
+                background-color: rgba(255,255,255,0.95);
+            }
+
+            .header { margin-bottom: 40px; }
+            
+            .logo {
+                font-size: 40px;
+                margin-bottom: 20px;
+                display: inline-block;
+                filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            }
+
+            .title {
+                font-family: 'Playfair Display', serif;
+                font-size: 60px;
+                font-weight: 700;
+                color: #065f46;
+                text-transform: uppercase;
+                letter-spacing: 4px;
+                margin: 0;
+            }
+
+            .subtitle {
+                font-size: 18px;
+                color: #059669;
+                text-transform: uppercase;
+                letter-spacing: 6px;
+                margin-top: 10px;
+            }
+
+            .recipient-section { margin: 40px 0; width: 80%; }
+            
+            .presented-to {
+                font-style: italic;
+                color: #6b7280;
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+
+            .recipient-name {
+                font-family: 'Playfair Display', serif;
+                font-size: 56px;
+                font-weight: 700;
+                color: #111827;
+                border-bottom: 2px solid #059669;
+                padding-bottom: 15px;
+                margin: 0 auto;
+                width: 100%;
+            }
+
+            .description {
+                margin-top: 20px;
+                font-size: 18px;
+                line-height: 1.6;
+                color: #374151;
+            }
+
+            .footer {
+                width: 80%;
+                display: flex;
+                justify-content: space-between;
+                margin-top: 60px;
+            }
+
+            .sign-box {
+                text-align: center;
+                width: 250px;
+            }
+
+            .signature {
+                font-family: 'Playfair Display', cursive;
+                font-size: 30px;
+                color: #059669;
+                border-bottom: 1px solid #9ca3af;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+                font-style: italic;
+            }
+
+            .sign-label {
+                font-size: 14px;
+                color: #6b7280;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+
+            .certificate-id {
+                position: absolute;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 12px;
+                color: #9ca3af;
+                font-family: monospace;
+            }
+
+            @media print {
+                body { background: none; -webkit-print-color-adjust: exact; }
+                .certificate { box-shadow: none; margin: 0; page-break-inside: avoid; }
+            }
+        </style>
+    `);
+    win.document.write('</head><body>');
+
+    win.document.write(`
+        <div class="certificate">
+            <div class="corner-deco top-left"></div>
+            <div class="corner-deco top-right"></div>
+            <div class="corner-deco bottom-left"></div>
+            <div class="corner-deco bottom-right"></div>
+            
+            <div class="content">
+                <div class="header">
+                    <div class="logo">🛡️ QadamSafe</div>
+                    <h1 class="title">Certificate</h1>
+                    <div class="subtitle">of Completion</div>
+                </div>
+
+                <div class="recipient-section">
+                    <div class="presented-to">This certificate is proudly presented to</div>
+                    <div class="recipient-name">${userName}</div>
+                    <div class="description">
+                        For successfully completing the <strong>${certificate.title}</strong> training module
+                        and demonstrating commitment to digital safety excellence.
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <div class="sign-box">
+                        <div class="signature">QadamAI System</div>
+                        <div class="sign-label">Verified By</div>
+                    </div>
+                    <div class="sign-box">
+                        <div class="signature">${currentDate}</div>
+                        <div class="sign-label">Date Issued</div>
+                    </div>
+                </div>
+
+                <div class="certificate-id">ID: ${certificateId} • Verify at qadamsafe.kz</div>
+            </div>
+        </div>
+    `);
+
+    win.document.write('</body></html>');
+    win.document.close();
+    win.focus();
+
+    // Auto print after images load (fake delay)
+    setTimeout(() => {
+        win.print();
+        // win.close(); // Optional: close after print
+    }, 500);
 };
 
 export const CertificatePage: React.FC = () => {
