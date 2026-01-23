@@ -553,7 +553,7 @@ export const ProgressPage: React.FC = () => {
     };
 
     const getLocalizedTitle = (scenario: Scenario | undefined) => {
-        if (!scenario) return 'Unknown';
+        if (!scenario) return t('progress.unknownScenario', 'Сценарий');
         const lang = i18n.language;
         if (lang === 'en' && scenario.titleEn) return scenario.titleEn;
         if (lang === 'kk' && scenario.titleKk) return scenario.titleKk;

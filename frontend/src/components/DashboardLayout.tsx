@@ -15,7 +15,6 @@ import {
     ChevronLeft,
     ChevronRight,
     Bot,
-    MessageSquare,
     Phone,
     Mic,
     Gamepad2,
@@ -41,7 +40,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     const navItems = [
         { to: '/welcome', icon: Shield, label: t('sidebar.welcome') },
         { to: '/training', icon: BookOpen, label: t('sidebar.training') },
-        { to: '/sms-analyzer', icon: MessageSquare, label: t('sidebar.smsAnalyzer', 'Проверка SMS'), tier: 'PRO' },
         { to: '/call-simulator', icon: Phone, label: t('sidebar.callSimulator', 'Симулятор звонков'), tier: 'PRO' },
         { to: '/voice-call', icon: Mic, label: t('sidebar.voiceCall', 'Голосовой тренажёр'), tier: 'PRO' },
         { to: '/cyber-defense', icon: Gamepad2, label: t('sidebar.cyberDefense', 'Cyber Defense'), tier: 'PRO' },

@@ -13,7 +13,7 @@ The project is built entirely on Firebase:
 - Frontend: React, TypeScript, Vite, deployed to Firebase Hosting
 - Database: Cloud Firestore
 - Authentication: Firebase Authentication
-- Server Functions: Firebase Cloud Functions (AI scenario generation via Gemini)
+- Server: Backend на Render (Groq: ИИ-сценарии, чат-ассистент); Firebase Cloud Functions (auth, progress, classroom)
 
 ## Quick Start
 
@@ -102,7 +102,7 @@ Supported languages:
 
 | Function | Description |
 |----------|-------------|
-| `generateAIScenario` | Generates unique scenarios using Gemini AI |
+| `api` | Auth, scenarios, progress, achievements, classroom join (ИИ-сценарии и чат — через Backend на Render) |
 
 ## Security
 
@@ -112,4 +112,5 @@ Supported languages:
 
 ## Additional Documentation
 
-See [IMPROVEMENTS.md](./IMPROVEMENTS.md) for improvement recommendations.
+- [IMPROVEMENTS.md](./IMPROVEMENTS.md) — рекомендации по улучшению
+- [docs/AI_TRAINING_GUIDE.md](./docs/AI_TRAINING_GUIDE.md) — как кастомизировать и «обучить» ИИ под QadamSafe (промпты, knowledge, RAG)

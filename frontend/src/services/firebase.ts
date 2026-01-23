@@ -319,107 +319,82 @@ export const firebaseScenariosAPI = {
     },
 };
 
-// ============= PROGRESS API =============
+// ============= PROGRESS API (AI-only: users/{uid}/aiProgress) =============
 export const firebaseProgressAPI = {
     getProgress: async () => {
         const currentUser = auth.currentUser;
-        if (!currentUser) {
-            throw new Error('Not authenticated');
-        }
+        if (!currentUser) throw new Error('Not authenticated');
 
-        const progressQuery = query(
-            collection(db, 'progress'),
-            where('userId', '==', currentUser.uid),
-            orderBy('completedAt', 'desc')
-        );
-        const progressSnap = await getDocs(progressQuery);
-        return progressSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const aiProgressRef = collection(db, 'users', currentUser.uid, 'aiProgress');
+        const q = query(aiProgressRef, orderBy('completedAt', 'desc'));
+        const snap = await getDocs(q);
+        return snap.docs.map(d => ({
+            id: d.id,
+            userId: currentUser.uid,
+            scenarioId: d.data().scenarioId,
+            completed: true,
+            score: d.data().score,
+            mistakes: d.data().mistakes,
+            completedAt: d.data().completedAt,
+            ...d.data()
+        }));
     },
 
-    // Real-time listener for progress updates (optimized with scenario caching)
     subscribeToProgress: (callback: (progress: UserProgress[]) => void) => {
         const currentUser = auth.currentUser;
-        if (!currentUser) {
-            return () => { };
-        }
+        if (!currentUser) return () => {};
 
-        // Query with completed filter
-        const progressQuery = query(
-            collection(db, 'progress'),
-            where('userId', '==', currentUser.uid),
-            where('completed', '==', true),
-            limit(20)
-        );
+        const aiProgressRef = collection(db, 'users', currentUser.uid, 'aiProgress');
+        const q = query(aiProgressRef, orderBy('completedAt', 'desc'), limit(20));
 
-        const unsubscribe = onSnapshot(progressQuery, async (snapshot) => {
-            let progress = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        const unsubscribe = onSnapshot(q, async (snapshot) => {
+            let progress = snapshot.docs.map(d => ({
+                id: d.id,
+                userId: currentUser.uid,
+                scenarioId: d.data().scenarioId,
+                completed: true,
+                score: d.data().score,
+                mistakes: d.data().mistakes,
+                completedAt: d.data().completedAt,
+                ...d.data()
+            }));
 
-            // Sort by completedAt in memory
-            progress = progress.sort((a: any, b: any) => {
-                const dateA = a.completedAt?.toDate ? a.completedAt.toDate() : new Date(a.completedAt || 0);
-                const dateB = b.completedAt?.toDate ? b.completedAt.toDate() : new Date(b.completedAt || 0);
-                return dateB.getTime() - dateA.getTime();
-            }).slice(0, 10);
-
-            // Get unique scenario IDs that need to be loaded
             const scenarioIdsToLoad = new Set<string>();
             progress.forEach((p: any) => {
-                if (p.scenarioId && !scenarioCache.has(p.scenarioId)) {
-                    scenarioIdsToLoad.add(p.scenarioId);
-                }
+                if (p.scenarioId && !scenarioCache.has(p.scenarioId)) scenarioIdsToLoad.add(p.scenarioId);
             });
 
-            // Load missing scenarios
-            const loadPromises = Array.from(scenarioIdsToLoad).map(async (scenarioId) => {
+            await Promise.all(Array.from(scenarioIdsToLoad).map(async (scenarioId) => {
                 try {
-                    const scenarioDoc = await getDoc(doc(db, 'scenarios', scenarioId));
-                    if (scenarioDoc.exists()) {
-                        const scenarioData = { id: scenarioDoc.id, ...scenarioDoc.data() };
-                        scenarioCache.set(scenarioId, scenarioData);
-                    }
-                } catch {
-                    // Error loading scenario - will use cache or skip
-                }
-            });
+                    const scenarioDoc = await getDoc(doc(db, 'users', currentUser.uid, 'aiScenarios', scenarioId));
+                    if (scenarioDoc.exists()) scenarioCache.set(scenarioId, { id: scenarioDoc.id, ...scenarioDoc.data() });
+                } catch { /* ignore */ }
+            }));
 
-            await Promise.all(loadPromises);
-
-            // Attach cached scenario data to progress items
             const progressWithScenarios = progress.map((p: any) => {
-                if (p.scenarioId && scenarioCache.has(p.scenarioId)) {
-                    p.scenario = scenarioCache.get(p.scenarioId);
-                }
+                if (p.scenarioId && scenarioCache.has(p.scenarioId)) p.scenario = scenarioCache.get(p.scenarioId);
                 return p;
             });
 
             callback(progressWithScenarios);
-        }, () => {
-            // Error handler - errors are handled silently
-        });
+        }, () => {});
 
         return unsubscribe;
     },
 
     getStats: async () => {
         const currentUser = auth.currentUser;
-        if (!currentUser) {
-            throw new Error('Not authenticated');
-        }
+        if (!currentUser) throw new Error('Not authenticated');
 
-        const progressQuery = query(
-            collection(db, 'progress'),
-            where('userId', '==', currentUser.uid),
-            where('completed', '==', true)
-        );
-        const progressSnap = await getDocs(progressQuery);
-        const progress = progressSnap.docs.map(d => d.data());
-
-        const scenariosSnap = await getDocs(collection(db, 'scenarios'));
-        const total = scenariosSnap.size;
+        const aiProgressRef = collection(db, 'users', currentUser.uid, 'aiProgress');
+        const q = query(aiProgressRef, where('completed', '==', true));
+        const snap = await getDocs(q);
+        const progress = snap.docs.map(d => d.data());
 
         const completed = progress.length;
-        const totalScore = progress.reduce((sum, p: any) => sum + (p.score || 0), 0);
-        const totalMistakes = progress.reduce((sum, p: any) => sum + (p.mistakes || 0), 0);
+        const total = Math.max(completed, 1);
+        const totalScore = progress.reduce((sum: number, p: any) => sum + (p.score || 0), 0);
+        const totalMistakes = progress.reduce((sum: number, p: any) => sum + (p.mistakes || 0), 0);
         const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
         return { completed, total, totalScore, totalMistakes, completionRate };

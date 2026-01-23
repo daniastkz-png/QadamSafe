@@ -103,8 +103,8 @@ export const AIScenarioPage: React.FC = () => {
         try {
             const scenario = await firebaseAIAPI.generateScenario(selectedTopic, i18n.language);
             setCurrentScenario(scenario as Scenario);
-            // Add to history
             setMyScenarios(prev => [scenario as Scenario, ...prev]);
+            navigate(`/training/${(scenario as Scenario).id}`);
         } catch (err: any) {
             console.error('Failed to generate scenario:', err);
             setError(err.message || 'Не удалось сгенерировать сценарий. Попробуйте снова.');
@@ -129,9 +129,9 @@ export const AIScenarioPage: React.FC = () => {
                 decisions
             });
 
-            // Reset to topic selection
             setCurrentScenario(null);
             setSelectedTopic(null);
+            navigate('/training');
         } catch (err) {
             console.error('Failed to save progress:', err);
         }
@@ -159,7 +159,7 @@ export const AIScenarioPage: React.FC = () => {
                         <button
                             onClick={() => {
                                 setCurrentScenario(null);
-                                navigate('/ai-scenarios');
+                                navigate('/training');
                             }}
                             className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
                         >
@@ -200,10 +200,10 @@ export const AIScenarioPage: React.FC = () => {
                             </div>
                             <div>
                                 <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                                    {t('ai.title', 'ИИ Сценарии')}
+                                    {t('training.title', 'Обучение')}
                                 </h1>
                                 <p className="text-muted-foreground">
-                                    {t('ai.subtitle', 'Уникальные сценарии, созданные нейросетью')}
+                                    {t('training.aiSubtitle', 'Сценарии созданы ИИ — выберите тему и начните')}
                                 </p>
                             </div>
                         </div>
@@ -250,7 +250,7 @@ export const AIScenarioPage: React.FC = () => {
                                     {myScenarios.slice(0, 6).map((scenario) => (
                                         <button
                                             key={scenario.id}
-                                            onClick={() => setCurrentScenario(scenario)}
+                                            onClick={() => { setCurrentScenario(scenario); navigate(`/training/${scenario.id}`); }}
                                             className="cyber-card text-left hover:border-purple-500/50 transition-all group"
                                         >
                                             <div className="flex items-start justify-between mb-2">
@@ -331,7 +331,7 @@ export const AIScenarioPage: React.FC = () => {
                             <div className="w-full max-w-2xl animate-in zoom-in-95 duration-300">
                                 <CyberTerminal duration={8000} />
                                 <p className="text-center text-cyber-green/50 mt-4 text-sm animate-pulse">
-                                    {t('ai.generatingHint', 'Gemini creates a unique scenario...')}
+                                    {t('ai.generatingHint', 'ИИ создаёт уникальный сценарий...')}
                                 </p>
                             </div>
                         </div>
@@ -353,7 +353,7 @@ export const AIScenarioPage: React.FC = () => {
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-purple-400">2.</span>
-                                {t('ai.step2', 'ИИ Gemini создаст уникальный реалистичный сценарий')}
+                                {t('ai.step2', 'ИИ создаст уникальный реалистичный сценарий')}
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-purple-400">3.</span>

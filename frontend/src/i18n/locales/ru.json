@@ -396,7 +396,8 @@
         "dontShowAgain": "Больше не показывать"
     },
     "training": {
-        "title": "Обучающие сценарии",
+        "title": "Обучение",
+        "aiSubtitle": "Сценарии созданы ИИ — выберите тему и начните",
         "subtitle": "Изучите типичные схемы мошенничества и научитесь их распознавать",
         "allScenarios": "Все сценарии",
         "difficulty": "Сложность",
@@ -506,6 +507,7 @@
         "completionRate": "Процент завершения",
         "recentScenarios": "Недавние сценарии",
         "scenarioName": "Название",
+        "unknownScenario": "Сценарий",
         "score": "Счёт",
         "mistakes": "Ошибки",
         "completedAt": "Завершено",

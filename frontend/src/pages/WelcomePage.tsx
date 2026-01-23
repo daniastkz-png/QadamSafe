@@ -415,24 +415,7 @@ export const WelcomePage: React.FC = () => {
                                 {t('welcome.newFeatures', 'Новые возможности')}
                             </h2>
                         </div>
-                        <div className="grid md:grid-cols-3 gap-4">
-                            {/* SMS Analyzer */}
-                            <div
-                                onClick={() => navigate('/sms-analyzer')}
-                                className="group p-5 bg-card border border-border rounded-xl hover:border-cyber-green transition-all cursor-pointer relative overflow-hidden"
-                            >
-                                <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                                    <MessageSquare className="w-24 h-24 text-cyber-green" />
-                                </div>
-                                <div className="relative z-10">
-                                    <div className="w-12 h-12 bg-cyber-green/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-cyber-green/20 transition-colors">
-                                        <MessageSquare className="w-6 h-6 text-cyber-green" />
-                                    </div>
-                                    <h3 className="font-bold text-lg mb-1 group-hover:text-cyber-green transition-colors">{t('sidebar.smsAnalyzer', 'Проверка SMS')}</h3>
-                                    <p className="text-sm text-muted-foreground">{t('welcome.features.smsDesc', 'Проверьте подозрительные сообщения на мошенничество')}</p>
-                                </div>
-                            </div>
-
+                        <div className="grid md:grid-cols-2 gap-4">
                             {/* Call Simulator */}
                             <div
                                 onClick={() => navigate('/call-simulator')}

@@ -408,7 +408,8 @@
         "dontShowAgain": "Don't show again"
     },
     "training": {
-        "title": "Training Scenarios",
+        "title": "Training",
+        "aiSubtitle": "AI-generated scenarios — pick a topic and start",
         "subtitle": "Learn to recognize common fraud schemes",
         "allScenarios": "All Scenarios",
         "difficulty": "Difficulty",
@@ -522,6 +523,7 @@
         "completionRate": "Completion Rate",
         "recentScenarios": "Recent Scenarios",
         "scenarioName": "Name",
+        "unknownScenario": "Scenario",
         "score": "Score",
         "mistakes": "Mistakes",
         "completedAt": "Completed",

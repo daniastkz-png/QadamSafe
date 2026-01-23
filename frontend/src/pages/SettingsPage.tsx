@@ -37,7 +37,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
-import { firebaseProgressAPI, firebaseScenariosAPI } from '../services/firebase';
+import { firebaseProgressAPI } from '../services/firebase';
 
 // Avatar options as emojis
 const avatarEmojis = ['🛡️', '🔐', '🎯', '⚡', '🚀', '💎', '🔥', '🌟', '🎮', '👤'];
@@ -112,21 +112,12 @@ export const SettingsPage: React.FC = () => {
     useEffect(() => {
         const fetchProgress = async () => {
             try {
-                const [progress, scenarios] = await Promise.all([
-                    firebaseProgressAPI.getProgress(),
-                    firebaseScenariosAPI.getAll()
-                ]) as [any[], any[]];
+                const stats = await firebaseProgressAPI.getStats();
 
-                const completed = progress.filter((p: any) => p.completed).length;
+                const completed = stats.completed;
                 setCompletedScenarios(completed);
-                setTotalScenarios(scenarios.length);
-
-                const completedIds = new Set(progress.filter((p: any) => p.completed).map((p: any) => p.scenarioId));
-                const nextScenario = scenarios
-                    .sort((a: any, b: any) => a.order - b.order)
-                    .find((s: any) => !completedIds.has(s.id));
-
-                setCurrentLevel(nextScenario ? nextScenario.order : scenarios.length);
+                setTotalScenarios(stats.total);
+                setCurrentLevel(completed);
             } catch (error) {
                 console.error('Failed to fetch progress:', error);
             } finally {

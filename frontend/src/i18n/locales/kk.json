@@ -345,7 +345,8 @@
         "dontShowAgain": "Енді көрсетпеу"
     },
     "training": {
-        "title": "Оқыту сценарийлері",
+        "title": "Оқыту",
+        "aiSubtitle": "ИИ жасаған сценарийлер — тақырыпты таңдаңыз және бастаңыз",
         "subtitle": "Алаяқтықтың типтік схемаларын танып білуді үйреніңіз",
         "allScenarios": "Барлық сценарийлер",
         "difficulty": "Қиындық",
@@ -461,6 +462,7 @@
         "completionRate": "Аяқтау пайызы",
         "recentScenarios": "Соңғы сценарийлер",
         "scenarioName": "Атауы",
+        "unknownScenario": "Сценарий",
         "score": "Ұпай",
         "mistakes": "Қателер",
         "completedAt": "Аяқталды",

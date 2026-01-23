@@ -13,8 +13,6 @@ const LandingPage = React.lazy(() => import('./pages/LandingPage').then(m => ({ 
 const AuthPage = React.lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
 const PartnersPage = React.lazy(() => import('./pages/PartnersPage').then(m => ({ default: m.PartnersPage })));
 const WelcomePage = React.lazy(() => import('./pages/WelcomePage').then(m => ({ default: m.WelcomePage })));
-const TrainingPage = React.lazy(() => import('./pages/TrainingPage').then(m => ({ default: m.TrainingPage })));
-const ScenarioPage = React.lazy(() => import('./pages/ScenarioPage').then(m => ({ default: m.ScenarioPage })));
 const AIScenarioPage = React.lazy(() => import('./pages/AIScenarioPage').then(m => ({ default: m.AIScenarioPage })));
 const AIAssistantPage = React.lazy(() => import('./pages/AIAssistantPage').then(m => ({ default: m.AIAssistantPage })));
 const ProgressPage = React.lazy(() => import('./pages/ProgressPage').then(m => ({ default: m.ProgressPage })));
@@ -24,7 +22,6 @@ const SettingsPage = React.lazy(() => import('./pages/SettingsPage').then(m => (
 const LeaderboardPage = React.lazy(() => import('./pages/LeaderboardPage').then(m => ({ default: m.LeaderboardPage })));
 const CertificatePage = React.lazy(() => import('./pages/CertificatePage').then(m => ({ default: m.CertificatePage })));
 const TeacherDashboard = React.lazy(() => import('./pages/TeacherDashboard').then(m => ({ default: m.TeacherDashboard })));
-const SMSAnalyzerPage = React.lazy(() => import('./pages/SMSAnalyzerPage').then(m => ({ default: m.SMSAnalyzerPage })));
 const CallSimulatorPage = React.lazy(() => import('./pages/CallSimulatorPage').then(m => ({ default: m.CallSimulatorPage })));
 const VoiceCallPage = React.lazy(() => import('./pages/VoiceCallPage').then(m => ({ default: m.VoiceCallPage })));
 const CyberDefensePage = React.lazy(() => import('./pages/CyberDefensePage').then(m => ({ default: m.CyberDefensePage })));
@@ -68,28 +65,12 @@ function App() {
                                         path="/training"
                                         element={
                                             <ProtectedRoute>
-                                                <TrainingPage />
-                                            </ProtectedRoute>
-                                        }
-                                    />
-                                    <Route
-                                        path="/training/:id"
-                                        element={
-                                            <ProtectedRoute>
-                                                <ScenarioPage />
-                                            </ProtectedRoute>
-                                        }
-                                    />
-                                    <Route
-                                        path="/ai-scenarios"
-                                        element={
-                                            <ProtectedRoute>
                                                 <AIScenarioPage />
                                             </ProtectedRoute>
                                         }
                                     />
                                     <Route
-                                        path="/ai-scenarios/:scenarioId"
+                                        path="/training/:scenarioId"
                                         element={
                                             <ProtectedRoute>
                                                 <AIScenarioPage />
@@ -157,14 +138,6 @@ function App() {
                                         element={
                                             <ProtectedRoute>
                                                 <TeacherDashboard />
-                                            </ProtectedRoute>
-                                        }
-                                    />
-                                    <Route
-                                        path="/sms-analyzer"
-                                        element={
-                                            <ProtectedRoute>
-                                                <SMSAnalyzerPage />
                                             </ProtectedRoute>
                                         }
                                     />

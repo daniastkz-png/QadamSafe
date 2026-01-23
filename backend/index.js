@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const { assistantContext } = require("./knowledge/qadamsafe-context");
 
 // Initialize Firebase Admin with service account
 let serviceAccount;
@@ -650,7 +650,9 @@ Safety Rules:
 - Do not provide instructions on how to hack or exploit systems.
 - If asked about non-cybersecurity topics, politely redirect.
 
-Format: Keep answers relatively short (under 200 words) unless asked for details. Use formatting for readability.`;
+Format: Keep answers relatively short (under 200 words) unless asked for details. Use formatting for readability.
+
+${assistantContext}`;
 
 app.post("/api/ai/chat", firebaseAuthMiddleware, async (req, res) => {
     try {
