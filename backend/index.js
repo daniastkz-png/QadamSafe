@@ -4,7 +4,23 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { assistantContext } = require("./knowledge/qadamsafe-context");
+const jwt = require("jsonwebtoken");
+
+// Inline Context to avoid module resolution issues on Render
+const assistantContext = `
+Контекст QadamSafe: образовательная платформа по кибербезопасности для Казахстана.
+Аудитория: школьники, студенты, семьи. Отвечай понятно, по делу, без лишнего.
+
+Казахстан — банки и сервисы:
+- Kaspi: 7111, kaspi.kz. Настоящий Kaspi не просит коды по телефону и не шлёт ссылки «разблокировать карту».
+- Halyk, Forte: только официальные приложения и сайты. Звонки «от банка» с просьбой назвать код — мошенники.
+- eGov: egov.kz, gov.kz. Подделки: egov-kz.site, egov-kz.com, egov.kz-*.
+- OLX, Kolesa, Kaspi Объявления: мошенники часто просят предоплату вне площадки или «для доставки»; OLX Доставка так не работает.
+- Kazpost, Glovo: не просят «подтвердить заказ» по ссылке с данными карты. Курьер не просит скрин с картой.
+- inDriver, Яндекс Такси: оплата через приложение; просьба перевести «напрямую на Kaspi» — подозрительно.
+
+Красные флаги: срочность («сейчас», «в течение часа»), просьбы о коде/SMS, переходах по ссылке, переводе денег «прямо на Kaspi», домены с опечатками (kaspl-bank, egov-kz.site).
+`.trim();
 
 // Initialize Firebase Admin with service account
 let serviceAccount;
