@@ -15,7 +15,7 @@ services:
         value: production
       - key: FIREBASE_SERVICE_ACCOUNT
         sync: false # Must be set manually in Render dashboard
-      - key: GEMINI_API_KEY
+      - key: OPENAI_API_KEY
         sync: false
       - key: JWT_SECRET
         sync: false

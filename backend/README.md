@@ -40,7 +40,7 @@
 | Key | Value |
 |-----|-------|
 | `FIREBASE_SERVICE_ACCOUNT` | Содержимое JSON файла из Шага 1 (в одну строку!) |
-| `GEMINI_API_KEY` | `AIzaSyClYvOSI5DT8vQGR9Upiq-MQ_FAhEhZ_I8` |
+| `OPENAI_API_KEY` | Ключ с [platform.openai.com/api-keys](https://platform.openai.com/api-keys) (для gpt-4o-mini: сценарии, чат) |
 | `JWT_SECRET` | `qadamsafe-secret-key-2024` |
 
 > ⚠️ **Важно:** JSON нужно вставить как одну строку, без переносов!

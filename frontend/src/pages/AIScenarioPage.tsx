@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { ScenarioPlayer } from '../components/ScenarioPlayer';
 import { firebaseAIAPI, AITopic } from '../services/firebase';
+import { ScenarioContextModal } from '../components/ScenarioContextModal';
 import { CyberTerminal } from '../components/CyberTerminal';
 import { Sparkles, ArrowLeft, Loader2, Zap, History, Play, RefreshCw, Trophy, CheckCircle } from 'lucide-react';
 import type { Scenario } from '../types';
@@ -23,6 +24,7 @@ export const AIScenarioPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [showHistory, setShowHistory] = useState(false);
     const [postResults, setPostResults] = useState<{ score: number; mistakes: number } | null>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     // Hardcoded topics (fallback if API fails) - Kazakhstan-specific
     const defaultTopics: AITopic[] = [
@@ -89,6 +91,7 @@ export const AIScenarioPage: React.FC = () => {
         try {
             const scenario = await firebaseAIAPI.getScenarioById(id);
             setCurrentScenario(scenario as Scenario);
+            setIsPlaying(false);
         } catch (err) {
             console.error('Failed to load scenario:', err);
             setError('Сценарий не найден');
@@ -105,6 +108,7 @@ export const AIScenarioPage: React.FC = () => {
         try {
             const scenario = await firebaseAIAPI.generateScenario(selectedTopic, i18n.language);
             setCurrentScenario(scenario as Scenario);
+            setIsPlaying(false);
             setMyScenarios(prev => [scenario as Scenario, ...prev]);
             navigate(`/training/${(scenario as Scenario).id}`);
         } catch (err: any) {
@@ -152,40 +156,59 @@ export const AIScenarioPage: React.FC = () => {
         return scenario.title;
     };
 
+    const getLocalizedDescription = (scenario: Scenario) => {
+        if (i18n.language === 'en' && scenario.descriptionEn) return scenario.descriptionEn;
+        if (i18n.language === 'kk' && scenario.descriptionKk) return scenario.descriptionKk;
+        return scenario.description || '';
+    };
+
     // If playing a scenario
     if (currentScenario) {
         return (
             <DashboardLayout>
-                <div className="min-h-screen bg-background">
-                    <div className="max-w-4xl mx-auto p-4 sm:p-8">
-                        {/* Back button */}
-                        <button
-                            onClick={() => {
-                                setCurrentScenario(null);
-                                navigate('/training');
-                            }}
-                            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
-                        >
-                            <ArrowLeft className="w-4 h-4" />
-                            {t('common.back', 'Назад')}
-                        </button>
+                {!isPlaying ? (
+                    <ScenarioContextModal
+                        title={getLocalizedTitle(currentScenario)}
+                        description={getLocalizedDescription(currentScenario)}
+                        subtitle={getLocalizedTopicName(topics.find(t => t.id === currentScenario.type?.toLowerCase()) || defaultTopics[0])}
+                        onStart={() => setIsPlaying(true)}
+                        onClose={() => {
+                            setCurrentScenario(null);
+                            navigate('/training');
+                        }}
+                    />
+                ) : (
+                    <div className="min-h-screen bg-background">
+                        <div className="max-w-4xl mx-auto p-4 sm:p-8">
+                            {/* Back button */}
+                            <button
+                                onClick={() => {
+                                    setCurrentScenario(null);
+                                    navigate('/training');
+                                }}
+                                className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                                {t('common.back', 'Назад')}
+                            </button>
 
-                        {/* AI Badge */}
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30">
-                                <Sparkles className="w-4 h-4 text-purple-400" />
-                                <span className="text-sm font-medium text-purple-300">
-                                    {t('ai.generated', 'Сгенерировано ИИ')}
-                                </span>
+                            {/* AI Badge */}
+                            <div className="flex items-center gap-2 mb-4">
+                                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30">
+                                    <Sparkles className="w-4 h-4 text-purple-400" />
+                                    <span className="text-sm font-medium text-purple-300">
+                                        {t('ai.generated', 'Сгенерировано ИИ')}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
 
-                        <ScenarioPlayer
-                            scenario={currentScenario}
-                            onComplete={handleScenarioComplete}
-                        />
+                            <ScenarioPlayer
+                                scenario={currentScenario}
+                                onComplete={handleScenarioComplete}
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
             </DashboardLayout>
         );
     }
