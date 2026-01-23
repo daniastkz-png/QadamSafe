@@ -589,7 +589,7 @@ app.post("/api/ai/generate-scenario", authMiddleware, async (req, res) => {
             requiredTier: "FREE",
             pointsReward: 15,
             order: 100, // AI scenarios come after manual ones
-            isLegitimate: false,
+            isLegitimate: scenarioData.isLegitimate ?? isLegitimate,
             isAIGenerated: true,
             generatedAt: now,
             content: {

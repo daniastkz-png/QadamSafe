@@ -200,12 +200,56 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
     if (showCompletionBlock && scenario.completionBlock) {
         return (
             <div className="max-w-3xl mx-auto">
-                <div className="cyber-card mb-6 p-8 bg-gradient-to-br from-cyber-green/10 to-cyber-blue/10 border border-cyber-green/30">
-                    <h3 className="text-2xl font-bold text-cyber-green text-center mb-6">
+                {/* Reveal: Was it a scam or legitimate? */}
+                <div className={`cyber-card mb-6 p-8 border-2 ${scenario.isLegitimate
+                        ? 'bg-gradient-to-br from-cyber-green/10 to-emerald-500/10 border-cyber-green/50'
+                        : 'bg-gradient-to-br from-cyber-red/10 to-orange-500/10 border-cyber-red/50'
+                    }`}>
+                    {/* Verdict Badge */}
+                    <div className="flex justify-center mb-6">
+                        <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full ${scenario.isLegitimate
+                                ? 'bg-cyber-green/20 border border-cyber-green/40'
+                                : 'bg-cyber-red/20 border border-cyber-red/40'
+                            }`}>
+                            {scenario.isLegitimate ? (
+                                <>
+                                    <CheckCircle className="w-6 h-6 text-cyber-green" />
+                                    <span className="text-lg font-bold text-cyber-green">
+                                        {t('scenario.verdict.legitimate', '✅ Это был настоящий человек')}
+                                    </span>
+                                </>
+                            ) : (
+                                <>
+                                    <XCircle className="w-6 h-6 text-cyber-red" />
+                                    <span className="text-lg font-bold text-cyber-red">
+                                        {t('scenario.verdict.scammer', '🚨 Это был мошенник!')}
+                                    </span>
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    <h3 className={`text-2xl font-bold text-center mb-6 ${scenario.isLegitimate ? 'text-cyber-green' : 'text-cyber-red'
+                        }`}>
                         {getLocalizedCompletionTitle()}
                     </h3>
+
                     <div className="text-foreground text-lg leading-relaxed whitespace-pre-line bg-background/50 p-6 rounded-xl border border-white/5">
                         {getLocalizedCompletionSummary()}
+                    </div>
+
+                    {/* Learning tip */}
+                    <div className="mt-6 p-4 rounded-lg bg-background/30 border border-white/10">
+                        <h4 className="font-semibold text-cyber-yellow mb-2 flex items-center gap-2">
+                            <AlertTriangle className="w-5 h-5" />
+                            {t('scenario.learningTip', '💡 Как распознать?')}
+                        </h4>
+                        <p className="text-muted-foreground">
+                            {scenario.isLegitimate
+                                ? t('scenario.tipLegitimate', 'Настоящие организации не требуют немедленных действий и персональных данных через SMS или звонки.')
+                                : t('scenario.tipScam', 'Мошенники используют срочность, страх и жадность. Всегда проверяйте информацию через официальные каналы.')
+                            }
+                        </p>
                     </div>
                 </div>
 
@@ -233,8 +277,8 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                         <button
                             onClick={() => setSoundEnabled(!soundEnabled)}
                             className={`p-1.5 rounded-lg transition-all ${soundEnabled
-                                    ? 'text-cyber-green hover:bg-cyber-green/10'
-                                    : 'text-muted-foreground hover:bg-muted'
+                                ? 'text-cyber-green hover:bg-cyber-green/10'
+                                : 'text-muted-foreground hover:bg-muted'
                                 }`}
                             title={soundEnabled ? t('scenario.soundOn', 'Звук включен') : t('scenario.soundOff', 'Звук выключен')}
                         >
@@ -244,9 +288,11 @@ export const ScenarioPlayer: React.FC<ScenarioPlayerProps> = ({ scenario, onComp
                                 <VolumeX className="w-4 h-4" />
                             )}
                         </button>
-                        <span className="text-sm text-cyber-green">
-                            {scenario.isLegitimate ? t('scenario.legitimate') : t('scenario.potential_threat')}
-                        </span>
+                        {scenario.isAIGenerated && (
+                            <span className="text-sm text-purple-400">
+                                {t('ai.generated', 'AI')}
+                            </span>
+                        )}
                     </div>
                 </div>
                 <div className="w-full bg-muted rounded-full h-2">

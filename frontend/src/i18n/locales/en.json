@@ -494,7 +494,22 @@
             "dangerous": "This could have been risky"
         },
         "soundOn": "Sound on",
-        "soundOff": "Sound off"
+        "soundOff": "Sound off",
+        "verdict": {
+            "legitimate": "✅ This was a real person",
+            "scammer": "🚨 This was a scammer!"
+        },
+        "learningTip": "💡 How to recognize?",
+        "tipLegitimate": "Real organizations and people don't demand immediate action, don't ask for SMS codes, and don't create artificial urgency.",
+        "tipScam": "Scammers use urgency, fear, and greed. Always verify information through official channels — call yourself or visit the official website."
+    },
+    "scenarioContext": {
+        "about": "About the scenario",
+        "howToRecognizeScam": "How to recognize a scammer",
+        "legitimacySigns": "Signs of a real person/organization",
+        "remember": "Remember",
+        "start": "Start scenario",
+        "startScenario": "Start scenario"
     },
     "progress": {
         "title": "Your Progress",
@@ -778,6 +793,48 @@
             "explanation1": "Small amount — on purpose! Scammers expect you won't verify because of just 450₸.\n\nBut on the phishing site, they'll get your card data and can withdraw ALL your money.",
             "explanation2": "Excellent! KazPost's official website is post.kz. You can check the real package status there.\n\nYou didn't fall for the small amount and verified the information.",
             "explanation3": "Correct! Calling the hotline will confirm if there's a package.\n\nOfficial services never send payment links via SMS."
+        }
+    },
+    "voiceCall": {
+        "title": "Voice Simulator",
+        "subtitle": "Learn to distinguish real calls from scams",
+        "badge": "Voice Simulator",
+        "startCall": "Answer Call",
+        "contextDesc": "You will receive a call from an unknown person. It could be a scammer or a real person/organization. Listen carefully — after the call you will determine who called and get a breakdown.",
+        "listening": "Listening...",
+        "waitingForResponse": "Waiting...",
+        "incomingCall": "Incoming Call",
+        "ttsNotSupported": "Your browser does not support voice synthesis. The simulator will work in text mode.",
+        "startTraining": "Start Training",
+        "replay": "Replay",
+        "next": "Next",
+        "ready": {
+            "title": "Ready for training?",
+            "desc": "You will receive a call from an unknown number. It could be a real person or a scammer. Listen and decide who it is!"
+        },
+        "howItWorks": {
+            "title": "How it works?"
+        },
+        "stats": {
+            "scenarios": "Scenarios",
+            "scams": "Scams",
+            "real": "Real",
+            "chance": "Chance"
+        },
+        "verdict": {
+            "callEnded": "Call Ended",
+            "from": "Caller",
+            "question": "What do you think?",
+            "isScam": "It was a scammer!",
+            "isReal": "It was a real call"
+        },
+        "result": {
+            "correct": "Correct!",
+            "wrong": "Mistake!",
+            "wasScam": "🚨 It was a scammer",
+            "wasReal": "✅ It was a real call",
+            "redFlags": "Red flags:",
+            "legitimacySigns": "Legitimacy signs:"
         }
     },
     "tips": {

@@ -20,13 +20,16 @@ export interface Scenario {
     description: string;
     descriptionEn?: string;
     descriptionKk?: string;
-    type: 'EMAIL_PHISHING' | 'SMS_PHISHING' | 'FAKE_WEBSITE' | 'SOCIAL_ENGINEERING' | 'MALWARE_DETECTION' | 'PHISHING' | 'INVESTMENT_SCAM';
+    type: 'EMAIL_PHISHING' | 'SMS_PHISHING' | 'FAKE_WEBSITE' | 'SOCIAL_ENGINEERING' | 'MALWARE_DETECTION' | 'PHISHING' | 'INVESTMENT_SCAM' | 'AI_GENERATED' | string;
     difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
     requiredTier: 'FREE' | 'PRO' | 'BUSINESS';
     pointsReward: number;
     order: number;
     prerequisiteScenarioId?: string;
     isLegitimate: boolean;
+    isAIGenerated?: boolean;
+    legitimateExplanation?: string;
+    scamExplanation?: string;
     content: ScenarioContent;
     completionBlock?: {
         title: string;

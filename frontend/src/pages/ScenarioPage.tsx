@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { ScenarioPlayer } from '../components/ScenarioPlayer';
+import { ScenarioContextModal } from '../components/ScenarioContextModal';
 import { firebaseScenariosAPI } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { Loader2, ArrowLeft } from 'lucide-react';
@@ -11,11 +12,12 @@ import type { Scenario } from '../types';
 export const ScenarioPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { refreshUser } = useAuth();
     const [scenario, setScenario] = useState<Scenario | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showContextModal, setShowContextModal] = useState(true);
 
     useEffect(() => {
         const loadScenario = async () => {
@@ -93,6 +95,12 @@ export const ScenarioPage: React.FC = () => {
         );
     }
 
+    const lang = i18n.language || 'ru';
+    const description = (lang === 'kk' ? scenario.descriptionKk : lang === 'en' ? scenario.descriptionEn : null) || scenario.description;
+    const summary = scenario.completionBlock
+        ? ((lang === 'kk' ? scenario.completionBlock.summaryKk : lang === 'en' ? scenario.completionBlock.summaryEn : null) || scenario.completionBlock.summary)
+        : undefined;
+
     return (
         <DashboardLayout>
             <div className="min-h-screen bg-background">
@@ -109,10 +117,23 @@ export const ScenarioPage: React.FC = () => {
                         {scenario.title}
                     </h1>
 
-                    <ScenarioPlayer
-                        scenario={scenario}
-                        onComplete={handleComplete}
-                    />
+                    {showContextModal ? (
+                        <ScenarioContextModal
+                            title={scenario.title}
+                            description={description}
+                            summary={summary}
+                            isScam={!scenario.isLegitimate}
+                            startLabel={t('scenarioContext.startScenario', 'Начать сценарий')}
+                            onStart={() => setShowContextModal(false)}
+                            onClose={() => navigate('/training')}
+                            showBackButton={true}
+                        />
+                    ) : (
+                        <ScenarioPlayer
+                            scenario={scenario}
+                            onComplete={handleComplete}
+                        />
+                    )}
                 </div>
             </div>
         </DashboardLayout>

@@ -26,6 +26,7 @@ const CertificatePage = React.lazy(() => import('./pages/CertificatePage').then(
 const TeacherDashboard = React.lazy(() => import('./pages/TeacherDashboard').then(m => ({ default: m.TeacherDashboard })));
 const SMSAnalyzerPage = React.lazy(() => import('./pages/SMSAnalyzerPage').then(m => ({ default: m.SMSAnalyzerPage })));
 const CallSimulatorPage = React.lazy(() => import('./pages/CallSimulatorPage').then(m => ({ default: m.CallSimulatorPage })));
+const VoiceCallPage = React.lazy(() => import('./pages/VoiceCallPage').then(m => ({ default: m.VoiceCallPage })));
 const CyberDefensePage = React.lazy(() => import('./pages/CyberDefensePage').then(m => ({ default: m.CyberDefensePage })));
 const TeamChallengesPage = React.lazy(() => import('./pages/TeamChallengesPage').then(m => ({ default: m.TeamChallengesPage })));
 
@@ -172,6 +173,14 @@ function App() {
                                         element={
                                             <ProtectedRoute>
                                                 <CallSimulatorPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/voice-call"
+                                        element={
+                                            <ProtectedRoute>
+                                                <VoiceCallPage />
                                             </ProtectedRoute>
                                         }
                                     />

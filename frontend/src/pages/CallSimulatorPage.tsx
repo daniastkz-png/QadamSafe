@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { FeatureGate } from '../components/FeatureGate';
+import { ScenarioContextModal } from '../components/ScenarioContextModal';
 import { useAuth } from '../contexts/AuthContext';
 import {
     Phone, PhoneOff, PhoneIncoming, AlertTriangle,
@@ -21,6 +22,7 @@ interface CallScenario {
     description: string;
     dialogues: Dialogue[];
     correctEnding: string;
+    redFlags?: string[];
 }
 
 interface Dialogue {
@@ -59,6 +61,11 @@ const CALL_SCENARIOS: CallScenario[] = [
         difficulty: 'easy',
         description: 'Вам звонят якобы из службы безопасности банка и сообщают о подозрительной активности.',
         correctEnding: 'Правильно! Настоящий банк никогда не просит данные карты по телефону.',
+        redFlags: [
+            'Создание паники и срочности («деньги списываются сейчас!»)',
+            'Запрос данных карты и кода из SMS по телефону',
+            'Давление и уход от ответа на проверочные вопросы (ID сотрудника)',
+        ],
         dialogues: [
             {
                 id: 'd1',
@@ -159,6 +166,11 @@ const CALL_SCENARIOS: CallScenario[] = [
         difficulty: 'medium',
         description: 'Звонящий представляется сотрудником полиции и сообщает о возбуждённом уголовном деле.',
         correctEnding: 'Полиция не решает вопросы по телефону и не требует оплаты для "закрытия дела".',
+        redFlags: [
+            'Запугивание властями и уголовным делом',
+            'Требует деньги за «закрытие дела» по телефону',
+            'Уход от ответа на проверочные вопросы (номер дела, явка в отделение)',
+        ],
         dialogues: [
             {
                 id: 'd1',
@@ -259,6 +271,11 @@ const CALL_SCENARIOS: CallScenario[] = [
         difficulty: 'hard',
         description: 'Звонящий притворяется вашим родственником попавшим в беду и срочно просит деньги.',
         correctEnding: 'Всегда перезванивайте родственникам напрямую для проверки!',
+        redFlags: [
+            'Эмоциональная манипуляция («помоги», «мне плохо»)',
+            'Просит не говорить другим родственникам («маме не говори»)',
+            'Требует срочный перевод денег, не даёт проверить по другому каналу',
+        ],
         dialogues: [
             {
                 id: 'd1',
@@ -656,6 +673,8 @@ export const CallSimulatorPage: React.FC = () => {
     const [selectedScenario, setSelectedScenario] = useState<CallScenario | null>(null);
     const [callState, setCallState] = useState<CallState | null>(null);
     const [showResults, setShowResults] = useState(false);
+    const [pendingScenario, setPendingScenario] = useState<CallScenario | null>(null);
+    const [showContextModal, setShowContextModal] = useState(false);
 
     const startCall = (scenario: CallScenario) => {
         setSelectedScenario(scenario);
@@ -815,7 +834,7 @@ export const CallSimulatorPage: React.FC = () => {
                                         </div>
                                     </div>
                                     <button
-                                        onClick={() => startCall(scenario)}
+                                        onClick={() => { setPendingScenario(scenario); setShowContextModal(true); }}
                                         className="px-6 py-3 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600 transition-colors flex items-center gap-2"
                                     >
                                         <Play className="w-4 h-4" />
@@ -859,6 +878,22 @@ export const CallSimulatorPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Context modal before call */}
+            {showContextModal && pendingScenario && (
+                <ScenarioContextModal
+                    title={pendingScenario.title}
+                    subtitle={pendingScenario.caller}
+                    description={pendingScenario.description}
+                    redFlags={pendingScenario.redFlags}
+                    summary={pendingScenario.correctEnding}
+                    isScam={true}
+                    startLabel={t('callSimulator.startCall', 'Начать звонок')}
+                    onStart={() => { startCall(pendingScenario); setShowContextModal(false); setPendingScenario(null); }}
+                    onClose={() => { setShowContextModal(false); setPendingScenario(null); }}
+                    showBackButton={true}
+                />
+            )}
 
             {/* Call Overlays */}
             {selectedScenario && callState?.status === 'ringing' && (

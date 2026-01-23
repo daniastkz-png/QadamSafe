@@ -10,5 +10,7 @@
     "deploy:functions": "cd functions && npm run deploy",
     "install:all": "npm install && cd frontend && npm install && cd ../functions && npm install"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "firebase-tools": "^15.4.0"
+  }
 }
