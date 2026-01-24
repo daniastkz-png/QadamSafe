@@ -717,7 +717,7 @@ export const firebaseAssistantAPI = {
         if (!currentUser) throw new Error('Not authenticated');
         const legacy = await firebaseAssistantAPI.getLegacyHistory();
         if (legacy.length === 0) throw new Error('Nothing to migrate');
-        const firstUser = legacy.find((m: { role?: string }) => m.role === 'user') as { content?: string } | undefined;
+        const firstUser = legacy.find((m: any) => m.role === 'user') as { content?: string } | undefined;
         const titleFromMsg = firstUser && typeof firstUser.content === 'string'
             ? (firstUser.content.replace(/\s+/g, ' ').trim().slice(0, 50) + (firstUser.content.replace(/\s+/g, ' ').trim().length > 50 ? '…' : '')) || 'Предыдущий чат'
             : 'Предыдущий чат';
