@@ -403,7 +403,6 @@ export const AIScenarioPage: React.FC = () => {
                     )}
 
                     {/* Info Block */}
-// ...
 
                     {/* Info Block */}
                     <div className="mt-12 p-6 rounded-xl bg-gradient-to-br from-purple-500/5 to-cyan-500/5 border border-purple-500/20">

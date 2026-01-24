@@ -61,8 +61,8 @@ const ShieldVisualization: React.FC<{ strength: number }> = ({ strength }) => {
                 <div
                     key={i}
                     className={`absolute inset-0 rounded-full border-4 transition-all duration-500 ${i < layers
-                            ? 'border-cyber-green opacity-100'
-                            : 'border-muted opacity-30'
+                        ? 'border-cyber-green opacity-100'
+                        : 'border-muted opacity-30'
                         }`}
                     style={{
                         transform: `scale(${1 - i * 0.15})`,
@@ -73,10 +73,10 @@ const ShieldVisualization: React.FC<{ strength: number }> = ({ strength }) => {
             {/* Center shield icon */}
             <div className="absolute inset-0 flex items-center justify-center">
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 ${strength >= 80
-                        ? 'bg-cyber-green text-background shadow-lg shadow-cyber-green/50'
-                        : strength >= 50
-                            ? 'bg-cyber-yellow text-background'
-                            : 'bg-muted text-muted-foreground'
+                    ? 'bg-cyber-green text-background shadow-lg shadow-cyber-green/50'
+                    : strength >= 50
+                        ? 'bg-cyber-yellow text-background'
+                        : 'bg-muted text-muted-foreground'
                     }`}>
                     <ShieldCheck className="w-8 h-8" />
                 </div>
@@ -92,6 +92,7 @@ const ThreatItem: React.FC<{
     recognized: boolean;
     count: number;
 }> = ({ icon, name, recognized, count }) => {
+    const { t } = useTranslation();
     return (
         <div className={`flex items-center justify-between p-3 rounded-lg transition-all ${recognized ? 'bg-cyber-green/10' : 'bg-muted/50'
             }`}>
@@ -105,7 +106,7 @@ const ThreatItem: React.FC<{
             <div className="flex items-center gap-2">
                 {recognized ? (
                     <>
-                        <span className="text-sm text-cyber-green">{count} изучено</span>
+                        <span className="text-sm text-cyber-green">{t('protection.learned', '{{count}} изучено', { count })}</span>
                         <CheckCircle className="w-4 h-4 text-cyber-green" />
                     </>
                 ) : (

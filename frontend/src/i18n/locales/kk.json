@@ -588,6 +588,74 @@
         "securityExpert": "Қауіпсіздік сарапшысы",
         "securityExpertDesc": "1000 ұпай жинаңыз"
     },
+    "progress": {
+        "title": "Сіздің прогрессіңіз",
+        "subtitle": "Киберқауіпсіздікке жолыңызды қадағалаңыз",
+        "outOf": "-дан",
+        "currentRank": "Ағымдағы деңгей",
+        "nextRank": "Келесі",
+        "completed": "Қол жеткізілді",
+        "weeklyActivity": "Апталық белсенділік",
+        "scenariosTotal": "барлық сценарийлер",
+        "skillsRadar": "Қорғаныс дағдылары",
+        "achievementsTitle": "Жетістіктер",
+        "viewAll": "Барлығы",
+        "noProgress": "Сіз әлі оқуды бастаған жоқсыз",
+        "startFirst": "Бірінші сценарийді өту",
+        "streak": {
+            "start": "Серияны бастаңыз!",
+            "current": "{{count}} күн қатарынан!",
+            "best": "Ең үздік серия: {{count}} күн"
+        },
+        "achievements": {
+            "firstScenario": "Алғашқы қадам",
+            "streak3": "3 күн қатарынан",
+            "noMistakes": "Қатесіз",
+            "allScenarios": "Барлық сценарийлер"
+        },
+        "unknownScenario": "Сценарий",
+        "statTitles": {
+            "securityScore": "Қорғаныс рейтингі",
+            "completedScenarios": "Өтілген сценарийлер",
+            "totalMistakes": "Қателер",
+            "completionRate": "Прогресс"
+        },
+        "skills": {
+            "phishing": "Фишинг",
+            "sms": "SMS",
+            "calls": "Қоңыраулар",
+            "social": "Әлеуметтік"
+        }
+    },
+    "protection": {
+        "title": "Сіздің қорғанысыңыз",
+        "subtitle": "Сіздің киберқауіпсіздік статистикаңыз",
+        "score": "Қорғаныс деңгейі",
+        "moneySaved": "Потенциалды сақталғаны",
+        "threatsRecognized": "Қауіптер зерттелді",
+        "perfectRuns": "Қатесіз",
+        "totalXP": "Барлық XP",
+        "knownThreats": "Зерттелген қауіптер",
+        "learned": "{{count}} зерттелді",
+        "improveTitle": "Қорғанысты қалай жақсартуға болады?",
+        "improveTip": {
+            "complete": "Барлық қауіп түрлерін зерттеу үшін қалған сценарийлерді өтіңіз.",
+            "perfect": "Максималды қорғаныс үшін сценарийлерді қатесіз өтіңіз."
+        },
+        "level": {
+            "maximum": "Максималды",
+            "high": "Жоғары",
+            "medium": "Орташа",
+            "low": "Төмен",
+            "minimal": "Минималды"
+        },
+        "threats": {
+            "sms": "SMS алаяқтық",
+            "calls": "Алаяқтардың қоңыраулары",
+            "phishing": "Фишинг шабуылдары",
+            "social": "Әлеуметтік инженерия"
+        }
+    },
     "subscription": {
         "title": "Жазылым",
         "currentPlan": "Ағымдағы жоспар",

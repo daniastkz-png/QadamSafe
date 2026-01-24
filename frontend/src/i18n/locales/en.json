@@ -596,6 +596,45 @@
             "allScenarios": "All Scenarios"
         }
     },
+    "progress": {
+        "title": "Your Progress",
+        "subtitle": "Track your journey to cybersecurity",
+        "outOf": "of",
+        "currentRank": "Current Rank",
+        "nextRank": "Next",
+        "completed": "Reached",
+        "weeklyActivity": "Weekly Activity",
+        "scenariosTotal": "total scenarios",
+        "skillsRadar": "Defense Skills",
+        "achievementsTitle": "Achievements",
+        "viewAll": "All",
+        "noProgress": "You haven't started training yet",
+        "startFirst": "Start First Scenario",
+        "streak": {
+            "start": "Start a streak!",
+            "current": "{{count}} days in a row!",
+            "best": "Best streak: {{count}} days"
+        },
+        "achievements": {
+            "firstScenario": "First Step",
+            "streak3": "3 days streak",
+            "noMistakes": "No Mistakes",
+            "allScenarios": "All Scenarios"
+        },
+        "unknownScenario": "Scenario",
+        "statTitles": {
+            "securityScore": "Security Score",
+            "completedScenarios": "Completed",
+            "totalMistakes": "Mistakes",
+            "completionRate": "Progress"
+        },
+        "skills": {
+            "phishing": "Phishing",
+            "sms": "SMS",
+            "calls": "Calls",
+            "social": "Social Eng."
+        }
+    },
     "achievements": {
         "title": "Achievements",
         "subtitle": "Your rewards and training progress",
@@ -637,6 +676,35 @@
         "secret": {
             "title": "Secret achievements",
             "hint": "Keep training to reveal"
+        }
+    },
+    "protection": {
+        "title": "Your Protection",
+        "subtitle": "Your cybersecurity statistics",
+        "score": "Protection Level",
+        "moneySaved": "Potentially Saved",
+        "threatsRecognized": "Threats Learned",
+        "perfectRuns": "Mistake Free",
+        "totalXP": "Total XP",
+        "knownThreats": "Known Threats",
+        "learned": "{{count}} learned",
+        "improveTitle": "How to improve protection?",
+        "improveTip": {
+            "complete": "Complete remaining scenarios to learn about all threat types.",
+            "perfect": "Complete scenarios without mistakes for maximum protection."
+        },
+        "level": {
+            "maximum": "Maximum",
+            "high": "High",
+            "medium": "Medium",
+            "low": "Low",
+            "minimal": "Minimal"
+        },
+        "threats": {
+            "sms": "SMS Fraud",
+            "calls": "Scam Calls",
+            "phishing": "Phishing Attacks",
+            "social": "Social Engineering"
         }
     },
     "subscription": {
