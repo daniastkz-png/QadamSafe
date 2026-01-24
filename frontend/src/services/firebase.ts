@@ -22,10 +22,35 @@ const auth = getAuth(app);
 const functions = getFunctions(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Connect to local emulator in development
-if (window.location.hostname === 'localhost') {
+// Connect to Firebase Functions emulator only when explicitly enabled (avoids "Failed to fetch" if emulator isn't running)
+if (window.location.hostname === 'localhost' && import.meta.env.VITE_USE_FUNCTIONS_EMULATOR === 'true') {
     connectFunctionsEmulator(functions, '127.0.0.1', 5001);
     console.log('🔧 Connected to Firebase Functions Emulator');
+}
+
+// Backend API URL (must be set for /api/ai/generate-scenario and /api/ai/chat)
+// Local: VITE_API_URL=http://localhost:3001 in .env.local; production: your Render backend, e.g. https://qadamsafe-api.onrender.com
+const API_URL = import.meta.env.VITE_API_URL || "https://qadamsafe-api.onrender.com";
+
+const API_TIMEOUT_MS = 90000; // 90s for Render cold start
+
+async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = API_TIMEOUT_MS): Promise<Response> {
+    const ctrl = new AbortController();
+    const id = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+        const res = await fetch(url, { ...options, signal: ctrl.signal });
+        return res;
+    } catch (e: any) {
+        if (e?.name === "AbortError") {
+            throw new Error("Сервер не ответил вовремя. На Render первый запрос после паузы может занять ~1 мин. Попробуйте ещё раз.");
+        }
+        if (typeof e?.message === "string" && (e.message === "Failed to fetch" || e.message.includes("network") || e.message.includes("Load failed"))) {
+            throw new Error("Не удалось подключиться к серверу. Проверьте: 1) бэкенд запущен (локально: localhost:3001; прод: Render), 2) в .env.local задан VITE_API_URL=http://localhost:3001 для локальной разработки.");
+        }
+        throw e;
+    } finally {
+        clearTimeout(id);
+    }
 }
 
 // Scenario cache for optimizing real-time listeners
@@ -483,7 +508,7 @@ export const firebaseAIAPI = {
         try {
             const token = await currentUser.getIdToken();
 
-            const response = await fetch(`${API_URL}/api/ai/generate-scenario`, {
+            const response = await fetchWithTimeout(`${API_URL}/api/ai/generate-scenario`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -579,9 +604,6 @@ export const firebaseAIAPI = {
 
 // ============= AI ASSISTANT API =============
 
-// API URL for backend
-const API_URL = import.meta.env.VITE_API_URL || 'https://qadamsafe.onrender.com';
-
 export const firebaseAssistantAPI = {
     sendMessage: async (message: string, history: { role: 'user' | 'model'; parts: string }[]) => {
         const currentUser = auth.currentUser;
@@ -594,7 +616,7 @@ export const firebaseAssistantAPI = {
             const token = await currentUser.getIdToken();
 
             // Call Render backend API instead of Gemini directly
-            const response = await fetch(`${API_URL}/api/ai/chat`, {
+            const response = await fetchWithTimeout(`${API_URL}/api/ai/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

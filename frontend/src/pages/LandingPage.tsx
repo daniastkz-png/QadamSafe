@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Footer } from '../components/Footer';
+import { PhishingSimulation } from '../components/PhishingSimulation';
 
 
 
@@ -246,28 +247,47 @@ export const LandingPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* MISSION Section - Honest & Minimal */}
-            <section id="social-proof" className="py-16 px-4 border-y border-border/50">
-                <div className="max-w-4xl mx-auto text-center">
-                    <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-                        {t('landing.mission.text')}
-                        <span className="text-foreground font-medium"> {t('landing.mission.highlight1')} </span>
-                        и
-                        <span className="text-foreground font-medium"> {t('landing.mission.highlight2')}</span>
-                    </p>
+            {/* ABOUT / MISSION Section - "About Platform" */}
+            <section id="social-proof" className="py-24 px-4 border-y border-border/50 bg-background overflow-hidden">
+                <div className="max-w-6xl mx-auto">
+                    <div className="grid md:grid-cols-2 gap-12 items-center">
+                        {/* Left: Text Content */}
+                        <div className="space-y-8 text-center md:text-left">
+                            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                                {t('landing.about.title', 'О платформе')}
+                            </h2>
+                            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                                {t('landing.mission.text')}
+                                <span className="text-foreground font-medium text-cyber-green"> {t('landing.mission.highlight1')} </span>
+                                и
+                                <span className="text-foreground font-medium text-cyber-green"> {t('landing.mission.highlight2')}</span>
+                            </p>
 
-                    <div className="flex items-center justify-center gap-8 mt-8 text-muted-foreground/60">
-                        <div className="flex items-center gap-2">
-                            <Shield className="w-5 h-5 text-cyber-green" />
-                            <span className="text-sm">{t('landing.mission.free')}</span>
+                            <p className="text-muted-foreground leading-relaxed">
+                                {t('landing.about.description', 'Мы создаем безопасную среду, где каждый может научиться распознавать цифровые угрозы через практику, а не скучные лекции.')}
+                            </p>
+
+                            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 pt-4 text-muted-foreground/80">
+                                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border">
+                                    <Shield className="w-4 h-4 text-cyber-green" />
+                                    <span className="text-sm font-medium">{t('landing.mission.free')}</span>
+                                </div>
+                                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border">
+                                    <Sparkles className="w-4 h-4 text-cyber-green" />
+                                    <span className="text-sm font-medium">{t('landing.mission.ai')}</span>
+                                </div>
+                                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border">
+                                    <GraduationCap className="w-4 h-4 text-cyber-green" />
+                                    <span className="text-sm font-medium">{t('landing.mission.allAges')}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Sparkles className="w-5 h-5 text-cyber-green" />
-                            <span className="text-sm">{t('landing.mission.ai')}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <GraduationCap className="w-5 h-5 text-cyber-green" />
-                            <span className="text-sm">{t('landing.mission.allAges')}</span>
+
+                        {/* Right: Visual Simulation */}
+                        <div className="relative">
+                            {/* Decorative background blur */}
+                            <div className="absolute -inset-4 bg-cyber-green/20 blur-[100px] rounded-full opacity-50" />
+                            <PhishingSimulation />
                         </div>
                     </div>
                 </div>

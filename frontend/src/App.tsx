@@ -12,7 +12,7 @@ import './i18n/i18n';
 const LandingPage = React.lazy(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })));
 const AuthPage = React.lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
 const PartnersPage = React.lazy(() => import('./pages/PartnersPage').then(m => ({ default: m.PartnersPage })));
-const WelcomePage = React.lazy(() => import('./pages/WelcomePage').then(m => ({ default: m.WelcomePage })));
+const DashboardPage = React.lazy(() => import('./pages/DashboardPage').then(m => ({ default: m.DashboardPage })));
 const AIScenarioPage = React.lazy(() => import('./pages/AIScenarioPage').then(m => ({ default: m.AIScenarioPage })));
 const AIAssistantPage = React.lazy(() => import('./pages/AIAssistantPage').then(m => ({ default: m.AIAssistantPage })));
 const ProgressPage = React.lazy(() => import('./pages/ProgressPage').then(m => ({ default: m.ProgressPage })));
@@ -56,7 +56,7 @@ function App() {
                                         path="/welcome"
                                         element={
                                             <ProtectedRoute>
-                                                <WelcomePage />
+                                                <DashboardPage />
                                             </ProtectedRoute>
                                         }
                                     />

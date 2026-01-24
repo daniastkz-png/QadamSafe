@@ -1,6 +1,7 @@
 {
     "common": {
         "appName": "QadamSafe",
+        "start": "Start",
         "loading": "Loading...",
         "error": "Error",
         "success": "Success",
@@ -37,6 +38,10 @@
             "free": "Free",
             "ai": "AI-powered",
             "allAges": "For all ages"
+        },
+        "about": {
+            "title": "About Platform",
+            "description": "We create a safe environment where everyone can learn to recognize digital threats through practice, not boring lectures."
         },
         "features": {
             "title": "What You'll Get",
@@ -313,7 +318,12 @@
         "askAI": "Ask Question",
         "practice": "Practice",
         "stats": "Statistics",
-        "profile": "Profile"
+        "profile": "Profile",
+        "greetings": {
+            "variant1": ", ready to distinguish threat from normal?",
+            "variant2": ", time to check digital intuition.",
+            "variant3": ". Real or dangerous?"
+        }
     },
     "daily": {
         "title": "Daily Challenges",

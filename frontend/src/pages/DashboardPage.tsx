@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
@@ -10,6 +10,12 @@ export const DashboardPage: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
+    // Random greeting variant (1-3)
+    const [greetingVariant] = useState(() => {
+        const randomNum = Math.floor(Math.random() * 3) + 1;
+        return `dashboard.greetings.variant${randomNum}`;
+    });
+
     const tips = [
         { title: t('tips.password.title', 'Пароль'), text: t('tips.password.text', 'Используйте менеджер паролей. Единый пароль для всех сайтов — это риск.') },
         { title: t('tips.phishing.title', 'Фишинг'), text: t('tips.phishing.text', 'Никогда не переходите по ссылкам из неожиданных писем, даже от "банка".') },
@@ -20,15 +26,6 @@ export const DashboardPage: React.FC = () => {
 
     const randomTip = tips[Math.floor(Math.random() * tips.length)];
 
-
-    // Get greeting based on time of day
-    const getGreeting = () => {
-        const hour = new Date().getHours();
-        if (hour < 12) return t('common.goodMorning', 'Доброе утро');
-        if (hour < 18) return t('common.goodAfternoon', 'Добрый день');
-        return t('common.goodEvening', 'Добрый вечер');
-    };
-
     return (
         <DashboardLayout>
             <div className="min-h-screen bg-background p-6 md:p-8">
@@ -38,7 +35,8 @@ export const DashboardPage: React.FC = () => {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 animate-fade-in-up">
                         <div>
                             <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                                {getGreeting()}, <span className="text-cyber-green">{user?.name || user?.email?.split('@')[0]}</span>
+                                <span className="text-cyber-green">{user?.name || user?.email?.split('@')[0]}</span>
+                                {t(greetingVariant)}
                             </h1>
                             <p className="text-muted-foreground mt-1">
                                 {t('dashboard.welcomeSubtitle', 'Готовы продолжить обучение безопасности?')}
