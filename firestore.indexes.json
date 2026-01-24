@@ -4,15 +4,14 @@
             "collectionGroup": "progress",
             "queryScope": "COLLECTION",
             "fields": [
-                { "fieldPath": "userId", "order": "ASCENDING" },
-                { "fieldPath": "completedAt", "order": "DESCENDING" }
-            ]
-        },
-        {
-            "collectionGroup": "aiProgress",
-            "queryScope": "COLLECTION_GROUP",
-            "fields": [
-                { "fieldPath": "completedAt", "order": "DESCENDING" }
+                {
+                    "fieldPath": "userId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "completedAt",
+                    "order": "DESCENDING"
+                }
             ]
         }
     ],
