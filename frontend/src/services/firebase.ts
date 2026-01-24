@@ -31,10 +31,16 @@ if (window.location.hostname === 'localhost' && import.meta.env.VITE_USE_FUNCTIO
 // Backend API URL (for /api/ai/generate-scenario and /api/ai/chat)
 // Priority: VITE_API_URL in .env.local > auto localhost:3001 when in browser on localhost/127.0.0.1 > production
 const API_URL = (() => {
-    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
-    if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"))
+    // Explicitly check for production domain to avoid env var issues
+    if (typeof window !== "undefined" && (window.location.hostname === "qadamsafe.web.app" || window.location.hostname === "qadamsafe.firebaseapp.com")) {
+        return ""; // Relative path for Firebase Hosting rewrites
+    }
+    // Local development
+    if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
         return "http://localhost:3001";
-    return "https://qadamsafe-api.onrender.com";
+    }
+    // Fallback/Custom (e.g. preview channels)
+    return import.meta.env.VITE_API_URL || "";
 })();
 if (import.meta.env.DEV) {
     console.log("[QadamSafe] API_URL:", API_URL);

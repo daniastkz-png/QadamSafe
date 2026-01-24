@@ -1,10 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Shield, ShieldCheck, DollarSign, Users,
-    TrendingUp, Eye, Phone, Mail, MessageSquare,
-    CheckCircle, XCircle, Zap, Target
+    Shield, ShieldCheck, DollarSign,
+    TrendingUp, Eye, Zap, Target,
+    Smartphone, Lock, Globe, CreditCard,
+    Users
 } from 'lucide-react';
+import {
+    Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip
+} from 'recharts';
 
 interface ProtectionStatsProps {
     scenariosCompleted: number;
@@ -12,6 +16,7 @@ interface ProtectionStatsProps {
     perfectScenarios: number;
     totalXP: number;
     rank: number;
+    completedScenarioIds?: string[]; // Need IDs to categorize
 }
 
 // Animated counter component
@@ -50,72 +55,12 @@ const AnimatedCounter: React.FC<{ value: number; suffix?: string; prefix?: strin
     );
 };
 
-// Shield visualization component
-const ShieldVisualization: React.FC<{ strength: number }> = ({ strength }) => {
-    const layers = Math.min(Math.floor(strength / 20), 5);
-
-    return (
-        <div className="relative w-32 h-32 mx-auto">
-            {/* Shield layers */}
-            {[...Array(5)].map((_, i) => (
-                <div
-                    key={i}
-                    className={`absolute inset-0 rounded-full border-4 transition-all duration-500 ${i < layers
-                        ? 'border-cyber-green opacity-100'
-                        : 'border-muted opacity-30'
-                        }`}
-                    style={{
-                        transform: `scale(${1 - i * 0.15})`,
-                    }}
-                />
-            ))}
-
-            {/* Center shield icon */}
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 ${strength >= 80
-                    ? 'bg-cyber-green text-background shadow-lg shadow-cyber-green/50'
-                    : strength >= 50
-                        ? 'bg-cyber-yellow text-background'
-                        : 'bg-muted text-muted-foreground'
-                    }`}>
-                    <ShieldCheck className="w-8 h-8" />
-                </div>
-            </div>
-        </div>
-    );
-};
-
-// Threat recognition item
-const ThreatItem: React.FC<{
-    icon: React.ReactNode;
-    name: string;
-    recognized: boolean;
-    count: number;
-}> = ({ icon, name, recognized, count }) => {
-    const { t } = useTranslation();
-    return (
-        <div className={`flex items-center justify-between p-3 rounded-lg transition-all ${recognized ? 'bg-cyber-green/10' : 'bg-muted/50'
-            }`}>
-            <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${recognized ? 'bg-cyber-green/20 text-cyber-green' : 'bg-muted text-muted-foreground'
-                    }`}>
-                    {icon}
-                </div>
-                <span className={recognized ? 'text-foreground' : 'text-muted-foreground'}>{name}</span>
-            </div>
-            <div className="flex items-center gap-2">
-                {recognized ? (
-                    <>
-                        <span className="text-sm text-cyber-green">{t('protection.learned', '{{count}} изучено', { count })}</span>
-                        <CheckCircle className="w-4 h-4 text-cyber-green" />
-                    </>
-                ) : (
-                    <XCircle className="w-4 h-4 text-muted-foreground" />
-                )}
-            </div>
-        </div>
-    );
-};
+// Helper to get color for score (unused for now but kept for reference if needed, commented out to fix build)
+// const getScoreColor = (score: number) => {
+//     if (score >= 80) return '#10B981'; // cyber-green
+//     if (score >= 50) return '#F59E0B'; // cyber-yellow
+//     return '#EF4444'; // cyber-red
+// };
 
 export const ProtectionStatsCard: React.FC<ProtectionStatsProps> = ({
     scenariosCompleted,
@@ -123,65 +68,99 @@ export const ProtectionStatsCard: React.FC<ProtectionStatsProps> = ({
     perfectScenarios,
     totalXP,
     rank,
+    completedScenarioIds = [], // Default to empty
 }) => {
     const { t } = useTranslation();
 
-    // Calculate protection metrics
+    // 1. Calculate stats for Radar Chart
+    const radarData = useMemo(() => {
+        // Categories mapping
+        const categories = {
+            financial: ['kaspi_sms', 'kaspi_call', 'investment_scam', 'crypto_work', 'investment_pyramid', 'fake_government', 'utility_scam', 'delivery_kazpost'],
+            digital: ['password_security', '2fa', 'fake_website', 'malware', 'wifi_security', 'software_updates'],
+            social: ['whatsapp_relative', 'romance_scam', 'charity', 'social_engineering', 'job_scam', 'job_enbek', 'lottery', 'taxi_scam'],
+            device: ['wifi', 'usb', 'antivirus', 'glovo_scam', 'kolesa_scam'],
+            privacy: ['telegram_scam', 'olx_scam', 'data_privacy', 'online_shopping', 'sextortion']
+        };
+
+        const calculateCategoryScore = (categoryIds: string[]) => {
+            if (completedScenarioIds.length === 0) return 20; // Base score for newbies
+            const completedInCategory = completedScenarioIds.filter(id => categoryIds.some(catId => id.includes(catId))).length;
+            // Cap at 100, slightly generous formula (each scenario gives ~25-30 points in cat)
+            return Math.min(100, 20 + (completedInCategory * 25));
+        };
+
+        return [
+            { subject: t('protection.radar.financial', 'Финансы'), A: calculateCategoryScore(categories.financial), fullMark: 100, icon: <CreditCard size={14} /> },
+            { subject: t('protection.radar.digital', 'Грамотность'), A: calculateCategoryScore(categories.digital), fullMark: 100, icon: <Globe size={14} /> },
+            { subject: t('protection.radar.social', 'Психология'), A: calculateCategoryScore(categories.social), fullMark: 100, icon: <Users size={14} /> },
+            { subject: t('protection.radar.device', 'Устройства'), A: calculateCategoryScore(categories.device), fullMark: 100, icon: <Smartphone size={14} /> },
+            { subject: t('protection.radar.privacy', 'Приватность'), A: calculateCategoryScore(categories.privacy), fullMark: 100, icon: <Lock size={14} /> },
+        ];
+    }, [completedScenarioIds, t]);
+
+    // 2. Calculate general protection metrics
     const stats = useMemo(() => {
         const completionRate = totalScenarios > 0 ? (scenariosCompleted / totalScenarios) * 100 : 0;
         const perfectRate = scenariosCompleted > 0 ? (perfectScenarios / scenariosCompleted) * 100 : 0;
 
-        // Potential money saved (average scam in Kazakhstan is 150,000 - 500,000 tenge)
-        const avgScamAmount = 250000;
-        const potentialSaved = scenariosCompleted * avgScamAmount;
+        // Smart Potential Saved Calculation
+        // Specific costs per scenario type (in KZT)
+        const COST_MAP: Record<string, number> = {
+            'kaspi_sms': 50000,
+            'kaspi_call': 1000000, // 1M+ for bank calls
+            'egov_scam': 200000,
+            'olx_scam': 150000,
+            'kolesa_scam': 300000,
+            'telegram_scam': 0, // Loss of account/reputation, hard to quantify in money but let's say 0 direct or small
+            'whatsapp_relative': 100000,
+            'job_enbek': 20000,
+            'crypto_work': 5000000, // 5M for crypto scams
+            'investment_pyramid': 2000000,
+            'utility_scam': 30000,
+            'delivery_kazpost': 5000, // 5000 for postal scam
+            'glovo_scam': 10000,
+            'lottery': 50000,
+            'charity': 20000,
+            'taxi_scam': 5000
+        };
 
-        // Threats recognized count
-        const threatsRecognized = scenariosCompleted * 3; // Each scenario teaches about 3 tactics
+        let savedAmount = 0;
+        completedScenarioIds.forEach(id => {
+            // Check for exact match first
+            if (COST_MAP[id] !== undefined) {
+                savedAmount += COST_MAP[id];
+            } else {
+                // Fallback fuzzy matching if ID is different (e.g. ai_generated_...)
+                if (id.includes('kaspi')) savedAmount += 1500000;
+                else if (id.includes('investment') || id.includes('crypto')) savedAmount += 5000000;
+                else if (id.includes('romance')) savedAmount += 3000000;
+                else if (id.includes('whatsapp') || id.includes('help')) savedAmount += 100000;
+                else if (id.includes('sms') || id.includes('delivery')) savedAmount += 5000;
+                else savedAmount += 50000; // Default average
+            }
+        });
 
-        // Protection score (0-100)
-        const protectionScore = Math.min(100, Math.round(
-            (completionRate * 0.4) + // 40% for completion
-            (perfectRate * 0.3) + // 30% for perfect runs
-            (rank * 10) + // 10% per rank level
-            (Math.min(totalXP / 10, 20)) // Up to 20% for XP
-        ));
+        // Use mock values if no scenarios completed just for display in dev? No, stick to 0 or logic.
+        // If completedIds not provided or empty but count > 0 (data mismatch), fallback to average
+        if (completedScenarioIds.length === 0 && scenariosCompleted > 0) {
+            savedAmount = scenariosCompleted * 250000;
+        }
+
+        const threatsRecognized = scenariosCompleted * 3;
+
+        // Weighted Protection Score based on axes
+        const avgRadarScore = radarData.reduce((acc, curr) => acc + curr.A, 0) / 5;
+        const protectionScore = Math.round(avgRadarScore);
 
         return {
             completionRate,
             perfectRate,
-            potentialSaved,
+            potentialSaved: savedAmount,
             threatsRecognized,
             protectionScore,
         };
-    }, [scenariosCompleted, totalScenarios, perfectScenarios, totalXP, rank]);
-
-    // Threat types based on completed scenarios
-    const threatTypes = useMemo(() => [
-        {
-            icon: <MessageSquare className="w-4 h-4" />,
-            name: t('protection.threats.sms', 'SMS мошенничество'),
-            recognized: scenariosCompleted >= 1,
-            count: Math.min(scenariosCompleted, 2)
-        },
-        {
-            icon: <Phone className="w-4 h-4" />,
-            name: t('protection.threats.calls', 'Звонки мошенников'),
-            recognized: scenariosCompleted >= 2,
-            count: Math.min(Math.max(scenariosCompleted - 1, 0), 2)
-        },
-        {
-            icon: <Mail className="w-4 h-4" />,
-            name: t('protection.threats.phishing', 'Фишинг-атаки'),
-            recognized: scenariosCompleted >= 3,
-            count: Math.min(Math.max(scenariosCompleted - 2, 0), 2)
-        },
-        {
-            icon: <Users className="w-4 h-4" />,
-            name: t('protection.threats.social', 'Социальная инженерия'),
-            recognized: scenariosCompleted >= 4,
-            count: Math.min(Math.max(scenariosCompleted - 3, 0), 2)
-        },
-    ], [scenariosCompleted, t]);
+    }, [scenariosCompleted, totalScenarios, perfectScenarios, totalXP, rank, completedScenarioIds, radarData]);
 
     const protectionLevel = useMemo(() => {
         if (stats.protectionScore >= 90) return { label: t('protection.level.maximum', 'Максимальная'), color: 'text-cyber-green' };
@@ -208,18 +187,45 @@ export const ProtectionStatsCard: React.FC<ProtectionStatsProps> = ({
                 </div>
             </div>
 
-            {/* Shield Visualization */}
-            <div className="text-center mb-6">
-                <ShieldVisualization strength={stats.protectionScore} />
-                <div className="mt-4">
-                    <p className="text-sm text-muted-foreground mb-1">
-                        {t('protection.score', 'Уровень защиты')}
-                    </p>
-                    <p className={`text-3xl font-bold ${protectionLevel.color}`}>
-                        <AnimatedCounter value={stats.protectionScore} suffix="%" />
-                    </p>
+            {/* Skill Radar Chart */}
+            <div className="flex flex-col items-center mb-8 relative">
+                <div className="w-full h-64 relative">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                            <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                            <PolarAngleAxis
+                                dataKey="subject"
+                                tick={{ fill: '#9CA3AF', fontSize: 11 }}
+                            />
+                            <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                            <Radar
+                                name="Protection"
+                                dataKey="A"
+                                stroke="#10B981"
+                                strokeWidth={2}
+                                fill="#10B981"
+                                fillOpacity={0.3}
+                            />
+                            <Tooltip
+                                contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', color: '#F3F4F6' }}
+                                itemStyle={{ color: '#10B981' }}
+                            />
+                        </RadarChart>
+                    </ResponsiveContainer>
+
+                    {/* Center Score Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="flex flex-col items-center justify-center mt-4">
+                            <span className={`text-2xl font-bold ${protectionLevel.color}`}>
+                                {stats.protectionScore}%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-2 text-center">
                     <p className={`text-sm font-medium ${protectionLevel.color}`}>
-                        {protectionLevel.label}
+                        {protectionLevel.label} {t('protection.score', 'защита')}
                     </p>
                 </div>
             </div>
@@ -275,17 +281,7 @@ export const ProtectionStatsCard: React.FC<ProtectionStatsProps> = ({
                 </div>
             </div>
 
-            {/* Threat Recognition */}
-            <div>
-                <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">
-                    {t('protection.knownThreats', 'Изученные угрозы')}
-                </h3>
-                <div className="space-y-2">
-                    {threatTypes.map((threat, index) => (
-                        <ThreatItem key={index} {...threat} />
-                    ))}
-                </div>
-            </div>
+
 
             {/* Improvement Tip */}
             {stats.protectionScore < 100 && (
