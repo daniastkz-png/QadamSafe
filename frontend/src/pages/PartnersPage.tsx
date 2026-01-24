@@ -39,7 +39,7 @@ export const PartnersPage: React.FC = () => {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center px-4">
                 <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50">
-                    <LanguageSwitcher />
+                    <LanguageSwitcher direction="down" align="right" />
                 </div>
 
                 <div className="max-w-md w-full text-center">
@@ -66,7 +66,7 @@ export const PartnersPage: React.FC = () => {
         <div className="min-h-screen bg-background">
             {/* Language Switcher */}
             <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50">
-                <LanguageSwitcher />
+                <LanguageSwitcher direction="down" align="right" />
             </div>
 
             {/* Back to Auth Link */}

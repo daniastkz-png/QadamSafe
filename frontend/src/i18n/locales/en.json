@@ -21,7 +21,7 @@
         "nav": {
             "features": "Features",
             "howItWorks": "How It Works",
-            "faq": "FAQ",
+            "faq": "Questions",
             "startFree": "Start Free"
         },
         "hero": {
@@ -30,6 +30,17 @@
             "subtitle": "Practice and interactive games — learn to spot fraud in realistic scenarios",
             "cta": "Start Training",
             "trustIndicator": "Free access • No credit card required"
+        },
+        "phishingSimulation": {
+            "emailLabel": "Email / ID",
+            "passwordLabel": "Password",
+            "logIn": "Log In",
+            "blocked": "PHISHING BLOCKED",
+            "warningTitle": "Warning Detected",
+            "warningText": "Fake domain detected:",
+            "guardActive": "QadamSafe Guard Active",
+            "threatFound": "THREAT FOUND",
+            "monitoring": "MONITORING"
         },
         "mission": {
             "text": "Designed to help people in Kazakhstan",

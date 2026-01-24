@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Lock, AlertTriangle, Globe, MousePointer2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const PhishingSimulation: React.FC = () => {
+    const { t } = useTranslation();
     const [step, setStep] = useState(0);
 
     // Animation sequence
@@ -55,14 +57,14 @@ export const PhishingSimulation: React.FC = () => {
                     {/* Inputs */}
                     <div className="space-y-3">
                         <div className="space-y-1">
-                            <label className="text-xs text-muted-foreground font-medium">Email / ID</label>
+                            <label className="text-xs text-muted-foreground font-medium">{t('landing.phishingSimulation.emailLabel')}</label>
                             <div className="h-9 w-full bg-muted/30 rounded border border-border px-3 flex items-center text-sm">
                                 <span className="text-foreground">victim@email.com</span>
                             </div>
                         </div>
 
                         <div className="space-y-1">
-                            <label className="text-xs text-muted-foreground font-medium">Password</label>
+                            <label className="text-xs text-muted-foreground font-medium">{t('landing.phishingSimulation.passwordLabel')}</label>
                             <div className="h-9 w-full bg-muted/30 rounded border border-border px-3 flex items-center">
                                 <div className="flex gap-1">
                                     {isTyping || step > 1 ? (
@@ -87,10 +89,10 @@ export const PhishingSimulation: React.FC = () => {
                         {isAttackDetected ? (
                             <span className="flex items-center gap-2">
                                 <Shield className="w-4 h-4" />
-                                PHISHING BLOCKED
+                                {t('landing.phishingSimulation.blocked')}
                             </span>
                         ) : (
-                            "Log In"
+                            t('landing.phishingSimulation.logIn')
                         )}
                     </div>
 
@@ -112,9 +114,9 @@ export const PhishingSimulation: React.FC = () => {
                             <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-3 animate-bounce">
                                 <AlertTriangle className="w-8 h-8 text-red-500" />
                             </div>
-                            <h4 className="text-lg font-bold text-red-500 mb-1">Warning Detected</h4>
+                            <h4 className="text-lg font-bold text-red-500 mb-1">{t('landing.phishingSimulation.warningTitle')}</h4>
                             <p className="text-xs text-muted-foreground">
-                                Fake domain detected: <span className="font-mono text-foreground">securre-bank.com</span>
+                                {t('landing.phishingSimulation.warningText')} <span className="font-mono text-foreground">securre-bank.com</span>
                             </p>
                         </div>
                     )}
@@ -122,10 +124,10 @@ export const PhishingSimulation: React.FC = () => {
 
                 {/* Bottom Status Bar */}
                 <div className="bg-muted/30 p-2 border-t border-border flex justify-between items-center text-[10px] text-muted-foreground">
-                    <span>QadamSafe Guard Active</span>
+                    <span>{t('landing.phishingSimulation.guardActive')}</span>
                     <div className="flex gap-1.5 items-center">
                         <div className={`w-2 h-2 rounded-full ${isAttackDetected ? 'bg-red-500 animate-ping' : 'bg-green-500'}`} />
-                        {isAttackDetected ? 'THREAT FOUND' : 'MONITORING'}
+                        {isAttackDetected ? t('landing.phishingSimulation.threatFound') : t('landing.phishingSimulation.monitoring')}
                     </div>
                 </div>
             </div>

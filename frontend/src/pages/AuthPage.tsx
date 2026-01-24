@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { Shield, Mail, Lock, User, X, Check } from 'lucide-react';
+import { Shield, Mail, Lock, User, X, Check, Eye, EyeOff } from 'lucide-react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Footer } from '../components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
@@ -32,6 +32,8 @@ export const AuthPage: React.FC = () => {
     const [googleLoading, setGoogleLoading] = useState(false);
     const [lastAccount, setLastAccount] = useState<LastAccount | null>(null);
     const [showQuickLogin, setShowQuickLogin] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const passwordRef = useRef<HTMLInputElement>(null);
 
     // Password requirements
@@ -406,13 +408,20 @@ export const AuthPage: React.FC = () => {
                                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                                 <input
                                                     ref={passwordRef}
-                                                    type="password"
+                                                    type={showPassword ? 'text' : 'password'}
                                                     value={password}
                                                     onChange={(e) => setPassword(e.target.value)}
-                                                    className="cyber-input pl-10"
+                                                    className="cyber-input pl-10 pr-10"
                                                     placeholder={t('auth.password')}
                                                     required
                                                 />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                                >
+                                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
                                             </div>
                                         </div>
 
@@ -526,13 +535,20 @@ export const AuthPage: React.FC = () => {
                                             <div className="relative">
                                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                                 <input
-                                                    type="password"
+                                                    type={showPassword ? 'text' : 'password'}
                                                     value={password}
                                                     onChange={(e) => setPassword(e.target.value)}
-                                                    className="cyber-input pl-10"
+                                                    className="cyber-input pl-10 pr-10"
                                                     placeholder={t('auth.password')}
                                                     required
                                                 />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                                >
+                                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
                                             </div>
                                         </div>
 
@@ -543,13 +559,20 @@ export const AuthPage: React.FC = () => {
                                             <div className="relative">
                                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                                 <input
-                                                    type="password"
+                                                    type={showConfirmPassword ? 'text' : 'password'}
                                                     value={confirmPassword}
                                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                                    className="cyber-input pl-10"
+                                                    className="cyber-input pl-10 pr-10"
                                                     placeholder={t('auth.confirmPassword', 'Подтвердите пароль')}
                                                     required
                                                 />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                                >
+                                                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
                                             </div>
                                         </div>
 
