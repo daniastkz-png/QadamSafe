@@ -55,36 +55,58 @@ class TTSService {
     }
 
     /**
-     * Get a suitable voice for the scenario
-     * Tries to find Russian voice, falls back to any available
+     * Get a suitable voice for the specifed language
+     * Prioritizes specific high-quality voices to minimize accent
      */
-    getBestVoice(preferMale = true): SpeechSynthesisVoice | null {
-        const russianVoices = this.getRussianVoices();
+    getBestVoice(lang: string = 'ru'): SpeechSynthesisVoice | null {
+        // Normalize lang code (e.g. 'ru-RU' -> 'ru')
+        const baseLang = lang.split('-')[0].toLowerCase();
 
-        if (russianVoices.length > 0) {
-            // Try to find gender-specific voice by name hints
-            if (preferMale) {
-                const maleVoice = russianVoices.find(v =>
-                    v.name.toLowerCase().includes('male') ||
-                    v.name.toLowerCase().includes('dmitri') ||
-                    v.name.toLowerCase().includes('pavel') ||
-                    v.name.toLowerCase().includes('maxim')
-                );
-                if (maleVoice) return maleVoice;
-            } else {
-                const femaleVoice = russianVoices.find(v =>
-                    v.name.toLowerCase().includes('female') ||
-                    v.name.toLowerCase().includes('milena') ||
-                    v.name.toLowerCase().includes('irina') ||
-                    v.name.toLowerCase().includes('anna')
-                );
-                if (femaleVoice) return femaleVoice;
-            }
-            return russianVoices[0];
+        // Get all available voices
+        const allVoices = this.synth.getVoices();
+
+        // Filter for target language strictly first
+        let voices = allVoices.filter(v => v.lang.toLowerCase().startsWith(baseLang));
+
+        // Special handling for Kazakh: if no native voice, try standard Russian but warn
+        if (baseLang === 'kk' && voices.length === 0) {
+            // Fallback to Russian as it uses Cyrillic, but this WILL have an accent
+            voices = allVoices.filter(v => v.lang.toLowerCase().startsWith('ru'));
         }
 
-        // Fallback to any voice
-        return this.voices[0] || null;
+        if (voices.length === 0) return null;
+
+        // Specific high-quality voices known to have neutral accents
+        const highQualityNames = [
+            // Russian
+            'google русский', 'milena', 'yuri', 'katya',
+            // English
+            'google us english', 'samantha', 'alex', 'daniel',
+            // General indicators
+            'premium', 'enhanced', 'neural'
+        ];
+
+        // Sort voices by quality priority
+        voices.sort((a, b) => {
+            const aName = a.name.toLowerCase();
+            const bName = b.name.toLowerCase();
+
+            const aScore = highQualityNames.findIndex(p => aName.includes(p));
+            const bScore = highQualityNames.findIndex(p => bName.includes(p));
+
+            // Found in high quality list? (Lower index = better)
+            if (aScore !== -1 && bScore === -1) return -1;
+            if (aScore === -1 && bScore !== -1) return 1;
+            if (aScore !== -1 && bScore !== -1) return aScore - bScore;
+
+            // Secondary sort: prefer default voices
+            if (a.default && !b.default) return -1;
+            if (!a.default && b.default) return 1;
+
+            return 0;
+        });
+
+        return voices[0];
     }
 
     /**
@@ -99,17 +121,31 @@ class TTSService {
             const utterance = new SpeechSynthesisUtterance(text);
 
             // Apply options
-            utterance.lang = options.lang || 'ru-RU';
+            const lang = options.lang || 'ru-RU';
+            utterance.lang = lang;
+
+            // Adjust rate based on language for better clarity (accent reduction)
+            let defaultRate = 1.0;
+            if (lang.startsWith('ru')) defaultRate = 0.95; // Russian is often clearer slightly slower
+            if (lang.startsWith('kk')) defaultRate = 0.9;  // Kazakh (if fallback) needs to be slower to be intelligible
+
             utterance.pitch = options.pitch ?? 1;
-            utterance.rate = options.rate ?? 0.9; // Slightly slower for clarity
+            utterance.rate = options.rate ?? defaultRate;
             utterance.volume = options.volume ?? 1;
 
             if (options.voice) {
                 utterance.voice = options.voice;
             } else {
-                const bestVoice = this.getBestVoice();
+                const bestVoice = this.getBestVoice(lang);
                 if (bestVoice) {
                     utterance.voice = bestVoice;
+                    // Ensure the utterance language matches the voice language if we are using a specific voice
+                    // This helps the engine switch modes correctly
+                    if (!utterance.lang.startsWith(bestVoice.lang.split('-')[0])) {
+                        // Keep requested lang if it's a fallback (e.g. reading KK with RU voice)
+                    } else {
+                        utterance.lang = bestVoice.lang;
+                    }
                 }
             }
 

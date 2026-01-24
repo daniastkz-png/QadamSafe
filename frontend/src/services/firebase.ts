@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, updateDoc, limit, onSnapshot } from 'firebase/firestore';
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, updateDoc, limit, onSnapshot, deleteDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import type { UserProgress } from '../types';
@@ -28,9 +28,20 @@ if (window.location.hostname === 'localhost' && import.meta.env.VITE_USE_FUNCTIO
     console.log('🔧 Connected to Firebase Functions Emulator');
 }
 
-// Backend API URL (must be set for /api/ai/generate-scenario and /api/ai/chat)
-// Local: VITE_API_URL=http://localhost:3001 in .env.local; production: your Render backend, e.g. https://qadamsafe-api.onrender.com
-const API_URL = import.meta.env.VITE_API_URL || "https://qadamsafe-api.onrender.com";
+// Backend API URL (for /api/ai/generate-scenario and /api/ai/chat)
+// Priority: VITE_API_URL in .env.local > auto localhost:3001 when in browser on localhost/127.0.0.1 > production
+const API_URL = (() => {
+    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+    if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"))
+        return "http://localhost:3001";
+    return "https://qadamsafe-api.onrender.com";
+})();
+if (import.meta.env.DEV) {
+    console.log("[QadamSafe] API_URL:", API_URL);
+    fetch(API_URL + "/health").catch(() =>
+        console.warn("[QadamSafe] Backend не отвечает. Запустите: cd backend && npm start")
+    );
+}
 
 const API_TIMEOUT_MS = 90000; // 90s for Render cold start
 
@@ -367,7 +378,7 @@ export const firebaseProgressAPI = {
 
     subscribeToProgress: (callback: (progress: UserProgress[]) => void) => {
         const currentUser = auth.currentUser;
-        if (!currentUser) return () => {};
+        if (!currentUser) return () => { };
 
         const aiProgressRef = collection(db, 'users', currentUser.uid, 'aiProgress');
         const q = query(aiProgressRef, orderBy('completedAt', 'desc'), limit(20));
@@ -402,7 +413,7 @@ export const firebaseProgressAPI = {
             });
 
             callback(progressWithScenarios);
-        }, () => {});
+        }, () => { });
 
         return unsubscribe;
     },
@@ -604,7 +615,123 @@ export const firebaseAIAPI = {
 
 // ============= AI ASSISTANT API =============
 
+export interface ChatThread {
+    id: string;
+    title: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+function toDate(raw: unknown): Date {
+    if (raw && typeof (raw as { toDate?: () => Date }).toDate === 'function')
+        return (raw as { toDate: () => Date }).toDate();
+    if (raw instanceof Date) return raw;
+    return raw ? new Date(raw as string | number) : new Date();
+}
+
 export const firebaseAssistantAPI = {
+    // List chat threads (for "История чатов" panel)
+    listThreads: async (): Promise<ChatThread[]> => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Not authenticated');
+        const ref = collection(db, 'users', currentUser.uid, 'chatThreads');
+        const q = query(ref, orderBy('updatedAt', 'desc'), limit(50));
+        const snap = await getDocs(q);
+        return snap.docs.map(d => {
+            const d2 = d.data();
+            return { id: d.id, title: d2.title || 'Чат', createdAt: toDate(d2.createdAt), updatedAt: toDate(d2.updatedAt) };
+        });
+    },
+
+    // Create a new chat thread
+    createThread: async (title?: string): Promise<ChatThread> => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Not authenticated');
+        const ref = collection(db, 'users', currentUser.uid, 'chatThreads');
+        const docRef = await addDoc(ref, { title: title || 'Новый чат', createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+        return { id: docRef.id, title: title || 'Новый чат', createdAt: new Date(), updatedAt: new Date() };
+    },
+
+    // Get messages for a thread
+    getHistory: async (threadId: string) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Not authenticated');
+        const ref = collection(db, 'users', currentUser.uid, 'chatThreads', threadId, 'messages');
+        const q = query(ref, orderBy('timestamp', 'asc'), limit(100));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(d => {
+            const data = d.data();
+            return { id: d.id, role: (data.role as 'user' | 'model') || 'model', content: data.content || '', timestamp: toDate(data.timestamp) };
+        });
+    },
+
+    // Save a message and update thread updatedAt
+    saveMessage: async (threadId: string, message: { id: string; role: 'user' | 'model'; content: string; timestamp: Date }) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Not authenticated');
+        const uid = currentUser.uid;
+        await setDoc(doc(db, 'users', uid, 'chatThreads', threadId, 'messages', message.id), { ...message, timestamp: message.timestamp });
+        await updateDoc(doc(db, 'users', uid, 'chatThreads', threadId), { updatedAt: serverTimestamp() });
+    },
+
+    // Update thread title (e.g. from first user message)
+    updateThreadTitle: async (threadId: string, title: string) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Not authenticated');
+        await updateDoc(doc(db, 'users', currentUser.uid, 'chatThreads', threadId), { title: title || 'Новый чат', updatedAt: serverTimestamp() });
+    },
+
+    // Clear messages in a thread
+    clearHistory: async (threadId: string) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Not authenticated');
+        const ref = collection(db, 'users', currentUser.uid, 'chatThreads', threadId, 'messages');
+        const snap = await getDocs(ref);
+        await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'users', currentUser!.uid, 'chatThreads', threadId, 'messages', d.id))));
+    },
+
+    // Delete a thread and its messages
+    deleteThread: async (threadId: string) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Not authenticated');
+        const uid = currentUser.uid;
+        const ref = collection(db, 'users', uid, 'chatThreads', threadId, 'messages');
+        const snap = await getDocs(ref);
+        for (const d of snap.docs) await deleteDoc(doc(db, 'users', uid, 'chatThreads', threadId, 'messages', d.id));
+        await deleteDoc(doc(db, 'users', uid, 'chatThreads', threadId));
+    },
+
+    // Legacy: read old chatHistory (flat) for migration
+    getLegacyHistory: async () => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) return [];
+        const ref = collection(db, 'users', currentUser.uid, 'chatHistory');
+        const q = query(ref, orderBy('timestamp', 'asc'), limit(100));
+        const snap = await getDocs(q);
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    },
+
+    // One-time: copy legacy chatHistory into a new thread
+    migrateLegacyToThread: async (): Promise<string> => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Not authenticated');
+        const legacy = await firebaseAssistantAPI.getLegacyHistory();
+        if (legacy.length === 0) throw new Error('Nothing to migrate');
+        const firstUser = legacy.find((m: { role?: string }) => m.role === 'user') as { content?: string } | undefined;
+        const titleFromMsg = firstUser && typeof firstUser.content === 'string'
+            ? (firstUser.content.replace(/\s+/g, ' ').trim().slice(0, 50) + (firstUser.content.replace(/\s+/g, ' ').trim().length > 50 ? '…' : '')) || 'Предыдущий чат'
+            : 'Предыдущий чат';
+        const t = await firebaseAssistantAPI.createThread(titleFromMsg);
+        const uid = currentUser.uid;
+        for (const m of legacy) {
+            const data = m as { id?: string; role?: string; content?: string; timestamp?: unknown };
+            const id = data.id || m.id;
+            const ts = toDate(data.timestamp);
+            await setDoc(doc(db, 'users', uid, 'chatThreads', t.id, 'messages', id), { id, role: data.role || 'model', content: data.content || '', timestamp: ts });
+        }
+        return t.id;
+    },
+
     sendMessage: async (message: string, history: { role: 'user' | 'model'; parts: string }[]) => {
         const currentUser = auth.currentUser;
         if (!currentUser) {
