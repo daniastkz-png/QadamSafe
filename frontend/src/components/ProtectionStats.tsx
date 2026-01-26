@@ -190,7 +190,7 @@ export const ProtectionStatsCard: React.FC<ProtectionStatsProps> = ({
             {/* Skill Radar Chart */}
             <div className="flex flex-col items-center mb-8 relative">
                 <div className="w-full h-64 relative">
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="100%" height="100%" minHeight={250}>
                         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
                             <PolarGrid stroke="rgba(255,255,255,0.1)" />
                             <PolarAngleAxis
