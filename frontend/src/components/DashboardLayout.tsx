@@ -250,13 +250,82 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             {/* Main Content */}
             <main
                 className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'
-                    } pt-16 md:pt-0`}
+                    } pt-16 pb-24 md:pt-0 md:pb-0`}
             >
                 {children}
             </main>
 
             {/* AI Assistant - Floating Widget */}
             <CyberMate />
+
+            {/* Mobile Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-card/90 backdrop-blur-lg border-t border-border z-40 md:hidden pb-safe">
+                <div className="flex justify-around items-center p-2">
+                    {/* Home */}
+                    <NavLink
+                        to="/welcome"
+                        className={({ isActive }) =>
+                            `flex flex-col items-center gap-1 p-2 min-w-[64px] rounded-xl transition-all ${isActive
+                                ? 'text-cyber-green'
+                                : 'text-muted-foreground'
+                            }`
+                        }
+                    >
+                        <Shield className="w-5 h-5" />
+                        <span className="text-[10px] font-medium">{t('sidebar.welcome')}</span>
+                    </NavLink>
+
+                    {/* Training */}
+                    <NavLink
+                        to="/training"
+                        className={({ isActive }) =>
+                            `flex flex-col items-center gap-1 p-2 min-w-[64px] rounded-xl transition-all ${isActive
+                                ? 'text-cyber-green'
+                                : 'text-muted-foreground'
+                            }`
+                        }
+                    >
+                        <BookOpen className="w-5 h-5" />
+                        <span className="text-[10px] font-medium">{t('sidebar.training')}</span>
+                    </NavLink>
+
+                    {/* Assistant (Center Button) */}
+                    <NavLink
+                        to="/assistant"
+                        className={({ isActive }) =>
+                            `flex flex-col items-center justify-center -mt-6 w-14 h-14 rounded-full border-4 border-background transition-all shadow-lg ${isActive
+                                ? 'bg-cyber-green text-black'
+                                : 'bg-card text-muted-foreground border-border'
+                            }`
+                        }
+                    >
+                        <Bot className="w-6 h-6" />
+                    </NavLink>
+
+                    {/* Progress */}
+                    <NavLink
+                        to="/progress"
+                        className={({ isActive }) =>
+                            `flex flex-col items-center gap-1 p-2 min-w-[64px] rounded-xl transition-all ${isActive
+                                ? 'text-cyber-green'
+                                : 'text-muted-foreground'
+                            }`
+                        }
+                    >
+                        <TrendingUp className="w-5 h-5" />
+                        <span className="text-[10px] font-medium">{t('sidebar.progress')}</span>
+                    </NavLink>
+
+                    {/* Menu Trigger */}
+                    <button
+                        onClick={() => setMobileMenuOpen(true)}
+                        className={`flex flex-col items-center gap-1 p-2 min-w-[64px] rounded-xl transition-all ${mobileMenuOpen ? 'text-cyber-green' : 'text-muted-foreground'}`}
+                    >
+                        <Menu className="w-5 h-5" />
+                        <span className="text-[10px] font-medium">{t('common.menu', 'Меню')}</span>
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
