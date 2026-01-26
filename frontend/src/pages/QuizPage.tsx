@@ -6,8 +6,8 @@ import { useAuth } from '../contexts/AuthContext';
 import {
     Brain, CheckCircle, XCircle, Clock, Trophy,
     Zap, Target, ChevronRight, RotateCcw, Star,
-    AlertTriangle, Shield, Play, Award, Sparkles,
-    MessageSquare, Mail, Phone, Link
+    AlertTriangle, Shield, Award, Sparkles,
+    MessageSquare, Mail, Link
 } from 'lucide-react';
 
 // Types
@@ -310,8 +310,8 @@ const QuestionCard: React.FC<{
                     {getTypeLabel()}
                 </span>
                 <span className={`px-3 py-1 rounded-full text-sm ${question.difficulty === 'easy' ? 'bg-green-500/20 text-green-400' :
-                        question.difficulty === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
-                            'bg-red-500/20 text-red-400'
+                    question.difficulty === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                        'bg-red-500/20 text-red-400'
                     }`}>
                     {question.difficulty === 'easy' ? t('quiz.easy', 'Легко') :
                         question.difficulty === 'medium' ? t('quiz.medium', 'Средне') :
@@ -327,8 +327,8 @@ const QuestionCard: React.FC<{
             {/* Content preview (for find_suspicious type) */}
             {question.content && (
                 <div className={`p-4 rounded-xl border-2 ${question.contentType === 'sms' ? 'bg-gray-800 border-gray-600' :
-                        question.contentType === 'email' ? 'bg-blue-900/30 border-blue-700/50' :
-                            'bg-purple-900/30 border-purple-700/50'
+                    question.contentType === 'email' ? 'bg-blue-900/30 border-blue-700/50' :
+                        'bg-purple-900/30 border-purple-700/50'
                     }`}>
                     <div className="flex items-center gap-2 mb-2 text-muted-foreground">
                         {getContentIcon()}
@@ -356,14 +356,14 @@ const QuestionCard: React.FC<{
                             onClick={() => !showFeedback && onAnswer(option.id)}
                             disabled={showFeedback}
                             className={`w-full p-4 rounded-xl border-2 text-left transition-all ${showFeedback
-                                    ? isCorrect
-                                        ? 'bg-cyber-green/20 border-cyber-green text-cyber-green'
-                                        : isSelected
-                                            ? 'bg-cyber-red/20 border-cyber-red text-cyber-red'
-                                            : 'bg-muted/30 border-border text-muted-foreground'
+                                ? isCorrect
+                                    ? 'bg-cyber-green/20 border-cyber-green text-cyber-green'
                                     : isSelected
-                                        ? 'bg-cyber-green/10 border-cyber-green'
-                                        : 'bg-card border-border hover:border-cyber-green/50 hover:bg-muted/50'
+                                        ? 'bg-cyber-red/20 border-cyber-red text-cyber-red'
+                                        : 'bg-muted/30 border-border text-muted-foreground'
+                                : isSelected
+                                    ? 'bg-cyber-green/10 border-cyber-green'
+                                    : 'bg-card border-border hover:border-cyber-green/50 hover:bg-muted/50'
                                 }`}
                         >
                             <div className="flex items-center gap-3">
@@ -700,12 +700,12 @@ export const QuizPage: React.FC = () => {
                                             <div
                                                 key={i}
                                                 className={`w-2 h-2 rounded-full transition-all ${i < quizState.currentQuestionIndex
-                                                        ? quizState.answers[i]?.isCorrect
-                                                            ? 'bg-cyber-green'
-                                                            : 'bg-cyber-red'
-                                                        : i === quizState.currentQuestionIndex
-                                                            ? 'bg-cyber-yellow w-4'
-                                                            : 'bg-muted'
+                                                    ? quizState.answers[i]?.isCorrect
+                                                        ? 'bg-cyber-green'
+                                                        : 'bg-cyber-red'
+                                                    : i === quizState.currentQuestionIndex
+                                                        ? 'bg-cyber-yellow w-4'
+                                                        : 'bg-muted'
                                                     }`}
                                             />
                                         ))}
