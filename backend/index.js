@@ -11,6 +11,7 @@ const scenarioRoutes = require('./src/routes/scenarioRoutes');
 const progressRoutes = require('./src/routes/progressRoutes');
 const achievementRoutes = require('./src/routes/achievementRoutes');
 const aiRoutes = require('./src/routes/aiRoutes');
+const classroomRoutes = require('./src/routes/classroomRoutes');
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/api/scenarios', scenarioRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/classrooms', classroomRoutes);
 
 // Health Check
 app.get("/health", (req, res) => {

@@ -10,8 +10,8 @@ import {
     serverTimestamp,
     orderBy
 } from 'firebase/firestore';
-import { db, functions } from './firebase'; // Assuming functions is exported from firebase.ts
-import { httpsCallable } from 'firebase/functions';
+import { db, auth, API_URL, fetchWithTimeout } from './firebase';
+
 
 export interface Classroom {
     id: string;
@@ -98,12 +98,29 @@ export const classroomService = {
         }
     },
 
-    // Join a classroom (Cloud Function wrapper)
+    // Join a classroom (Backend API)
     joinClassroom: async (code: string) => {
         try {
-            const joinFunction = httpsCallable(functions, 'joinClassroom');
-            const result = await joinFunction({ code });
-            return result.data;
+            const currentUser = auth.currentUser;
+            if (!currentUser) throw new Error('Not authenticated');
+
+            const token = await currentUser.getIdToken();
+
+            const response = await fetchWithTimeout(`${API_URL}/api/classrooms/join`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ code })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Failed to join classroom');
+            }
+
+            return await response.json();
         } catch (error) {
             console.error('Error joining classroom:', error);
             throw error;

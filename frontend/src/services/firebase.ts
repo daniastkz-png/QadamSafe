@@ -30,7 +30,7 @@ if (window.location.hostname === 'localhost' && import.meta.env.VITE_USE_FUNCTIO
 
 // Backend API URL (for /api/ai/generate-scenario and /api/ai/chat)
 // Priority: VITE_API_URL in .env.local > auto localhost:3001 when in browser on localhost/127.0.0.1 > production
-const API_URL = (() => {
+export const API_URL = (() => {
     // Explicitly check for production domain to avoid env var issues
     if (typeof window !== "undefined" && (window.location.hostname === "qadamsafe.web.app" || window.location.hostname === "qadamsafe.firebaseapp.com")) {
         return ""; // Relative path for Firebase Hosting rewrites
@@ -51,7 +51,7 @@ if (import.meta.env.DEV) {
 
 const API_TIMEOUT_MS = 90000; // 90s for Render cold start
 
-async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = API_TIMEOUT_MS): Promise<Response> {
+export async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = API_TIMEOUT_MS): Promise<Response> {
     const ctrl = new AbortController();
     const id = setTimeout(() => ctrl.abort(), timeoutMs);
     try {
