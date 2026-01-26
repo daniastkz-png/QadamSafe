@@ -273,10 +273,10 @@
         "home": "Home",
         "welcome": "About Platform",
         "training": "Training",
+        "quiz": "Quizzes",
+        "detective": "Detective",
+        "emailSim": "Email Simulator",
         "assistant": "AI Assistant",
-        "progress": "Progress",
-        "achievements": "Achievements",
-        "subscription": "Subscription",
         "settings": "Settings"
     },
     "ranks": {
@@ -330,6 +330,10 @@
         "practice": "Practice",
         "stats": "Statistics",
         "profile": "Profile",
+        "trainers": "Practical Trainers",
+        "quizDesc": "12 questions, 3 game modes",
+        "detectiveDesc": "Investigate suspicious messages",
+        "emailSimDesc": "Identify phishing emails",
         "greetings": {
             "variant1": ", ready to distinguish threat from normal?",
             "variant2": ", time to check digital intuition.",
@@ -350,6 +354,58 @@
         "difficultyEasy": "Easy",
         "difficultyMedium": "Medium",
         "difficultyHard": "Hard"
+    },
+    "quiz": {
+        "badge": "Interactive Quizzes",
+        "title": "Cybersecurity Quiz",
+        "subtitle": "Test your knowledge and improve defense skills",
+        "selectMode": "Select Mode",
+        "whatYouLearn": "What You'll Learn",
+        "learn1": "Recognizing phishing links",
+        "learn2": "Identifying scam calls",
+        "learn3": "Password security",
+        "learn4": "Safe online shopping",
+        "question": "Question",
+        "explanation": "Explanation",
+        "nextQuestion": "Next Question",
+        "showResults": "Show Results",
+        "backToMenu": "Back to Menu",
+        "playAgain": "Play Again",
+        "accuracy": "Accuracy",
+        "points": "Points",
+        "maxStreak": "Max Streak",
+        "correct": "Correct",
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard",
+        "types": {
+            "findSuspicious": "Find the catch",
+            "trueFalse": "True or False",
+            "multipleChoice": "Multiple Choice"
+        },
+        "result": {
+            "excellent": "Excellent!",
+            "good": "Good!",
+            "fair": "Fair!",
+            "needsPractice": "Needs Practice"
+        },
+        "resultSubtitle": "You answered {{correct}} out of {{total}} questions correctly"
+    },
+    "detective": {
+        "badge": "Detective Mode",
+        "title": "Cyber Detective",
+        "subtitle": "Investigate suspicious messages and calls",
+        "casesSolved": "Cases Solved",
+        "points": "Points",
+        "accuracy": "Accuracy",
+        "startRandom": "Start Investigation",
+        "allCases": "All Cases"
+    },
+    "emailSim": {
+        "badge": "Email Simulator",
+        "title": "Email Detector",
+        "subtitle": "Learn to distinguish phishing emails from real ones",
+        "openInbox": "Open Inbox"
     },
     "welcome": {
         "title": "Welcome to QadamSafe!",
@@ -486,7 +542,8 @@
             "all": "All",
             "pending": "Pending",
             "completed": "Completed"
-        }
+        },
+        "otherFormats": "Other Formats"
     },
     "ai": {
         "title": "AI Scenarios",
@@ -1001,5 +1058,51 @@
             "trend": "Current Threats",
             "trendDesc": "Scammers constantly develop new deception methods"
         }
+    },
+    "scamReport": {
+        "badge": "Kazakhstan Scam Database",
+        "title": "Threat News",
+        "subtitle": "Report scams and help protect others. All reports are reviewed and analyzed by AI.",
+        "feedTab": "Threat Feed",
+        "reportTab": "Report",
+        "totalReports": "Total Reports",
+        "thisMonth": "This Month",
+        "topType": "Top Type",
+        "topRegion": "Top Region",
+        "filterAll": "All",
+        "noReports": "No reports yet. Be the first!",
+        "beFirst": "Be the first to report",
+        "verified": "Verified",
+        "minutesAgo": "min ago",
+        "hoursAgo": "h ago",
+        "daysAgo": "d ago",
+        "showMore": "More details",
+        "showLess": "Show less",
+        "seenThis": "also saw this",
+        "redFlags": "Red Flags",
+        "thankYou": "Thank you for reporting!",
+        "thankYouDesc": "Your report will help protect others from scammers.",
+        "aiHint": "AI will automatically detect the type of scam from your description",
+        "titleLabel": "Title",
+        "titlePlaceholder": "E.g.: Call from \"Kaspi security service\"",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Describe what happened in detail. The more details, the better...",
+        "aiAnalysis": "AI Analysis",
+        "detectedType": "Type",
+        "riskLevel": "Risk",
+        "confidence": "Confidence",
+        "typeLabel": "Scam Type",
+        "selectType": "Select type (or AI will detect automatically)",
+        "regionLabel": "Region",
+        "selectRegion": "Select region",
+        "cityLabel": "City",
+        "cityPlaceholder": "E.g.: Almaty",
+        "phoneLabel": "Scammer's Number",
+        "websiteLabel": "Fake Website",
+        "impactLabel": "Damage Amount (if any)",
+        "submitting": "Submitting...",
+        "submit": "Submit Report",
+        "submitError": "Error submitting. Please try again.",
+        "disclaimer": "Your report will be reviewed by a moderator before publication"
     }
 }

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { useAuth } from '../contexts/AuthContext';
-import { TrendingUp, Shield, ArrowRight, Lightbulb, Zap, Target, BarChart3, Settings } from 'lucide-react';
+import { TrendingUp, Shield, ArrowRight, Lightbulb, Zap, Target, BarChart3, Settings, Brain, Search, Mail, Gamepad2 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
     const { t } = useTranslation();
@@ -140,6 +140,81 @@ export const DashboardPage: React.FC = () => {
                             onClick={() => navigate('/settings')}
                             color="gray"
                         />
+                    </div>
+
+                    {/* 4. Interactive Trainers Section */}
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                                <Gamepad2 className="w-5 h-5 text-cyber-green" />
+                                {t('dashboard.trainers', 'Практические тренажёры')}
+                            </h2>
+                            <span className="text-xs px-2 py-1 rounded-full bg-cyber-green/10 text-cyber-green font-medium">
+                                PRO
+                            </span>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-4">
+                            {/* Quiz Card */}
+                            <div
+                                onClick={() => navigate('/quiz')}
+                                className="group relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-900/20 to-purple-800/5 p-5 cursor-pointer hover:border-purple-500 transition-all hover:shadow-lg hover:shadow-purple-500/10"
+                            >
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-purple-500/20 transition-all" />
+                                <div className="relative z-10">
+                                    <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                        <Brain className="w-6 h-6 text-purple-400" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-foreground mb-1 group-hover:text-purple-300 transition-colors">
+                                        {t('sidebar.quiz', 'Квизы')}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        {t('dashboard.quizDesc', '12 вопросов, 3 режима игры')}
+                                    </p>
+                                </div>
+                                <ArrowRight className="absolute bottom-4 right-4 w-5 h-5 text-purple-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </div>
+
+                            {/* Detective Card */}
+                            <div
+                                onClick={() => navigate('/detective')}
+                                className="group relative overflow-hidden rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-cyan-900/20 to-cyan-800/5 p-5 cursor-pointer hover:border-cyan-500 transition-all hover:shadow-lg hover:shadow-cyan-500/10"
+                            >
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-cyan-500/20 transition-all" />
+                                <div className="relative z-10">
+                                    <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                        <Search className="w-6 h-6 text-cyan-400" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-foreground mb-1 group-hover:text-cyan-300 transition-colors">
+                                        {t('sidebar.detective', 'Детектив')}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        {t('dashboard.detectiveDesc', 'Расследуйте подозрительные сообщения')}
+                                    </p>
+                                </div>
+                                <ArrowRight className="absolute bottom-4 right-4 w-5 h-5 text-cyan-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </div>
+
+                            {/* Email Simulator Card */}
+                            <div
+                                onClick={() => navigate('/email-simulator')}
+                                className="group relative overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-900/20 to-orange-800/5 p-5 cursor-pointer hover:border-orange-500 transition-all hover:shadow-lg hover:shadow-orange-500/10"
+                            >
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-orange-500/20 transition-all" />
+                                <div className="relative z-10">
+                                    <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                        <Mail className="w-6 h-6 text-orange-400" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-foreground mb-1 group-hover:text-orange-300 transition-colors">
+                                        {t('sidebar.emailSim', 'Email симулятор')}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        {t('dashboard.emailSimDesc', 'Определите фишинговые письма')}
+                                    </p>
+                                </div>
+                                <ArrowRight className="absolute bottom-4 right-4 w-5 h-5 text-orange-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

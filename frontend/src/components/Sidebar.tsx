@@ -2,8 +2,9 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { BookOpen, TrendingUp, Award, CreditCard, LogOut, Shield, Settings, FileCheck, GraduationCap, Phone, Gamepad2, Target } from 'lucide-react';
+import { BookOpen, TrendingUp, Award, CreditCard, LogOut, Shield, Settings, FileCheck, GraduationCap, Phone, Gamepad2, Target, Newspaper, Brain, Search, Mail } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
+
 
 export const Sidebar: React.FC = () => {
     const { t } = useTranslation();
@@ -12,6 +13,9 @@ export const Sidebar: React.FC = () => {
     const navItems = [
         { to: '/welcome', icon: Shield, label: t('sidebar.welcome') },
         { to: '/training', icon: BookOpen, label: t('sidebar.training') },
+        { to: '/quiz', icon: Brain, label: t('sidebar.quiz', 'Квизы'), tier: 'PRO' },
+        { to: '/detective', icon: Search, label: t('sidebar.detective', 'Детектив'), tier: 'PRO' },
+        { to: '/email-simulator', icon: Mail, label: t('sidebar.emailSim', 'Email симулятор'), tier: 'PRO' },
         { to: '/call-simulator', icon: Phone, label: t('sidebar.callSimulator', 'Симулятор звонков'), tier: 'PRO' },
         { to: '/cyber-defense', icon: Gamepad2, label: t('sidebar.cyberDefense', 'Cyber Defense'), tier: 'PRO' },
         { to: '/team-challenges', icon: Target, label: t('sidebar.teamChallenges', 'Челленджи'), tier: 'BUSINESS' },
@@ -19,6 +23,7 @@ export const Sidebar: React.FC = () => {
         { to: '/achievements', icon: Award, label: t('sidebar.achievements') },
         { to: '/certificates', icon: FileCheck, label: t('sidebar.certificates', 'Сертификаты'), tier: 'BUSINESS' },
         { to: '/teacher', icon: GraduationCap, label: t('sidebar.teacher', 'Учителям'), tier: 'BUSINESS' },
+        { to: '/scam-reports', icon: Newspaper, label: t('sidebar.scamReports', 'Новости') },
         { to: '/subscription', icon: CreditCard, label: t('sidebar.subscription') },
         { to: '/settings', icon: Settings, label: t('sidebar.settings') },
     ];

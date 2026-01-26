@@ -6,7 +6,7 @@ import { ScenarioPlayer } from '../components/ScenarioPlayer';
 import { firebaseAIAPI, AITopic } from '../services/firebase';
 import { ScenarioContextModal } from '../components/ScenarioContextModal';
 import { CyberTerminal } from '../components/CyberTerminal';
-import { Sparkles, ArrowLeft, Loader2, Zap, History, Play, RefreshCw, Trophy, CheckCircle } from 'lucide-react';
+import { Sparkles, ArrowLeft, Loader2, Zap, History, Play, RefreshCw, Trophy, CheckCircle, Brain, Search, Mail, Gamepad2 } from 'lucide-react';
 import type { Scenario } from '../types';
 
 
@@ -429,6 +429,66 @@ export const AIScenarioPage: React.FC = () => {
                             <span className="text-cyan-300">
                                 {t('ai.unique', 'Каждый сценарий уникален — генерируйте сколько хотите!')}
                             </span>
+                        </div>
+                    </div>
+
+                    {/* Other Training Formats */}
+                    <div className="mt-8 p-6 rounded-xl bg-card border border-border">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                                <Gamepad2 className="w-5 h-5 text-cyber-green" />
+                                {t('training.otherFormats', 'Другие форматы')}
+                            </h3>
+                            <span className="text-xs px-2 py-1 rounded-full bg-cyber-green/10 text-cyber-green font-medium">
+                                PRO
+                            </span>
+                        </div>
+
+                        <div className="grid sm:grid-cols-3 gap-3">
+                            <button
+                                onClick={() => navigate('/quiz')}
+                                className="group flex items-center gap-3 p-3 rounded-xl border border-purple-500/30 bg-purple-500/5 hover:bg-purple-500/10 hover:border-purple-500 transition-all"
+                            >
+                                <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <Brain className="w-5 h-5 text-purple-400" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="font-medium text-foreground group-hover:text-purple-300 transition-colors">
+                                        {t('sidebar.quiz', 'Квизы')}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">12 вопросов</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => navigate('/detective')}
+                                className="group flex items-center gap-3 p-3 rounded-xl border border-cyan-500/30 bg-cyan-500/5 hover:bg-cyan-500/10 hover:border-cyan-500 transition-all"
+                            >
+                                <div className="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <Search className="w-5 h-5 text-cyan-400" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="font-medium text-foreground group-hover:text-cyan-300 transition-colors">
+                                        {t('sidebar.detective', 'Детектив')}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">6 расследований</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => navigate('/email-simulator')}
+                                className="group flex items-center gap-3 p-3 rounded-xl border border-orange-500/30 bg-orange-500/5 hover:bg-orange-500/10 hover:border-orange-500 transition-all"
+                            >
+                                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <Mail className="w-5 h-5 text-orange-400" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="font-medium text-foreground group-hover:text-orange-300 transition-colors">
+                                        {t('sidebar.emailSim', 'Email симулятор')}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">8 писем</p>
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </div>

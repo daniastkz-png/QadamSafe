@@ -25,6 +25,10 @@ const CallSimulatorPage = React.lazy(() => import('./pages/CallSimulatorPage').t
 const VoiceCallPage = React.lazy(() => import('./pages/VoiceCallPage').then(m => ({ default: m.VoiceCallPage })));
 const CyberDefensePage = React.lazy(() => import('./pages/CyberDefensePage').then(m => ({ default: m.CyberDefensePage })));
 const TeamChallengesPage = React.lazy(() => import('./pages/TeamChallengesPage').then(m => ({ default: m.TeamChallengesPage })));
+const ScamReportPage = React.lazy(() => import('./pages/ScamReportPage').then(m => ({ default: m.ScamReportPage })));
+const QuizPage = React.lazy(() => import('./pages/QuizPage').then(m => ({ default: m.QuizPage })));
+const DetectivePage = React.lazy(() => import('./pages/DetectivePage').then(m => ({ default: m.DetectivePage })));
+const EmailSimulatorPage = React.lazy(() => import('./pages/EmailSimulatorPage').then(m => ({ default: m.EmailSimulatorPage })));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -161,6 +165,38 @@ function App() {
                                         element={
                                             <ProtectedRoute>
                                                 <TeamChallengesPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/scam-reports"
+                                        element={
+                                            <ProtectedRoute>
+                                                <ScamReportPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/quiz"
+                                        element={
+                                            <ProtectedRoute>
+                                                <QuizPage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/detective"
+                                        element={
+                                            <ProtectedRoute>
+                                                <DetectivePage />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/email-simulator"
+                                        element={
+                                            <ProtectedRoute>
+                                                <EmailSimulatorPage />
                                             </ProtectedRoute>
                                         }
                                     />
