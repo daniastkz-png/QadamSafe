@@ -3,13 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { ProtectionStatsCard } from '../components/ProtectionStats';
 import { useAuth } from '../contexts/AuthContext';
+// TODO: These components don't exist yet - uncomment when created
+// import { StreakWidget } from '../components/StreakWidget';
+// import { ImmunityHistoryWidget } from '../components/ImmunityHistoryWidget';
 import DailyChallengeWidget from '../components/DailyChallengeWidget';
 
 export const ProgressPage: React.FC = () => {
     const { t } = useTranslation();
     const { user } = useAuth();
 
-    // Mock data for now (later we can pull from API/Context)
     const mockStats = {
         scenariosCompleted: 3,
         totalScenarios: 15,
@@ -43,14 +45,22 @@ export const ProgressPage: React.FC = () => {
                         />
                     </div>
 
-                    {/* Daily Challenges */}
-                    <div className="grid md:grid-cols-1 gap-6">
+                    {/* Gamification Grid */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {/* TODO: StreakWidget not yet implemented */}
+                        {/* <StreakWidget currentStreak={5} frozen={false} /> */}
+
+                        {/* Daily Challenges */}
                         <DailyChallengeWidget />
                     </div>
+
+                    {/* TODO: ImmunityHistoryWidget not yet implemented */}
+                    {/* <div className="animate-fade-in-up delay-100">
+                        <ImmunityHistoryWidget />
+                    </div> */}
 
                 </div>
             </div>
         </DashboardLayout>
     );
 };
-
