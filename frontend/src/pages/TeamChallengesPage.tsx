@@ -514,8 +514,8 @@ export const TeamChallengesPage: React.FC = () => {
         );
     }
 
-    const handleCreateTeam = (_name: string, _school: string) => {
-        // TODO: Call API to create team
+    const handleCreateTeam = (name: string, school: string) => {
+        console.log('Creating team:', name, school);
         // In real app, this would call an API
     };
 
@@ -582,7 +582,7 @@ export const TeamChallengesPage: React.FC = () => {
                                 <ChallengeCard
                                     key={challenge.id}
                                     challenge={challenge}
-                                    onJoin={() => { /* TODO: Join challenge handler */ }}
+                                    onJoin={() => console.log('Joining challenge:', challenge.id)}
                                 />
                             ))}
                         </div>
