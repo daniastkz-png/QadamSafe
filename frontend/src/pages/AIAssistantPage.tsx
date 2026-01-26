@@ -225,7 +225,7 @@ export const AIAssistantPage: React.FC = () => {
 
     return (
         <DashboardLayout>
-            <div className="flex flex-col h-[calc(100vh-6rem)] md:h-[calc(100vh-4rem)] max-w-5xl mx-auto">
+            <div className="flex flex-col h-[calc(100dvh-10rem)] md:h-screen max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="flex items-center gap-3 p-4 border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-10">
                     <div className="w-10 h-10 rounded-full bg-cyber-green/10 flex items-center justify-center border border-cyber-green/30 shadow-[0_0_10px_rgba(0,255,65,0.2)]">
