@@ -66,13 +66,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             if (e.metaKey || e.ctrlKey) {
                 if (e.key.toLowerCase() === 'p') {
                     e.preventDefault();
-                    console.log('👑 Switching to PRO plan...');
+                    // Switch to PRO plan (demo hotkey)
                     setUser(prev => prev ? { ...prev, subscriptionTier: 'PRO' } : null);
                     // Use setTimeout to allow render cycle to complete before alert
                     setTimeout(() => alert('👑 Switched to PRO plan'), 10);
                 } else if (e.key.toLowerCase() === 'b') {
                     e.preventDefault();
-                    console.log('💼 Switching to BUSINESS plan...');
+                    // Switch to BUSINESS plan (demo hotkey)
                     setUser(prev => prev ? { ...prev, subscriptionTier: 'BUSINESS' } : null);
                     setTimeout(() => alert('💼 Switched to BUSINESS plan'), 10);
                 }

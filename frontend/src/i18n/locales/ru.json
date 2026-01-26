@@ -573,6 +573,18 @@
             "streak3": "3 дня подряд",
             "noMistakes": "Без ошибок",
             "allScenarios": "Все сценарии"
+        },
+        "statTitles": {
+            "securityScore": "Рейтинг защиты",
+            "completedScenarios": "Пройдено сценариев",
+            "totalMistakes": "Ошибок",
+            "completionRate": "Прогресс"
+        },
+        "skills": {
+            "phishing": "Фишинг",
+            "sms": "SMS",
+            "calls": "Звонки",
+            "social": "Соц. инженерия"
         }
     },
     "leaderboard": {
@@ -589,45 +601,6 @@
         "yourScore": "Ваши очки",
         "empty": "Лидерборд пуст",
         "beFirst": "Станьте первым, кто попадёт в рейтинг!"
-    },
-    "progress": {
-        "title": "Ваш прогресс",
-        "subtitle": "Отслеживайте свой путь к кибербезопасности",
-        "outOf": "из",
-        "currentRank": "Текущий ранг",
-        "nextRank": "Следующий",
-        "completed": "Достигнуто",
-        "weeklyActivity": "Активность за неделю",
-        "scenariosTotal": "сценариев всего",
-        "skillsRadar": "Навыки защиты",
-        "achievementsTitle": "Достижения",
-        "viewAll": "Все",
-        "noProgress": "Вы еще не начали обучение",
-        "startFirst": "Пройти первый сценарий",
-        "streak": {
-            "start": "Начните серию!",
-            "current": "{{count}} дней подряд!",
-            "best": "Лучшая серия: {{count}} дней"
-        },
-        "achievements": {
-            "firstScenario": "Первый шаг",
-            "streak3": "3 дня подряд",
-            "noMistakes": "Без ошибок",
-            "allScenarios": "Все сценарии"
-        },
-        "unknownScenario": "Сценарий",
-        "statTitles": {
-            "securityScore": "Рейтинг защиты",
-            "completedScenarios": "Пройдено сценариев",
-            "totalMistakes": "Ошибок",
-            "completionRate": "Прогресс"
-        },
-        "skills": {
-            "phishing": "Фишинг",
-            "sms": "SMS",
-            "calls": "Звонки",
-            "social": "Соц. инженерия"
-        }
     },
     "certificate": {
         "badge": "Сертификаты",

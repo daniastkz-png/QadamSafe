@@ -580,6 +580,7 @@
         "viewAll": "Барлығы",
         "currentRank": "Ағымдағы деңгей",
         "nextRank": "Келесі",
+        "completed": "Қол жеткізілді",
         "weeklyActivity": "Апталық белсенділік",
         "skillsRadar": "Қорғау дағдылары",
         "achievementsTitle": "Жетістіктер",
@@ -593,6 +594,18 @@
             "streak3": "3 күн қатарынан",
             "noMistakes": "Қатесіз",
             "allScenarios": "Барлық сценарийлер"
+        },
+        "statTitles": {
+            "securityScore": "Қорғаныс рейтингі",
+            "completedScenarios": "Өтілген сценарийлер",
+            "totalMistakes": "Қателер",
+            "completionRate": "Прогресс"
+        },
+        "skills": {
+            "phishing": "Фишинг",
+            "sms": "SMS",
+            "calls": "Қоңыраулар",
+            "social": "Әлеуметтік"
         }
     },
     "achievements": {
@@ -647,45 +660,6 @@
         "perfectScoreDesc": "Қатесіз сценарийден өтіңіз",
         "securityExpert": "Қауіпсіздік сарапшысы",
         "securityExpertDesc": "1000 ұпай жинаңыз"
-    },
-    "progress": {
-        "title": "Сіздің прогрессіңіз",
-        "subtitle": "Киберқауіпсіздікке жолыңызды қадағалаңыз",
-        "outOf": "-дан",
-        "currentRank": "Ағымдағы деңгей",
-        "nextRank": "Келесі",
-        "completed": "Қол жеткізілді",
-        "weeklyActivity": "Апталық белсенділік",
-        "scenariosTotal": "барлық сценарийлер",
-        "skillsRadar": "Қорғаныс дағдылары",
-        "achievementsTitle": "Жетістіктер",
-        "viewAll": "Барлығы",
-        "noProgress": "Сіз әлі оқуды бастаған жоқсыз",
-        "startFirst": "Бірінші сценарийді өту",
-        "streak": {
-            "start": "Серияны бастаңыз!",
-            "current": "{{count}} күн қатарынан!",
-            "best": "Ең үздік серия: {{count}} күн"
-        },
-        "achievements": {
-            "firstScenario": "Алғашқы қадам",
-            "streak3": "3 күн қатарынан",
-            "noMistakes": "Қатесіз",
-            "allScenarios": "Барлық сценарийлер"
-        },
-        "unknownScenario": "Сценарий",
-        "statTitles": {
-            "securityScore": "Қорғаныс рейтингі",
-            "completedScenarios": "Өтілген сценарийлер",
-            "totalMistakes": "Қателер",
-            "completionRate": "Прогресс"
-        },
-        "skills": {
-            "phishing": "Фишинг",
-            "sms": "SMS",
-            "calls": "Қоңыраулар",
-            "social": "Әлеуметтік"
-        }
     },
     "protection": {
         "title": "Сіздің қорғанысыңыз",

@@ -638,6 +638,7 @@
         "viewAll": "All",
         "currentRank": "Current Rank",
         "nextRank": "Next",
+        "completed": "Reached",
         "weeklyActivity": "Weekly Activity",
         "skillsRadar": "Defense Skills",
         "achievementsTitle": "Achievements",
@@ -651,34 +652,7 @@
             "streak3": "3 days in a row",
             "noMistakes": "No Mistakes",
             "allScenarios": "All Scenarios"
-        }
-    },
-    "progress": {
-        "title": "Your Progress",
-        "subtitle": "Track your journey to cybersecurity",
-        "outOf": "of",
-        "currentRank": "Current Rank",
-        "nextRank": "Next",
-        "completed": "Reached",
-        "weeklyActivity": "Weekly Activity",
-        "scenariosTotal": "total scenarios",
-        "skillsRadar": "Defense Skills",
-        "achievementsTitle": "Achievements",
-        "viewAll": "All",
-        "noProgress": "You haven't started training yet",
-        "startFirst": "Start First Scenario",
-        "streak": {
-            "start": "Start a streak!",
-            "current": "{{count}} days in a row!",
-            "best": "Best streak: {{count}} days"
         },
-        "achievements": {
-            "firstScenario": "First Step",
-            "streak3": "3 days streak",
-            "noMistakes": "No Mistakes",
-            "allScenarios": "All Scenarios"
-        },
-        "unknownScenario": "Scenario",
         "statTitles": {
             "securityScore": "Security Score",
             "completedScenarios": "Completed",
