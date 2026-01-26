@@ -23,7 +23,7 @@ import {
     GraduationCap
 } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { CyberMate } from './CyberMate';
+
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -255,8 +255,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 {children}
             </main>
 
-            {/* AI Assistant - Floating Widget */}
-            <CyberMate />
+            {/* AI Assistant - Floating Widget - Disabled for now
+            <CyberMate /> */}
 
             {/* Mobile Bottom Navigation */}
             <div className="fixed bottom-0 left-0 right-0 bg-card/90 backdrop-blur-lg border-t border-border z-40 md:hidden pb-safe">
